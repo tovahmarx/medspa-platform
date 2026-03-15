@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book an Appointment — Haus of Confidence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--gold:#C9A84C;--gold-h:#b8943e;--gold-l:#f5edda;--gold-p:#fdf9f0;--gold-b:#e8d5a3;--white:#fff;--bg:#fafaf8;--border:#e8e4dc;--border2:#d4cfc4;--text:#1a1814;--t2:#6b6459;--t3:#a09890;--green:#16a34a;--gbg:#f0fdf4;--gbd:#bbf7d0;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;}
+.booking-header{background:var(--white);border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;}
+.booking-logo{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;}
+.booking-tag{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;}
+.booking-wrap{max-width:760px;margin:0 auto;padding:2.5rem 1.5rem;}
+.step-indicator{display:flex;justify-content:center;gap:8px;margin-bottom:2.5rem;}
+.si-dot{width:8px;height:8px;border-radius:50%;background:var(--border2);transition:all .2s;}
+.si-dot.done{background:var(--gold);}
+.si-dot.active{background:var(--gold);transform:scale(1.3);}
+.bk-step{display:none;}
+.bk-step.active{display:block;}
+.bk-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:500;text-align:center;margin-bottom:.4rem;}
+.bk-sub{font-size:14px;color:var(--t2);text-align:center;margin-bottom:2rem;line-height:1.6;}
+.service-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:1.5rem;}
+.svc-btn{background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:1.1rem 1rem;cursor:pointer;text-align:left;transition:all .15s;font-family:'DM Sans',sans-serif;}
+.svc-btn:hover,.svc-btn.sel{border-color:var(--gold);background:var(--gold-p);}
+.svc-name{font-size:13px;font-weight:500;margin-bottom:3px;}
+.svc-desc{font-size:11px;color:var(--t3);}
+.svc-price{font-size:12px;color:var(--gold-h);margin-top:5px;font-weight:500;}
+.provider-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1.5rem;}
+.prov-btn{background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:1.1rem 1rem;cursor:pointer;text-align:center;transition:all .15s;}
+.prov-btn:hover,.prov-btn.sel{border-color:var(--gold);background:var(--gold-p);}
+.prov-av{width:44px;height:44px;border-radius:50%;background:var(--gold-l);color:var(--gold-h);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;margin:0 auto 8px;}
+.prov-name{font-size:12.5px;font-weight:500;}
+.prov-title{font-size:10px;color:var(--t3);margin-top:2px;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:1.5rem;}
+.cal-day-hdr{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--t3);text-align:center;padding:4px 0;}
+.cal-day{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:13px;cursor:pointer;transition:all .12s;border:1.5px solid transparent;}
+.cal-day:hover:not(.disabled){background:var(--gold-l);border-color:var(--gold-b);}
+.cal-day.sel{background:var(--gold);color:var(--white);font-weight:500;}
+.cal-day.disabled{color:var(--border2);cursor:default;}
+.cal-day.today{border-color:var(--gold-b);}
+.time-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1.5rem;}
+.time-btn{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:9px;font-size:12.5px;cursor:pointer;text-align:center;transition:all .12s;font-family:'DM Sans',sans-serif;}
+.time-btn:hover,.time-btn.sel{border-color:var(--gold);background:var(--gold-p);}
+.fi{width:100%;padding:11px 14px;border:1.5px solid var(--border2);border-radius:10px;font-size:14px;color:var(--text);font-family:'DM Sans',sans-serif;background:var(--white);outline:none;transition:border .12s;margin-bottom:1rem;}
+.fi:focus{border-color:var(--gold);}
+.bk-btn{background:var(--gold);color:var(--white);border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .15s;width:100%;}
+.bk-btn:hover{background:var(--gold-h);}
+.bk-btn-ghost{background:var(--white);color:var(--t2);border:1px solid var(--border2);border-radius:10px;padding:11px;font-size:14px;cursor:pointer;font-family:'DM Sans',sans-serif;width:100%;margin-bottom:8px;}
+.confirm-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1.25rem;}
+.confirm-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;}
+.confirm-row:last-child{border-bottom:none;}
+.success-icon{width:72px;height:72px;border-radius:50%;background:var(--gbg);border:2px solid var(--gbd);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 1.5rem;}
+</style>
+</head>
+<body>
+<div class="booking-header">
+  <div><div class="booking-logo">Haus of Confidence</div><div class="booking-tag">Online Booking</div></div>
+  <div style="font-size:12px;color:var(--t3);">📍 4205 N Winfield Scott Plaza, Scottsdale · (480) 493-5921</div>
+</div>
+
+<div class="booking-wrap">
+  <div class="step-indicator" id="steps"></div>
+
+  <!-- Step 1: Service -->
+  <div class="bk-step active" id="bk-1">
+    <div class="bk-title">What brings you in?</div>
+    <div class="bk-sub">Select the service you'd like to book. Not sure? Choose "Consultation."</div>
+    <div class="service-grid" id="svc-grid"></div>
+    <button class="bk-btn" onclick="nextStep(2)">Continue →</button>
+  </div>
+
+  <!-- Step 2: Provider -->
+  <div class="bk-step" id="bk-2">
+    <div class="bk-title">Choose your provider</div>
+    <div class="bk-sub">All providers are highly experienced. Some services require a specific provider.</div>
+    <div class="provider-grid" id="prov-grid"></div>
+    <button class="bk-btn" onclick="nextStep(3)">Continue →</button>
+    <button class="bk-btn-ghost" onclick="prevStep(1)" style="margin-top:8px;">← Back</button>
+  </div>
+
+  <!-- Step 3: Date -->
+  <div class="bk-step" id="bk-3">
+    <div class="bk-title">Pick a date</div>
+    <div class="bk-sub">Select an available date for your appointment.</div>
+    <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:8px;" id="cal-hdrs"></div>
+    <div class="cal-grid" id="cal-grid"></div>
+    <button class="bk-btn" onclick="nextStep(4)">Continue →</button>
+    <button class="bk-btn-ghost" onclick="prevStep(2)" style="margin-top:8px;">← Back</button>
+  </div>
+
+  <!-- Step 4: Time -->
+  <div class="bk-step" id="bk-4">
+    <div class="bk-title">Pick a time</div>
+    <div class="bk-sub" id="time-sub">Available times on <span id="selected-date-label"></span></div>
+    <div class="time-grid" id="time-grid"></div>
+    <button class="bk-btn" onclick="nextStep(5)">Continue →</button>
+    <button class="bk-btn-ghost" onclick="prevStep(3)" style="margin-top:8px;">← Back</button>
+  </div>
+
+  <!-- Step 5: Info -->
+  <div class="bk-step" id="bk-5">
+    <div class="bk-title">Your information</div>
+    <div class="bk-sub">We'll send your confirmation here.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <input class="fi" id="bk-first" placeholder="First name" style="margin-bottom:0;">
+      <input class="fi" id="bk-last" placeholder="Last name" style="margin-bottom:0;">
+    </div>
+    <input class="fi" id="bk-phone" placeholder="Phone number" type="tel">
+    <input class="fi" id="bk-email" placeholder="Email address" type="email">
+    <input class="fi" id="bk-notes" placeholder="Any questions or special requests? (optional)">
+    <div style="background:var(--gold-p);border:1px solid var(--gold-b);border-radius:10px;padding:12px 14px;font-size:12px;color:var(--t2);margin-bottom:1rem;">
+      🔒 Your information is kept private and secure. We will never share or sell your data.
+    </div>
+    <button class="bk-btn" onclick="nextStep(6)">Review Booking →</button>
+    <button class="bk-btn-ghost" onclick="prevStep(4)" style="margin-top:8px;">← Back</button>
+  </div>
+
+  <!-- Step 6: Confirm -->
+  <div class="bk-step" id="bk-6">
+    <div class="bk-title">Confirm your booking</div>
+    <div class="bk-sub">Please review your details before confirming.</div>
+    <div class="confirm-card" id="confirm-summary"></div>
+    <button class="bk-btn" onclick="confirmBooking()">Confirm Appointment ✓</button>
+    <button class="bk-btn-ghost" onclick="prevStep(5)" style="margin-top:8px;">← Edit Details</button>
+  </div>
+
+  <!-- Step 7: Success -->
+  <div class="bk-step" id="bk-7">
+    <div class="success-icon">✓</div>
+    <div class="bk-title">You're booked!</div>
+    <div class="bk-sub">We've received your request and will confirm by text within 1 hour during business hours.</div>
+    <div class="confirm-card" id="success-summary"></div>
+    <div style="background:var(--gbg);border:1px solid var(--gbd);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--green);margin-bottom:1rem;text-align:center;">
+      ✓ Confirmation sent to your phone and email
+    </div>
+    <button class="bk-btn" onclick="resetBooking()">Book Another Appointment</button>
+  </div>
+</div>
+
+<script src="hoc.js"></script>
+<script>
+const SERVICES=[
+  {name:'LipoAway Consultation',desc:'Learn about our awake liposuction',price:'$150',provider:'malan',dur:60},
+  {name:'Dermal Fillers',desc:'Lips, cheeks, jawline & more',price:'From $720',provider:'sara',dur:45},
+  {name:'Botox',desc:'Natural wrinkle relaxation',price:'From $350',provider:'sara',dur:30},
+  {name:'RF Microneedling',desc:'Collagen induction therapy',price:'$1,200',provider:'jacq',dur:90},
+  {name:'Medical Weight Loss',desc:'Semaglutide & weight management',price:'$350/mo',provider:'sara',dur:30},
+  {name:'Fat Transfer',desc:'Natural augmentation with your fat',price:'From $2,400',provider:'malan',dur:120},
+  {name:'IV Therapy',desc:'Hydration, immunity, energy drips',price:'From $199',provider:'any',dur:60},
+  {name:'Consultation',desc:"Not sure? Let's talk about your goals",price:'Complimentary',provider:'any',dur:30},
+];
+const PROVIDERS=[
+  {id:'sara',name:'Dr. Sara Ameli',title:'DNP, FNP-C · Injectables & Wellness'},
+  {id:'malan',name:'Dr. Todd Malan',title:'MD · LipoAway & Fat Transfer'},
+  {id:'jacq',name:'Jacqueline',title:'CLT, LE · Laser & Aesthetics'},
+];
+const TIMES=['9:00 AM','9:30 AM','10:00 AM','10:30 AM','11:00 AM','11:30 AM','1:00 PM','1:30 PM','2:00 PM','2:30 PM','3:00 PM','3:30 PM','4:00 PM','4:30 PM','5:00 PM','5:30 PM'];
+
+let booking={service:null,provider:null,date:null,time:null};
+let curStep=1;
+const TOTAL_STEPS=6;
+
+function renderSteps(){
+  document.getElementById('steps').innerHTML=Array.from({length:TOTAL_STEPS},(_,i)=>`<div class="si-dot${i+1<curStep?' done':i+1===curStep?' active':''}"></div>`).join('');
+}
+function nextStep(n){curStep=n;['bk-1','bk-2','bk-3','bk-4','bk-5','bk-6','bk-7'].forEach((id,i)=>{ document.getElementById(id).classList.toggle('active',i+1===n); });renderSteps();window.scrollTo(0,0);if(n===3)renderCal();if(n===4)renderTimes();if(n===6)renderConfirm();}
+function prevStep(n){nextStep(n);}
+
+// Services
+document.getElementById('svc-grid').innerHTML=SERVICES.map((s,i)=>`<button class="svc-btn" onclick="selectSvc(${i},this)"><div class="svc-name">${s.name}</div><div class="svc-desc">${s.desc}</div><div class="svc-price">${s.price}</div></button>`).join('');
+function selectSvc(i,el){booking.service=SERVICES[i];document.querySelectorAll('.svc-btn').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');}
+
+// Providers
+document.getElementById('prov-grid').innerHTML=PROVIDERS.map(p=>`<button class="prov-btn" onclick="selectProv('${p.id}',this)"><div class="prov-av">${p.name.split(' ').map(w=>w[0]).join('').slice(0,2)}</div><div class="prov-name">${p.name}</div><div class="prov-title">${p.title}</div></button>`).join('');
+function selectProv(id,el){booking.provider=PROVIDERS.find(p=>p.id===id);document.querySelectorAll('.prov-btn').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');}
+
+// Calendar
+function renderCal(){
+  const now=new Date();
+  const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  document.getElementById('cal-hdrs').innerHTML=days.map(d=>`<div class="cal-day-hdr">${d}</div>`).join('');
+  const firstDay=new Date(now.getFullYear(),now.getMonth(),1).getDay();
+  const daysInMonth=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();
+  let cells='';
+  for(let i=0;i<firstDay;i++) cells+=`<div></div>`;
+  for(let d=1;d<=daysInMonth;d++){
+    const date=new Date(now.getFullYear(),now.getMonth(),d);
+    const ds=date.toISOString().slice(0,10);
+    const isPast=date<new Date(now.getFullYear(),now.getMonth(),now.getDate());
+    const isSun=date.getDay()===0;
+    const isToday=ds===HOC.today();
+    cells+=`<div class="cal-day${isPast||isSun?' disabled':''}${isToday?' today':''}${booking.date===ds?' sel':''}" onclick="${!isPast&&!isSun?`selectDate('${ds}',this)`:''}">${d}</div>`;
+  }
+  document.getElementById('cal-grid').innerHTML=cells;
+}
+function selectDate(ds,el){booking.date=ds;document.querySelectorAll('.cal-day').forEach(d=>d.classList.remove('sel'));el.classList.add('sel');const[,m,day]=ds.split('-');document.getElementById('selected-date-label').textContent=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+m-1]+' '+day;}
+
+function renderTimes(){
+  // Randomly mark some as unavailable
+  const unavail=[2,5,9,12];
+  document.getElementById('time-grid').innerHTML=TIMES.map((t,i)=>`<button class="time-btn${unavail.includes(i)?'" disabled style="opacity:.35;cursor:default;':booking.time===t?' sel':''}" onclick="${!unavail.includes(i)?`selectTime('${t}',this)`:''}">${t}</button>`).join('');
+}
+function selectTime(t,el){booking.time=t;document.querySelectorAll('.time-btn').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');}
+
+function renderConfirm(){
+  const rows=[
+    ['Service',booking.service?.name||'Not selected'],
+    ['Provider',booking.provider?.name||'Not selected'],
+    ['Date',booking.date?HOC.fd(booking.date):'Not selected'],
+    ['Time',booking.time||'Not selected'],
+    ['Duration',booking.service?.dur?booking.service.dur+' min':'—'],
+    ['Price',booking.service?.price||'—'],
+  ];
+  document.getElementById('confirm-summary').innerHTML=rows.map(r=>`<div class="confirm-row"><span style="color:var(--t3);">${r[0]}</span><span style="font-weight:500;">${r[1]}</span></div>`).join('');
+}
+
+function confirmBooking(){
+  // Save to HOC data
+  const first=document.getElementById('bk-first').value||'New';
+  const last=document.getElementById('bk-last').value||'Patient';
+  const phone=document.getElementById('bk-phone').value;
+  const email=document.getElementById('bk-email').value;
+  // Add patient if new
+  const pts=HOC.load(HOC.K.pts);
+  const existing=pts.find(p=>p.phone===phone||p.email===email);
+  let patientId;
+  if(existing){ patientId=existing.id; }
+  else {
+    const np={id:HOC.uid(),first,last,phone,email,dob:'',source:'Online Booking',notes:document.getElementById('bk-notes').value,created:Date.now()};
+    pts.push(np);HOC.save(HOC.K.pts,pts);patientId=np.id;
+  }
+  // Add appointment
+  if(booking.date&&booking.time){
+    const appts=HOC.load(HOC.K.appts);
+    appts.push({id:HOC.uid(),patientId,date:booking.date,time:booking.time.replace(' AM','').replace(' PM','').replace(':',':'),service:booking.service?.name||'Appointment',provider:booking.provider?.name||'TBD',status:'Pending',notes:document.getElementById('bk-notes').value});
+    HOC.save(HOC.K.appts,appts);
+  }
+  document.getElementById('success-summary').innerHTML=`<div class="confirm-row"><span style="color:var(--t3);">Name</span><span style="font-weight:500;">${first} ${last}</span></div><div class="confirm-row"><span style="color:var(--t3);">Service</span><span style="font-weight:500;">${booking.service?.name||'—'}</span></div><div class="confirm-row"><span style="color:var(--t3);">Date & Time</span><span style="font-weight:500;">${HOC.fd(booking.date)} · ${booking.time}</span></div><div class="confirm-row"><span style="color:var(--t3);">Provider</span><span style="font-weight:500;">${booking.provider?.name||'TBD'}</span></div>`;
+  nextStep(7);
+}
+function resetBooking(){booking={};curStep=1;nextStep(1);document.querySelectorAll('.svc-btn,.prov-btn,.cal-day,.time-btn').forEach(el=>el.classList.remove('sel'));}
+renderSteps();
+</script>
+</body>
+</html>

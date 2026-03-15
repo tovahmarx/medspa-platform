@@ -1,0 +1,1830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Haus of Confidence · Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --gold:#C9A84C;--gold-h:#b8943e;--gold-light:#f5edda;--gold-pale:#fdf9f0;--gold-border:#e8d5a3;
+  --white:#ffffff;--bg:#fafaf8;--surface:#ffffff;--s2:#f5f4f1;
+  --border:#e8e4dc;--border2:#d4cfc4;
+  --text:#1a1814;--t2:#6b6459;--t3:#a09890;
+  --green:#16a34a;--green-bg:#f0fdf4;--green-bd:#bbf7d0;
+  --amber:#b45309;--amber-bg:#fffbeb;--amber-bd:#fde68a;
+  --red:#dc2626;--red-bg:#fef2f2;--red-bd:#fecaca;
+  --blue:#1d4ed8;--blue-bg:#eff6ff;--blue-bd:#bfdbfe;
+}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;}
+body{overflow:hidden;}
+
+/* ─── SPLASH ─────────────────────────────────────────────── */
+#splash{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;background:var(--bg);z-index:100;}
+.sp-eye{font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--gold);margin-bottom:.9rem;}
+.sp-h1{font-family:'Cormorant Garamond',serif;font-size:clamp(30px,5vw,52px);font-weight:500;line-height:1.1;margin-bottom:.5rem;}
+.sp-sub{font-size:14px;color:var(--t2);margin-bottom:2.2rem;max-width:420px;line-height:1.7;}
+.sg{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:500px;width:100%;margin-bottom:1.4rem;}
+.sc{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:14px 10px;text-align:center;}
+.sc-n{font-size:12px;font-weight:500;color:var(--text);}
+.sc-t{font-size:11px;color:var(--t3);margin-top:3px;}
+.arr{display:flex;align-items:center;gap:12px;color:var(--t3);font-size:12px;max-width:500px;width:100%;margin-bottom:1.4rem;}
+.al{flex:1;height:1px;background:var(--border);}
+.ubox{background:var(--white);border:2px solid var(--gold);border-radius:12px;padding:14px 36px;margin-bottom:2rem;}
+.un{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;}
+.us{font-size:11px;color:var(--t3);margin-top:4px;letter-spacing:.03em;}
+.btn-p{background:var(--gold);color:var(--white);border:none;border-radius:8px;padding:13px 28px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .15s;}
+.btn-p:hover{background:var(--gold-h);}
+
+/* ─── APP SHELL ───────────────────────────────────────────── */
+#app{display:flex;height:100vh;flex-direction:row;}
+
+/* ─── SIDEBAR ─────────────────────────────────────────────── */
+.sb{width:210px;flex-shrink:0;background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;transition:width .25s;}
+.sb-brand{padding:1.1rem 1.25rem;border-bottom:1px solid var(--border);}
+.sb-logo{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:500;line-height:1.2;}
+.sb-tag{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;margin-top:1px;}
+.ns{font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--t3);padding:.85rem 1.25rem .3rem;}
+.ni{display:flex;align-items:center;gap:9px;padding:8px 1.25rem;font-size:13px;cursor:pointer;color:var(--t2);border-left:2px solid transparent;user-select:none;transition:all .12s;white-space:nowrap;}
+.ni:hover{color:var(--text);background:var(--gold-pale);}
+.ni.active{color:var(--text);border-left-color:var(--gold);background:var(--gold-pale);font-weight:500;}
+.nd{width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0;}
+.nsq{width:6px;height:6px;border:1.5px solid var(--t3);flex-shrink:0;}
+.nbadge{margin-left:auto;background:var(--red-bg);color:var(--red);font-size:9px;font-weight:500;padding:1px 6px;border-radius:8px;border:1px solid var(--red-bd);}
+.sb-rep{font-size:9px;color:var(--t3);padding:.6rem 1.25rem;border-top:1px solid var(--border);}
+.sb-user{padding:1rem 1.25rem;border-top:1px solid var(--border);}
+.sb-uname{font-size:12px;font-weight:500;color:var(--t2);}
+.sb-ucred{font-size:10px;color:var(--t3);}
+
+/* ─── MAIN ────────────────────────────────────────────────── */
+.main{flex:1;overflow-y:auto;padding:1.5rem;background:var(--bg);min-width:0;}
+.view{display:none;}
+.view.active{display:block;}
+.pg-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.4rem;gap:10px;}
+.pg-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:500;}
+.pg-sub{font-size:12px;color:var(--t3);margin-top:3px;}
+.btn-sm{background:var(--gold);color:var(--white);border:none;border-radius:7px;padding:8px 16px;font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .15s;flex-shrink:0;white-space:nowrap;}
+.btn-sm:hover{background:var(--gold-h);}
+.btn-g{background:var(--white);color:var(--t2);border:1px solid var(--border2);border-radius:7px;padding:7px 13px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .12s;white-space:nowrap;}
+.btn-g:hover{border-color:var(--gold);color:var(--gold);}
+.btn-d{background:var(--white);color:var(--red);border:1px solid var(--red-bd);border-radius:7px;padding:7px 13px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.btn-d:hover{background:var(--red-bg);}
+.btns{display:flex;gap:8px;flex-wrap:wrap;}
+
+/* ─── STATS ───────────────────────────────────────────────── */
+.stats-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:1.4rem;}
+.stat-card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:1rem;}
+.stat-lbl{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px;}
+.stat-val{font-size:24px;font-weight:300;}
+.stat-hint{font-size:10px;color:var(--t3);margin-top:2px;}
+
+/* ─── PANEL / TABLE ───────────────────────────────────────── */
+.panel{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.panel-hdr{padding:12px 16px;border-bottom:1px solid var(--border);font-size:13px;font-weight:500;display:flex;align-items:center;justify-content:space-between;}
+table.dt{width:100%;border-collapse:collapse;font-size:12.5px;}
+table.dt th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--t3);padding:8px 14px;border-bottom:1px solid var(--border);font-weight:400;}
+table.dt td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle;}
+table.dt tr:last-child td{border-bottom:none;}
+table.dt tr:hover td{background:var(--gold-pale);}
+.prow{display:flex;align-items:center;gap:9px;}
+.av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0;background:var(--gold-light);color:var(--gold-h);}
+.pname{font-size:12.5px;font-weight:500;}
+.phint{font-size:10px;color:var(--t3);}
+.st{display:inline-block;font-size:10px;font-weight:500;padding:2px 9px;border-radius:20px;}
+.st-ok{background:var(--green-bg);color:var(--green);border:1px solid var(--green-bd);}
+.st-pend{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-bd);}
+.st-info{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-bd);}
+.empty{padding:3rem;text-align:center;color:var(--t3);font-size:13px;}
+
+/* ─── NOTICE BAR ──────────────────────────────────────────── */
+.notice{background:var(--amber-bg);border:1px solid var(--amber-bd);border-radius:8px;padding:10px 14px;font-size:11px;color:var(--amber);margin-bottom:1rem;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.notice input{padding:3px 8px;border:1px solid var(--amber-bd);border-radius:5px;font-size:11px;width:220px;background:white;font-family:'DM Sans',sans-serif;}
+.notice button{padding:4px 10px;background:var(--gold);color:white;border:none;border-radius:5px;font-size:11px;cursor:pointer;}
+
+/* ─── MODAL ───────────────────────────────────────────────── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:500;display:flex;align-items:center;justify-content:center;padding:1rem;}
+.modal{background:var(--white);border-radius:14px;border:1px solid var(--border);padding:1.75rem;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.12);}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;margin-bottom:1.4rem;}
+.fr{margin-bottom:1rem;}
+.fl{font-size:11px;font-weight:500;color:var(--t2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px;display:block;}
+.fi{width:100%;padding:9px 13px;border:1px solid var(--border2);border-radius:8px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;background:var(--white);outline:none;transition:border .12s;}
+.fi:focus{border-color:var(--gold);}
+.fs{width:100%;padding:9px 13px;border:1px solid var(--border2);border-radius:8px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;background:var(--white);outline:none;}
+.fs:focus{border-color:var(--gold);}
+.fr2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.modal-acts{display:flex;gap:8px;justify-content:flex-end;margin-top:1.5rem;}
+
+/* ─── BEFORE/AFTER ────────────────────────────────────────── */
+.ba-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
+.ba-card{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.ba-hdr{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.ba-name{font-size:13px;font-weight:500;}
+.ba-svc{font-size:10px;color:var(--t3);margin-top:2px;}
+.ba-photos{display:grid;grid-template-columns:1fr 1fr;}
+.ba-photo{aspect-ratio:1/1;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;}
+.ba-photo:first-child{border-right:1px solid var(--border);}
+.ba-lbl{position:absolute;top:7px;left:9px;font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);font-weight:500;}
+.fo{width:54px;height:66px;border-radius:50% 50% 44% 44%;border:1.5px dashed var(--border2);display:flex;align-items:center;justify-content:center;}
+.ft{font-size:8px;color:var(--t3);text-align:center;line-height:1.5;}
+.fo-saved{background:var(--green-bg);border-color:var(--green);}
+.fo-saved .ft{color:var(--green);}
+.ba-note{padding:7px 13px;background:var(--s2);border-top:1px solid var(--border);font-size:10px;color:var(--t2);}
+
+/* ─── MESSAGES ────────────────────────────────────────────── */
+.msg-wrap{display:grid;grid-template-columns:215px minmax(0,1fr);border:1px solid var(--border);border-radius:12px;overflow:hidden;min-height:450px;background:var(--white);}
+.ml{border-right:1px solid var(--border);}
+.ml-hdr{padding:11px 13px;border-bottom:1px solid var(--border);font-size:13px;font-weight:500;}
+.mi{padding:11px 13px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s;}
+.mi:hover,.mi.on{background:var(--gold-pale);}
+.mi-name{font-size:12px;font-weight:500;display:flex;justify-content:space-between;}
+.mi-prev{font-size:11px;color:var(--t2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.mi-ch{font-size:9px;color:var(--t3);margin-top:2px;}
+.mi-time{font-size:10px;color:var(--t3);}
+.md{display:flex;flex-direction:column;}
+.md-hdr{padding:11px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.md-ph{font-size:11px;color:var(--t3);font-weight:400;margin-left:7px;}
+.msg-thread{flex:1;padding:14px;display:flex;flex-direction:column;gap:10px;min-height:200px;}
+.mb{max-width:75%;padding:9px 13px;border-radius:12px;font-size:12.5px;line-height:1.55;}
+.mb-in{background:var(--s2);color:var(--text);align-self:flex-start;border:1px solid var(--border);}
+.mb-out{background:var(--gold-light);color:var(--text);align-self:flex-end;border:1px solid var(--gold-border);}
+.mb-meta{font-size:10px;color:var(--t3);margin-top:3px;}
+.sug-row{display:flex;gap:6px;flex-wrap:wrap;}
+.sug{font-size:11px;padding:4px 11px;border:1px solid var(--border2);border-radius:20px;cursor:pointer;color:var(--t2);transition:all .1s;}
+.sug:hover{border-color:var(--gold);color:var(--gold);}
+.msg-reply{padding:11px 14px;border-top:1px solid var(--border);display:flex;gap:7px;align-items:center;}
+.msg-input{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:12.5px;color:var(--text);outline:none;font-family:'DM Sans',sans-serif;}
+.msg-input:focus{border-color:var(--gold);}
+
+/* ─── PAYMENTS ────────────────────────────────────────────── */
+.pay-grid{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:14px;}
+.charge-panel{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1.2rem;}
+.cp-lbl{font-size:11px;color:var(--t2);margin-bottom:5px;font-weight:500;}
+.charge-amt{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:500;text-align:center;padding:.8rem;border:1px solid var(--border);border-radius:10px;background:var(--bg);margin:9px 0;}
+.qa{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px;}
+.qb{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:8px 4px;font-size:12px;cursor:pointer;text-align:center;color:var(--t2);font-family:'DM Sans',sans-serif;transition:all .1s;}
+.qb:hover{border-color:var(--gold);color:var(--gold);}
+.week-pills{display:flex;gap:6px;margin-bottom:1.1rem;flex-wrap:wrap;}
+.wp{padding:5px 13px;border-radius:20px;font-size:11px;cursor:pointer;color:var(--t2);background:var(--white);border:1px solid var(--border);transition:all .1s;}
+.wp:hover{border-color:var(--gold);}
+.wp.on{background:var(--gold);color:var(--white);border-color:var(--gold);font-weight:500;}
+input.search{width:100%;padding:9px 13px;border:1px solid var(--border);border-radius:8px;font-size:12.5px;color:var(--text);outline:none;font-family:'DM Sans',sans-serif;background:var(--white);margin-bottom:1rem;}
+input.search:focus{border-color:var(--gold);}
+
+/* ─── PATIENT DETAIL ──────────────────────────────────────── */
+.pd{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-top:1.2rem;}
+.pd-hdr{display:flex;align-items:center;gap:14px;margin-bottom:1.2rem;padding-bottom:1.2rem;border-bottom:1px solid var(--border);}
+.pd-av{width:48px;height:48px;border-radius:50%;background:var(--gold-light);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:500;color:var(--gold-h);flex-shrink:0;}
+.pd-name{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;}
+.pd-cred{font-size:12px;color:var(--t3);margin-top:2px;}
+.pd-fields{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:1.2rem;}
+.pd-f{background:var(--bg);border-radius:8px;padding:.8rem;}
+.pd-fl{font-size:10px;color:var(--t3);margin-bottom:3px;text-transform:uppercase;letter-spacing:.06em;}
+.pd-fv{font-size:13px;font-weight:500;}
+
+/* ─── IMPORT MODAL ────────────────────────────────────────── */
+.import-modal{max-width:560px;}
+.import-step{padding:1.2rem;border:1px solid var(--border);border-radius:10px;margin-bottom:.8rem;cursor:pointer;transition:all .15s;}
+.import-step:hover{border-color:var(--gold);background:var(--gold-pale);}
+.import-step-title{font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px;}
+.import-step-sub{font-size:11px;color:var(--t3);margin-top:4px;margin-left:24px;}
+.import-badge{width:16px;height:16px;border-radius:50%;background:var(--gold);color:white;font-size:9px;font-weight:500;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;}
+.drop-zone{border:2px dashed var(--border2);border-radius:10px;padding:2.5rem;text-align:center;cursor:pointer;transition:all .15s;margin:1rem 0;}
+.drop-zone:hover{border-color:var(--gold);background:var(--gold-pale);}
+.drop-icon{font-size:28px;margin-bottom:.5rem;color:var(--t3);}
+.drop-txt{font-size:13px;color:var(--t2);}
+.drop-sub{font-size:11px;color:var(--t3);margin-top:4px;}
+.import-progress{display:none;}
+.progress-bar-wrap{background:var(--s2);border-radius:20px;height:6px;overflow:hidden;margin:.5rem 0;}
+.progress-bar{background:var(--gold);height:100%;width:0%;transition:width .4s ease;border-radius:20px;}
+.import-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:12.5px;}
+.import-row:last-child{border-bottom:none;}
+.check{color:var(--green);font-weight:500;}
+
+/* ─── KIOSK / INTAKE ──────────────────────────────────────── */
+#kiosk-overlay{display:none;position:fixed;inset:0;background:var(--bg);z-index:900;overflow-y:auto;}
+.kiosk-inner{max-width:680px;margin:0 auto;padding:2.5rem 2rem;}
+.kiosk-logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;text-align:center;margin-bottom:.3rem;}
+.kiosk-tagline{font-size:12px;color:var(--t3);text-align:center;margin-bottom:2.5rem;text-transform:uppercase;letter-spacing:.1em;}
+.kiosk-step{display:none;}
+.kiosk-step.active{display:block;}
+.ks-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:500;margin-bottom:.4rem;}
+.ks-sub{font-size:13px;color:var(--t2);margin-bottom:1.8rem;line-height:1.6;}
+.kiosk-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:1.75rem;margin-bottom:1.25rem;}
+.kf{margin-bottom:1.2rem;}
+.kf label{display:block;font-size:12px;font-weight:500;color:var(--t2);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em;}
+.kf input,.kf select,.kf textarea{width:100%;padding:12px 16px;border:1.5px solid var(--border2);border-radius:10px;font-size:14px;color:var(--text);font-family:'DM Sans',sans-serif;background:var(--white);outline:none;transition:border .12s;}
+.kf input:focus,.kf select:focus,.kf textarea:focus{border-color:var(--gold);}
+.kf2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.consent-text{background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:1.25rem;font-size:12px;color:var(--t2);line-height:1.7;max-height:220px;overflow-y:auto;margin-bottom:1.25rem;}
+.consent-text h4{font-size:13px;font-weight:500;color:var(--text);margin-bottom:.5rem;}
+.consent-text p{margin-bottom:.75rem;}
+.consent-text p:last-child{margin-bottom:0;}
+.checkbox-row{display:flex;align-items:flex-start;gap:12px;padding:.8rem;border:1px solid var(--border);border-radius:8px;margin-bottom:.6rem;cursor:pointer;transition:all .12s;}
+.checkbox-row:hover{border-color:var(--gold);background:var(--gold-pale);}
+.checkbox-row input[type=checkbox]{width:18px;height:18px;accent-color:var(--gold);flex-shrink:0;margin-top:1px;cursor:pointer;}
+.checkbox-row span{font-size:12.5px;color:var(--text);line-height:1.5;}
+.sig-pad{background:var(--s2);border:1.5px solid var(--border2);border-radius:10px;width:100%;height:130px;display:flex;align-items:center;justify-content:center;cursor:crosshair;position:relative;margin-bottom:.5rem;overflow:hidden;}
+.sig-placeholder{font-size:12px;color:var(--t3);pointer-events:none;}
+canvas#sig{position:absolute;inset:0;width:100%;height:100%;}
+.sig-controls{display:flex;justify-content:space-between;align-items:center;margin-top:4px;}
+.sig-hint{font-size:11px;color:var(--t3);}
+.kiosk-progress{display:flex;gap:6px;justify-content:center;margin-bottom:2rem;}
+.kp-dot{width:8px;height:8px;border-radius:50%;background:var(--border2);transition:all .2s;}
+.kp-dot.done{background:var(--gold);}
+.kiosk-nav{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;}
+.success-screen{text-align:center;padding:3rem 2rem;}
+.success-icon{width:64px;height:64px;border-radius:50%;background:var(--green-bg);border:2px solid var(--green-bd);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-size:24px;}
+
+/* ─── TABLET RESPONSIVE ───────────────────────────────────── */
+@media (max-width: 900px){
+  body{overflow:auto;}
+  #app{flex-direction:column;height:auto;min-height:100vh;}
+  .sb{width:100%;flex-direction:row;flex-wrap:wrap;border-right:none;border-bottom:1px solid var(--border);}
+  .sb-brand{border-bottom:none;border-right:1px solid var(--border);padding:.75rem 1rem;}
+  .sb-user{padding:.75rem 1rem;border-top:none;border-left:1px solid var(--border);margin-top:0;margin-left:auto;}
+  .sb > div:first-child + div{display:flex;flex-direction:row;padding:0;overflow-x:auto;flex:1;}
+  .ns{display:none;}
+  .ni{padding:10px 14px;border-left:none;border-bottom:2px solid transparent;white-space:nowrap;}
+  .ni.active{border-left:none;border-bottom-color:var(--gold);}
+  .sb-rep{display:none;}
+  .main{padding:1rem;}
+  .stats-grid{grid-template-columns:repeat(2,1fr);}
+  .ba-grid{grid-template-columns:1fr;}
+  .pay-grid{grid-template-columns:1fr;}
+  .fr2{grid-template-columns:1fr;}
+  .msg-wrap{grid-template-columns:1fr;}
+  .ml{border-right:none;border-bottom:1px solid var(--border);}
+  .pd-fields{grid-template-columns:1fr 1fr;}
+  .kf2{grid-template-columns:1fr;}
+}
+@media (max-width: 600px){
+  .stats-grid{grid-template-columns:1fr 1fr;}
+  .sg{grid-template-columns:repeat(2,1fr);}
+  .pg-hdr{flex-direction:column;gap:8px;}
+  .btns{width:100%;}
+}
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+
+
+<!-- KIOSK OVERLAY -->
+<div id="kiosk-overlay">
+  <div class="kiosk-inner">
+    <div class="kiosk-logo">Haus of Confidence</div>
+    <div class="kiosk-tagline">New Patient Check-In</div>
+    <div class="kiosk-progress" id="kp"></div>
+
+    <!-- Step 1: Personal Info -->
+    <div class="kiosk-step active" id="ks-1">
+      <div class="ks-title">Welcome. Let's get you started.</div>
+      <div class="ks-sub">Tell us a little about yourself so we can personalize your experience.</div>
+      <div class="kiosk-card">
+        <div class="kf kf2"><div class="kf"><label>First Name</label><input type="text" id="ki-first" placeholder="Sara"></div><div class="kf"><label>Last Name</label><input type="text" id="ki-last" placeholder="Ameli"></div></div>
+        <div class="kf kf2"><div class="kf"><label>Date of Birth</label><input type="date" id="ki-dob"></div><div class="kf"><label>Phone Number</label><input type="tel" id="ki-phone" placeholder="(480) 555-0000"></div></div>
+        <div class="kf"><label>Email Address</label><input type="email" id="ki-email" placeholder="you@email.com"></div>
+        <div class="kf"><label>Home Address</label><input type="text" id="ki-address" placeholder="1234 N Scottsdale Rd, Scottsdale, AZ 85251"></div>
+        <div class="kf"><label>How did you hear about us?</label>
+          <select id="ki-source"><option>Instagram</option><option>Google</option><option>TikTok</option><option>Friend / Referral</option><option>Yelp</option><option>Walk-in</option><option>Other</option></select>
+        </div>
+      </div>
+      <div class="kiosk-nav"><div></div><button class="btn-p" onclick="ksNext(2)">Continue →</button></div>
+    </div>
+
+    <!-- Step 2: Medical History -->
+    <div class="kiosk-step" id="ks-2">
+      <div class="ks-title">Medical History</div>
+      <div class="ks-sub">This information helps us provide the safest, most effective treatments for you.</div>
+      <div class="kiosk-card">
+        <div class="kf"><label>Do you have any known allergies?</label><textarea id="ki-allergies" rows="2" placeholder="e.g. Lidocaine, latex, penicillin — or write 'None'"></textarea></div>
+        <div class="kf"><label>Current medications</label><textarea id="ki-meds" rows="2" placeholder="Include supplements and vitamins — or write 'None'"></textarea></div>
+        <div class="kf"><label>Relevant medical conditions</label><textarea id="ki-conditions" rows="2" placeholder="e.g. Diabetes, hypertension, autoimmune conditions — or write 'None'"></textarea></div>
+        <div class="kf kf2">
+          <div class="kf"><label>Are you pregnant or nursing?</label><select id="ki-preg"><option>No</option><option>Yes — pregnant</option><option>Yes — nursing</option><option>Possibly</option></select></div>
+          <div class="kf"><label>Previous cosmetic procedures?</label><select id="ki-prev"><option>No</option><option>Yes — Botox / fillers</option><option>Yes — surgery</option><option>Yes — multiple</option></select></div>
+        </div>
+      </div>
+      <div class="kiosk-nav"><button class="btn-g" onclick="ksNext(1)">← Back</button><button class="btn-p" onclick="ksNext(3)">Continue →</button></div>
+    </div>
+
+    <!-- Step 3: Today's Visit -->
+    <div class="kiosk-step" id="ks-3">
+      <div class="ks-title">Today's Visit</div>
+      <div class="ks-sub">Tell us what brings you in today.</div>
+      <div class="kiosk-card">
+        <div class="kf"><label>Which service are you here for?</label>
+          <select id="ki-service"><option>LipoAway (Awake Liposuction)</option><option>Fat Transfer</option><option>Dermal Fillers</option><option>Botox</option><option>RF Microneedling</option><option>PDO Thread Lift</option><option>Medical Weight Loss</option><option>Hormone Replacement Therapy</option><option>Hair Restoration</option><option>IV Therapy</option><option>Consultation — not sure yet</option></select>
+        </div>
+        <div class="kf"><label>What are your main goals?</label><textarea id="ki-goals" rows="3" placeholder="Tell us what results you're hoping to achieve..."></textarea></div>
+        <div class="kf"><label>Any questions or concerns for your provider?</label><textarea id="ki-questions" rows="2" placeholder="Optional..."></textarea></div>
+        <div class="kf kf2">
+          <div class="kf"><label>Pain tolerance</label><select id="ki-pain"><option>Low — I prefer numbing</option><option>Medium — standard care</option><option>High — minimal numbing fine</option></select></div>
+          <div class="kf"><label>Preferred follow-up contact</label><select id="ki-contact-pref"><option>Text / SMS</option><option>Phone call</option><option>Email</option></select></div>
+        </div>
+      </div>
+      <div class="kiosk-nav"><button class="btn-g" onclick="ksNext(2)">← Back</button><button class="btn-p" onclick="ksNext(4)">Continue →</button></div>
+    </div>
+
+    <!-- Step 4: Consent -->
+    <div class="kiosk-step" id="ks-4">
+      <div class="ks-title">Consent &amp; Agreements</div>
+      <div class="ks-sub">Please read carefully and check each box to confirm your understanding.</div>
+      <div class="kiosk-card">
+        <div class="consent-text">
+          <h4>Informed Consent for Aesthetic Treatments</h4>
+          <p>I understand that aesthetic treatments, including but not limited to injectable treatments, liposuction procedures, laser treatments, and related services carry inherent risks including bruising, swelling, infection, asymmetry, and in rare cases, more serious complications.</p>
+          <p>I confirm that I have disclosed all relevant medical history, medications, and conditions to the best of my knowledge, and I understand that withholding information may affect the safety of my treatment.</p>
+          <p>I understand that results are not guaranteed and may vary. I have been given the opportunity to ask questions and have had them answered to my satisfaction.</p>
+          <h4>HIPAA Privacy Notice</h4>
+          <p>Haus of Confidence maintains strict confidentiality of all patient health information in accordance with HIPAA regulations. Your information will only be shared with treating providers and will not be sold or disclosed to third parties without your explicit consent.</p>
+          <h4>Photo / Media Release</h4>
+          <p>You may optionally consent to before/after photographs for clinical documentation purposes. These images are stored securely and used solely for tracking your progress unless you explicitly authorize other use.</p>
+        </div>
+        <div class="checkbox-row"><input type="checkbox" id="c1"><span>I have read and understand the informed consent for aesthetic treatments and voluntarily agree to proceed.</span></div>
+        <div class="checkbox-row"><input type="checkbox" id="c2"><span>I acknowledge receipt of the HIPAA Privacy Notice and consent to the collection and use of my health information for treatment purposes.</span></div>
+        <div class="checkbox-row"><input type="checkbox" id="c3"><span>I consent to before/after photographs for my clinical record. <em style="color:var(--t3);">(Optional — uncheck to decline)</em></span></div>
+        <div class="checkbox-row"><input type="checkbox" id="c4"><span>I confirm that all information I have provided is accurate and complete to the best of my knowledge.</span></div>
+      </div>
+      <div class="kiosk-nav"><button class="btn-g" onclick="ksNext(3)">← Back</button><button class="btn-p" onclick="ksNext(5)">Continue →</button></div>
+    </div>
+
+    <!-- Step 5: Signature -->
+    <div class="kiosk-step" id="ks-5">
+      <div class="ks-title">Sign Below</div>
+      <div class="ks-sub">Please sign with your finger (on tablet) or mouse to complete your intake form.</div>
+      <div class="kiosk-card">
+        <div class="sig-pad" id="sig-pad">
+          <div class="sig-placeholder" id="sig-placeholder">Sign here</div>
+          <canvas id="sig"></canvas>
+        </div>
+        <div class="sig-controls">
+          <span class="sig-hint" id="sig-status">Draw your signature above</span>
+          <button class="btn-g" style="font-size:11px;padding:4px 12px;" onclick="clearSig()">Clear</button>
+        </div>
+        <div style="margin-top:1.2rem;padding-top:1.2rem;border-top:1px solid var(--border);font-size:12px;color:var(--t2);">
+          By signing above, I confirm that I am the patient named in this form (or their authorized guardian), that I have read all pages of this intake form, and that I agree to the terms described herein.
+        </div>
+      </div>
+      <div class="kiosk-nav"><button class="btn-g" onclick="ksNext(4)">← Back</button><button class="btn-p" onclick="submitIntake()">Submit &amp; Complete Check-In</button></div>
+    </div>
+
+    <!-- Success -->
+    <div class="kiosk-step" id="ks-6">
+      <div class="success-screen">
+        <div class="success-icon">✓</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:500;margin-bottom:.5rem;">You're all checked in.</div>
+        <div style="font-size:14px;color:var(--t2);margin-bottom:2rem;line-height:1.7;">Your intake form has been submitted and saved to your patient record. A member of our team will be with you shortly.</div>
+        <div style="background:var(--gold-pale);border:1px solid var(--gold-border);border-radius:12px;padding:1.25rem;max-width:360px;margin:0 auto 2rem;text-align:left;">
+          <div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--gold-h);margin-bottom:.5rem;">Your intake summary</div>
+          <div id="intake-summary" style="font-size:13px;color:var(--text);line-height:1.8;"></div>
+        </div>
+        <button class="btn-p" onclick="closeKiosk()">Done</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="sb">
+    <div class="sb-brand"><div class="sb-logo">Haus of Confidence</div><div class="sb-tag">medspa platform</div></div>
+    <div style="flex:1;overflow-y:auto;padding-top:.3rem;">
+      <div class="ns">Operations</div>
+      <div class="ni active" onclick="nav('dashboard',this)"><div class="nd"></div>Dashboard</div>
+      <div class="ni" onclick="nav('appointments',this)"><div class="nsq"></div>Appointments</div>
+      <div class="ni" onclick="nav('patients',this)"><div class="nsq" style="border-radius:50%;"></div>Patients</div>
+      <div class="ns">Clinical</div>
+      <div class="ni" onclick="nav('photos',this)"><div class="nsq"></div>Before &amp; After</div>
+      <div class="ns">Engagement</div>
+      <div class="ni" onclick="nav('messages',this)"><div class="nsq" style="border-radius:50%;"></div>Messages<span class="nbadge">5</span></div>
+      <div class="ns">Finance</div>
+      <div class="ni" onclick="nav('payments',this)"><div class="nsq" style="border-radius:2px;"></div>Payments</div>
+      <div class="ns">More</div>
+      <a class="ni" href="charting.html"><div class="nsq"></div>Charting &amp; SOAP</a>
+      <a class="ni" href="analytics.html"><div class="nsq"></div>Analytics</a>
+      <a class="ni" href="memberships.html"><div class="nsq"></div>Memberships</a>
+      <a class="ni" href="inventory.html"><div class="nsq"></div>Inventory</a>
+    </div>
+    <div class="sb-rep">✦ Replaces: Clover + 3 other systems</div>
+    <div class="sb-user"><div class="sb-uname">Dr. Sara Ameli</div><div class="sb-ucred">DNP, FNP-C</div></div>
+  </div>
+
+  <div class="main">
+
+    <!-- DASHBOARD -->
+    <div id="view-dashboard" class="view active">
+      <div class="pg-hdr">
+        <div><div class="pg-title">Good morning, Sara.</div><div class="pg-sub" id="dash-date"></div></div>
+        <div class="btns">
+          <button class="btn-g" onclick="openKiosk()">Patient Check-In</button>
+          <button class="btn-sm" onclick="openApptModal()">+ New Appointment</button>
+        </div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-lbl">Today's Appointments</div><div class="stat-val" id="d-appts">0</div><div class="stat-hint" id="d-appts-h"></div></div>
+        <div class="stat-card"><div class="stat-lbl">Total Patients</div><div class="stat-val" id="d-pts">0</div><div class="stat-hint">in your system</div></div>
+        <div class="stat-card"><div class="stat-lbl">Unread Messages</div><div class="stat-val">5</div><div class="stat-hint">2 texts · 3 emails</div></div>
+        <div class="stat-card"><div class="stat-lbl">Monthly Revenue</div><div class="stat-val" id="d-rev">$0</div><div class="stat-hint">paid this month</div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-hdr">Today's Schedule<span style="font-size:11px;color:var(--t3);font-weight:400;" id="today-lbl"></span></div>
+        <div id="dash-sched"></div>
+      </div>
+    </div>
+
+    <!-- APPOINTMENTS -->
+    <div id="view-appointments" class="view">
+      <div class="pg-hdr">
+        <div><div class="pg-title">Appointments</div><div class="pg-sub">Add, edit, and manage all bookings</div></div>
+        <div class="btns">
+          <button class="btn-sm" onclick="openApptModal()">+ New Appointment</button>
+        </div>
+      </div>
+      <div class="week-pills" id="week-pills"></div>
+      <div class="panel" id="appt-wrap"></div>
+    </div>
+
+    <!-- PATIENTS -->
+    <div id="view-patients" class="view">
+      <div class="pg-hdr">
+        <div><div class="pg-title">Patients</div><div class="pg-sub" id="pt-count-lbl"></div></div>
+        <div class="btns">
+          <button class="btn-g" onclick="openImport()">Import Data</button>
+          <button class="btn-sm" onclick="openPatientModal()">+ New Patient</button>
+        </div>
+      </div>
+      <input class="search" id="pt-search" type="text" placeholder="Search by name, phone, or email..." oninput="renderPatients()">
+      <div class="panel" id="pt-table"></div>
+      <div id="pt-detail"></div>
+    </div>
+
+    <!-- BEFORE & AFTER -->
+    <div id="view-photos" class="view">
+      <div class="pg-hdr"><div><div class="pg-title">Before &amp; After</div><div class="pg-sub">Photo documentation with provider notes</div></div><button class="btn-sm">+ New Session</button></div>
+      <div class="ba-grid">
+        <div class="ba-card"><div class="ba-hdr"><div><div class="ba-name">Maria G.</div><div class="ba-svc">LipoAway · Abdomen · Feb 14, 2026</div></div><button class="btn-g" style="font-size:11px;padding:3px 10px;">Annotate</button></div><div class="ba-photos"><div class="ba-photo"><div class="ba-lbl">Before</div><div class="fo"><div class="ft">Place<br>photo<br>here</div></div></div><div class="ba-photo"><div class="ba-lbl">After</div><div class="fo fo-saved"><div class="ft">Photo<br>saved</div></div></div></div><div class="ba-note">Note: Excellent results — 3.5in waist reduction in one session</div></div>
+        <div class="ba-card"><div class="ba-hdr"><div><div class="ba-name">Jessica T.</div><div class="ba-svc">Dermal Fillers · Lips · Mar 2, 2026</div></div><button class="btn-g" style="font-size:11px;padding:3px 10px;">Annotate</button></div><div class="ba-photos"><div class="ba-photo"><div class="ba-lbl">Before</div><div class="fo"><div class="ft">Place<br>photo<br>here</div></div></div><div class="ba-photo"><div class="ba-lbl">After</div><div class="fo"><div class="ft">Place<br>photo<br>here</div></div></div></div><div class="ba-note">Note: 1ml Juvederm Ultra, natural lip enhancement</div></div>
+        <div class="ba-card"><div class="ba-hdr"><div><div class="ba-name">Amanda K.</div><div class="ba-svc">RF Microneedling · Full Face · Jan 28, 2026</div></div><button class="btn-g" style="font-size:11px;padding:3px 10px;">Annotate</button></div><div class="ba-photos"><div class="ba-photo"><div class="ba-lbl">Before</div><div class="fo"><div class="ft">Place<br>photo<br>here</div></div></div><div class="ba-photo"><div class="ba-lbl">After</div><div class="fo fo-saved"><div class="ft">Photo<br>saved</div></div></div></div><div class="ba-note">Note: Significant texture improvement, visible pore reduction</div></div>
+        <div class="ba-card"><div class="ba-hdr"><div><div class="ba-name">Rachel M.</div><div class="ba-svc">Botox · Forehead + Crow's feet · Dec 20, 2025</div></div><button class="btn-g" style="font-size:11px;padding:3px 10px;">Annotate</button></div><div class="ba-photos"><div class="ba-photo"><div class="ba-lbl">Before</div><div class="fo"><div class="ft">Place<br>photo<br>here</div></div></div><div class="ba-photo"><div class="ba-lbl">After</div><div class="fo fo-saved"><div class="ft">Photo<br>saved</div></div></div></div><div class="ba-note">Note: 50 units total · 2-week follow-up booked</div></div>
+      </div>
+    </div>
+
+    <!-- MESSAGES -->
+    <div id="view-messages" class="view">
+      <div class="pg-hdr" style="margin-bottom:.9rem;"><div><div class="pg-title">Messages</div><div class="pg-sub">SMS · Email · All in one inbox</div></div><button class="btn-sm">+ Compose</button></div>
+      <div class="notice">⚡ <strong>SMS</strong> requires Twilio (10 min setup). <strong>Email</strong> — add an EmailJS key to send now:
+        <input id="ej-key" placeholder="EmailJS public key (optional)">
+      </div>
+      <div class="msg-wrap">
+        <div class="ml">
+          <div class="ml-hdr">Inbox <span style="font-size:9px;background:var(--red-bg);color:var(--red);padding:1px 6px;border-radius:8px;margin-left:5px;border:1px solid var(--red-bd);">5</span></div>
+          <div class="mi on" onclick="selMsg(this,'Amanda K.','(623) 555-0391','SMS')"><div class="mi-name">Amanda K.<span class="mi-time">9:41am</span></div><div class="mi-prev">Quick question about my appt...</div><div class="mi-ch">SMS</div></div>
+          <div class="mi" onclick="selMsg(this,'Nicole B.','(480) 555-0518','SMS')"><div class="mi-name">Nicole B.<span class="mi-time">8:15am</span></div><div class="mi-prev">Can I reschedule to 2pm?</div><div class="mi-ch">SMS</div></div>
+          <div class="mi" onclick="selMsg(this,'Sarah P.','sarah@email.com','Email')"><div class="mi-name">Sarah P.<span class="mi-time">Yesterday</span></div><div class="mi-prev">Thank you so much Sara!</div><div class="mi-ch">Email</div></div>
+          <div class="mi" onclick="selMsg(this,'Carmen L.','carmen@email.com','Email')"><div class="mi-name">Carmen L.<span class="mi-time">Yesterday</span></div><div class="mi-prev">What's the recovery time for...</div><div class="mi-ch">Email</div></div>
+          <div class="mi" onclick="selMsg(this,'Maria G.','(602) 555-0143','SMS')"><div class="mi-name">Maria G.<span class="mi-time">Mon</span></div><div class="mi-prev">Your appointment is confirmed...</div><div class="mi-ch">SMS · Auto-sent</div></div>
+        </div>
+        <div class="md">
+          <div class="md-hdr"><div><span id="msg-name">Amanda K.</span><span class="md-ph" id="msg-info">(623) 555-0391 · SMS</span></div><span id="msg-status" style="font-size:11px;color:var(--green);"></span></div>
+          <div class="msg-thread" id="msg-thread">
+            <div style="align-self:flex-end;"><div class="mb mb-out">Hi Amanda! Your RF Microneedling is confirmed for tomorrow at 11:15am with Jacqueline. Reply STOP to opt out.</div><div class="mb-meta" style="text-align:right;">Mar 16 · 4:02pm · Auto-reminder</div></div>
+            <div style="align-self:flex-start;"><div class="mb mb-in">Hey! Quick question — do I need to do anything to prep my skin before coming in?</div><div class="mb-meta">Amanda K. · 9:41am</div></div>
+            <div style="text-align:center;font-size:10px;color:var(--t3);padding:2px 0;">Suggested replies</div>
+            <div class="sug-row"><div class="sug" onclick="fillReply(this)">Avoid retinol 24hrs prior</div><div class="sug" onclick="fillReply(this)">Come with clean, dry skin</div><div class="sug" onclick="fillReply(this)">Send prep guide PDF</div></div>
+          </div>
+          <div class="msg-reply"><input class="msg-input" id="msg-reply" type="text" placeholder="Reply..."><button class="btn-sm" onclick="sendMsg()">Send</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAYMENTS -->
+    <div id="view-payments" class="view">
+      <div class="pg-hdr"><div><div class="pg-title">Payments</div><div class="pg-sub">Charge, track, and report — no Clover needed</div></div></div>
+      <div class="stats-grid" style="margin-bottom:1.4rem;">
+        <div class="stat-card"><div class="stat-lbl">Today's Revenue</div><div class="stat-val" id="pay-today">$0</div><div class="stat-hint" id="pay-today-h"></div></div>
+        <div class="stat-card"><div class="stat-lbl">This Month</div><div class="stat-val" id="pay-month">$0</div><div class="stat-hint">all transactions</div></div>
+        <div class="stat-card"><div class="stat-lbl">Pending</div><div class="stat-val" id="pay-pend">$0</div><div class="stat-hint">unpaid invoices</div></div>
+        <div class="stat-card"><div class="stat-lbl">Transactions</div><div class="stat-val" id="pay-ct">0</div><div class="stat-hint">this month</div></div>
+      </div>
+      <div class="notice">⚡ <strong>Live card processing</strong> via Stripe — paste your publishable key to activate:
+        <input id="stripe-key" placeholder="pk_test_... (Stripe publishable key)" style="width:240px;">
+        <button onclick="initStripe()">Connect Stripe</button>
+      </div>
+      <div class="pay-grid">
+        <div>
+          <div style="font-size:13px;font-weight:500;margin-bottom:10px;">Transaction History</div>
+          <div class="panel" id="pay-table"></div>
+        </div>
+        <div>
+          <div style="font-size:13px;font-weight:500;margin-bottom:10px;">Quick Charge</div>
+          <div class="charge-panel">
+            <div class="cp-lbl">Patient</div>
+            <select class="fs" id="charge-pt" style="width:100%;padding:9px 12px;border:1px solid var(--border2);border-radius:8px;font-size:12px;font-family:'DM Sans',sans-serif;background:var(--white);margin-bottom:11px;"></select>
+            <div class="cp-lbl">Service</div>
+            <select class="fs" id="charge-svc" onchange="prefillAmt(this)" style="width:100%;padding:9px 12px;border:1px solid var(--border2);border-radius:8px;font-size:12px;font-family:'DM Sans',sans-serif;background:var(--white);margin-bottom:11px;">
+              <option value="150">LipoAway Consult — $150</option>
+              <option value="4800">LipoAway Procedure — $4,800</option>
+              <option value="720">Dermal Fillers — $720</option>
+              <option value="350">Botox — $350</option>
+              <option value="1200">RF Microneedling — $1,200</option>
+              <option value="2400">Fat Transfer — $2,400</option>
+              <option value="200">Consultation — $200</option>
+            </select>
+            <div class="cp-lbl">Amount</div>
+            <div class="charge-amt" id="chargeAmt">$150</div>
+            <div class="qa">
+              <div class="qb" onclick="setC(150)">$150</div><div class="qb" onclick="setC(350)">$350</div><div class="qb" onclick="setC(720)">$720</div>
+              <div class="qb" onclick="setC(1200)">$1,200</div><div class="qb" onclick="setC(2400)">$2,400</div><div class="qb" onclick="setC(4800)">$4,800</div>
+            </div>
+            <div id="stripe-card-el" style="padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--bg);margin-bottom:10px;font-size:12px;color:var(--t3);text-align:center;min-height:38px;line-height:2.2;">Card form appears after connecting Stripe</div>
+            <button class="btn-p" style="width:100%;padding:12px;font-size:14px;" onclick="processCharge()">Charge Card</button>
+            <button class="btn-g" style="width:100%;padding:10px;font-size:12px;margin-top:8px;" onclick="sendInvoiceText()">Send Invoice by Text</button>
+            <div id="charge-status" style="margin-top:8px;font-size:12px;text-align:center;min-height:18px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- APPOINTMENT MODAL -->
+<div id="appt-modal" class="overlay" style="display:none;" onclick="if(event.target===this)closeApptModal()">
+  <div class="modal">
+    <div class="modal-title" id="appt-modal-title">New Appointment</div>
+    <input type="hidden" id="ae-id">
+    <div class="fr"><label class="fl">Patient</label><select class="fs" id="ae-pt"></select></div>
+    <div class="fr2">
+      <div class="fr" style="margin-bottom:0;"><label class="fl">Date</label><input class="fi" type="date" id="ae-date"></div>
+      <div class="fr" style="margin-bottom:0;"><label class="fl">Time</label><input class="fi" type="time" id="ae-time"></div>
+    </div>
+    <div class="fr" style="margin-top:1rem;"><label class="fl">Service</label>
+      <select class="fs" id="ae-svc"><option>LipoAway Consult</option><option>LipoAway Procedure</option><option>Fat Transfer</option><option>Dermal Fillers</option><option>Sculptra &amp; Radiesse</option><option>Botox</option><option>RF Microneedling</option><option>PDO Thread Lift</option><option>Medical Weight Loss</option><option>Hormone Replacement Therapy</option><option>Hair Restoration</option><option>IV Therapy</option><option>Stem Cells</option><option>Facial</option></select>
+    </div>
+    <div class="fr"><label class="fl">Provider</label>
+      <select class="fs" id="ae-prov"><option>Dr. Sara Ameli</option><option>Dr. Todd Malan</option><option>Jacqueline</option></select>
+    </div>
+    <div class="fr"><label class="fl">Status</label>
+      <select class="fs" id="ae-st"><option>Confirmed</option><option>Pending</option><option>Completed</option><option>Cancelled</option></select>
+    </div>
+    <div class="fr"><label class="fl">Notes</label><textarea class="fi" id="ae-notes" rows="2" placeholder="Optional notes..."></textarea></div>
+    <div class="modal-acts">
+      <button class="btn-g" onclick="closeApptModal()">Cancel</button>
+      <button class="btn-d" id="ae-del" style="display:none;" onclick="deleteAppt()">Delete</button>
+      <button class="btn-sm" onclick="saveAppt()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- PATIENT MODAL -->
+<div id="pt-modal" class="overlay" style="display:none;" onclick="if(event.target===this)closePtModal()">
+  <div class="modal">
+    <div class="modal-title" id="pt-modal-title">New Patient</div>
+    <input type="hidden" id="pe-id">
+    <div class="fr2">
+      <div class="fr" style="margin-bottom:0;"><label class="fl">First Name</label><input class="fi" type="text" id="pe-first" placeholder="Sara"></div>
+      <div class="fr" style="margin-bottom:0;"><label class="fl">Last Name</label><input class="fi" type="text" id="pe-last" placeholder="Ameli"></div>
+    </div>
+    <div class="fr" style="margin-top:1rem;"><label class="fl">Phone</label><input class="fi" type="tel" id="pe-phone" placeholder="(480) 555-0000"></div>
+    <div class="fr"><label class="fl">Email</label><input class="fi" type="email" id="pe-email" placeholder="patient@email.com"></div>
+    <div class="fr2">
+      <div class="fr" style="margin-bottom:0;"><label class="fl">Date of Birth</label><input class="fi" type="date" id="pe-dob"></div>
+      <div class="fr" style="margin-bottom:0;"><label class="fl">Source</label>
+        <select class="fs" id="pe-src"><option>Instagram</option><option>Google</option><option>Referral</option><option>Walk-in</option><option>TikTok</option><option>Other</option></select>
+      </div>
+    </div>
+    <div class="fr" style="margin-top:1rem;"><label class="fl">Medical Notes</label><textarea class="fi" id="pe-notes" rows="2" placeholder="Allergies, conditions, preferences..."></textarea></div>
+    <div class="modal-acts">
+      <button class="btn-g" onclick="closePtModal()">Cancel</button>
+      <button class="btn-d" id="pe-del" style="display:none;" onclick="deletePatient()">Delete</button>
+      <button class="btn-sm" onclick="savePatient()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- IMPORT MODAL -->
+<div id="import-modal" class="overlay" style="display:none;" onclick="if(event.target===this)closeImport()">
+  <div class="modal import-modal">
+    <div class="modal-title">Import Existing Data</div>
+    <p style="font-size:13px;color:var(--t2);margin-bottom:1.4rem;line-height:1.6;">Migrate your patients, appointments, and payment history from any existing system. We support direct imports from common medspa platforms.</p>
+    <div id="import-source-step">
+      <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--t3);margin-bottom:.8rem;">Select your current system</div>
+      <div class="import-step" onclick="startImport('Clover')"><div class="import-step-title"><span class="import-badge">1</span>Clover</div><div class="import-step-sub">Import payment history and customer records</div></div>
+      <div class="import-step" onclick="startImport('Jane App')"><div class="import-step-title"><span class="import-badge">2</span>Jane App</div><div class="import-step-sub">Import patient profiles, appointments, and notes</div></div>
+      <div class="import-step" onclick="startImport('Vagaro')"><div class="import-step-title"><span class="import-badge">3</span>Vagaro</div><div class="import-step-sub">Import client records, bookings, and forms</div></div>
+      <div class="import-step" onclick="startImport('Meevo')"><div class="import-step-title"><span class="import-badge">4</span>Meevo</div><div class="import-step-sub">Import client data and transaction history</div></div>
+      <div class="import-step" onclick="startImport('CSV / Spreadsheet')">
+        <div class="import-step-title"><span class="import-badge">✦</span>CSV / Spreadsheet</div>
+        <div class="import-step-sub">Upload any .csv or .xlsx file with patient data</div>
+      </div>
+    </div>
+    <div id="import-upload-step" style="display:none;">
+      <div style="font-size:13px;color:var(--t2);margin-bottom:1rem;" id="import-from-label"></div>
+      <div class="drop-zone" onclick="simulateUpload()">
+        <div class="drop-icon">⬆</div>
+        <div class="drop-txt">Drop your export file here</div>
+        <div class="drop-sub">or click to browse — supports .csv, .xlsx, .json</div>
+      </div>
+      <div class="import-progress" id="import-progress">
+        <div style="font-size:12px;color:var(--t2);margin-bottom:.5rem;" id="import-progress-label">Reading file...</div>
+        <div class="progress-bar-wrap"><div class="progress-bar" id="import-bar"></div></div>
+        <div id="import-results" style="margin-top:1rem;display:none;">
+          <div class="import-row"><span>Patients found</span><span class="check" id="imp-pts">—</span></div>
+          <div class="import-row"><span>Appointments found</span><span class="check" id="imp-appts">—</span></div>
+          <div class="import-row"><span>Transactions found</span><span class="check" id="imp-txns">—</span></div>
+          <div class="import-row"><span>Duplicates skipped</span><span style="color:var(--t3);" id="imp-dups">—</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-acts">
+      <button class="btn-g" onclick="closeImport()">Close</button>
+      <button class="btn-sm" id="import-confirm-btn" style="display:none;" onclick="confirmImport()">Import All Records</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DATA ─────────────────────────────────────────────────────────────
+const KA='hoc_a',KP='hoc_p',KT='hoc_t';
+function load(k){try{return JSON.parse(localStorage.getItem(k)||'[]')}catch{return[];}}
+function save(k,d){localStorage.setItem(k,JSON.stringify(d));}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+function today(){return new Date().toISOString().slice(0,10);}
+
+if(!localStorage.getItem('hoc_seed')){
+  const pts=[
+    {id:'p1',first:'Maria',last:'G',phone:'(602) 555-0143',email:'maria@email.com',dob:'1988-04-12',source:'Instagram',notes:'No known allergies',created:Date.now()},
+    {id:'p2',first:'Jessica',last:'T',phone:'(480) 555-0287',email:'jessica@email.com',dob:'1995-07-23',source:'Google',notes:'',created:Date.now()},
+    {id:'p3',first:'Amanda',last:'K',phone:'(623) 555-0391',email:'amanda@email.com',dob:'1991-02-14',source:'Referral',notes:'Sensitive skin',created:Date.now()},
+    {id:'p4',first:'Nicole',last:'B',phone:'(480) 555-0518',email:'nicole@email.com',dob:'1983-09-30',source:'TikTok',notes:'',created:Date.now()},
+    {id:'p5',first:'Rachel',last:'M',phone:'(602) 555-0774',email:'rachel@email.com',dob:'1979-11-05',source:'Google',notes:'Prefers afternoon slots',created:Date.now()},
+    {id:'p6',first:'Carmen',last:'L',phone:'(480) 555-0922',email:'carmen@email.com',dob:'1990-06-18',source:'Instagram',notes:'',created:Date.now()},
+  ];
+  const t=today();
+  const appts=[
+    {id:'a1',patientId:'p1',date:t,time:'09:00',service:'LipoAway Consult',provider:'Dr. Todd Malan',status:'Confirmed',notes:'',created:Date.now()},
+    {id:'a2',patientId:'p2',date:t,time:'10:30',service:'Dermal Fillers',provider:'Dr. Sara Ameli',status:'Confirmed',notes:'',created:Date.now()},
+    {id:'a3',patientId:'p3',date:t,time:'11:15',service:'RF Microneedling',provider:'Jacqueline',status:'Pending',notes:'',created:Date.now()},
+    {id:'a4',patientId:'p4',date:t,time:'13:00',service:'Medical Weight Loss',provider:'Dr. Sara Ameli',status:'Confirmed',notes:'',created:Date.now()},
+    {id:'a5',patientId:'p5',date:t,time:'14:30',service:'Botox',provider:'Dr. Sara Ameli',status:'Confirmed',notes:'',created:Date.now()},
+    {id:'a6',patientId:'p6',date:t,time:'15:45',service:'Fat Transfer Consult',provider:'Dr. Todd Malan',status:'Pending',notes:'',created:Date.now()},
+  ];
+  const txns=[
+    {id:'t1',patientId:'p1',service:'LipoAway Consult',amount:150,method:'Visa ···4821',status:'Paid',date:t},
+    {id:'t2',patientId:'p2',service:'Dermal Fillers',amount:720,method:'Visa ···2290',status:'Paid',date:t},
+    {id:'t3',patientId:'p4',service:'Medical Weight Loss',amount:350,method:'Amex ···3804',status:'Paid',date:t},
+    {id:'t4',patientId:'p3',service:'RF Microneedling',amount:1200,method:'Pending',status:'Due',date:t},
+    {id:'t5',patientId:'p6',service:'Fat Transfer Consult',amount:200,method:'Pending',status:'Due',date:t},
+  ];
+  save(KP,pts);save(KA,appts);save(KT,txns);
+  localStorage.setItem('hoc_seed','1');
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────────
+function gp(id){return load(KP).find(p=>p.id===id)||{};}
+function pn(p){return(p.first||'')+(p.last?' '+p.last:'');}
+function pi(p){return((p.first||'')[0]||'')+((p.last||'')[0]||'');}
+function fa(n){return'$'+Number(n).toLocaleString();}
+function fd(d){if(!d)return'';const[y,m,day]=d.split('-');return['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+m-1]+' '+day;}
+function ft(t){if(!t)return'';const[h,m]=t.split(':');const hr=+h;return(hr===0?12:hr>12?hr-12:hr)+':'+m+(hr<12?' AM':' PM');}
+function sc(s){return s==='Confirmed'?'st-ok':s==='Completed'?'st-info':'st-pend';}
+function tbl(cols,rows){return'<table class="dt"><thead><tr>'+cols.map(c=>'<th>'+c+'</th>').join('')+'</tr></thead><tbody>'+rows+'</tbody></table>';}
+
+// ── LAUNCH ─────────────────────────────────────────────────────────────
+function launch(){
+  document.getElementById('splash').style.display='none';
+  document.getElementById('app').style.display='flex';
+  renderDash();renderApptWeek();renderPatients();renderPayments();
+  const now=new Date();
+  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  document.getElementById('dash-date').textContent=days[now.getDay()]+', '+now.toLocaleDateString('en-US',{month:'long',day:'numeric'});
+  document.getElementById('today-lbl').textContent=' — '+now.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+  document.getElementById('ae-date').value=today();
+}
+function nav(v,el){
+  document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.ni').forEach(x=>x.classList.remove('active'));
+  document.getElementById('view-'+v).classList.add('active');
+  el.classList.add('active');
+  if(v==='dashboard')renderDash();
+  if(v==='appointments')renderApptWeek();
+  if(v==='patients')renderPatients();
+  if(v==='payments')renderPayments();
+}
+
+// ── DASHBOARD ──────────────────────────────────────────────────────────
+function renderDash(){
+  const appts=load(KA),pts=load(KP),txns=load(KT),t=today();
+  const ta=appts.filter(a=>a.date===t);
+  const pend=ta.filter(a=>a.status==='Pending').length;
+  document.getElementById('d-appts').textContent=ta.length;
+  document.getElementById('d-appts-h').textContent=pend+' pending confirmation';
+  document.getElementById('d-pts').textContent=pts.length;
+  const rev=txns.filter(x=>x.status==='Paid').reduce((s,x)=>s+Number(x.amount),0);
+  document.getElementById('d-rev').textContent=fa(rev);
+  const sorted=ta.slice().sort((a,b)=>a.time.localeCompare(b.time));
+  const el=document.getElementById('dash-sched');
+  if(!sorted.length){el.innerHTML='<div class="empty">No appointments today. <a href="#" onclick="openApptModal();return false;" style="color:var(--gold);">Add one →</a></div>';return;}
+  el.innerHTML=tbl(['Time','Patient','Service','Provider','Status',''],
+    sorted.map(a=>{const p=gp(a.patientId);return`<tr><td style="color:var(--t3);white-space:nowrap;">${ft(a.time)}</td><td><div class="prow"><div class="av">${pi(p)}</div><div><div class="pname">${pn(p)}</div></div></div></td><td>${a.service}</td><td>${a.provider}</td><td><span class="st ${sc(a.status)}">${a.status}</span></td><td><button class="btn-g" style="font-size:11px;padding:3px 10px;" onclick="editAppt('${a.id}')">Edit</button></td></tr>`;}).join(''));
+}
+
+// ── APPOINTMENTS ────────────────────────────────────────────────────────
+let wkOff=0,selDate=today();
+function getWkDates(off){
+  const d=new Date();d.setDate(d.getDate()-d.getDay()+1+(off*7));
+  return Array.from({length:6},(_,i)=>{const x=new Date(d);x.setDate(d.getDate()+i);return x.toISOString().slice(0,10);});
+}
+function renderApptWeek(){
+  const dates=getWkDates(wkOff);
+  if(!dates.includes(selDate))selDate=dates[0];
+  const days=['Mon','Tue','Wed','Thu','Fri','Sat'];
+  document.getElementById('week-pills').innerHTML=
+    `<div class="wp btn-g" onclick="wkOff--;renderApptWeek()">← Prev</div>`+
+    dates.map((d,i)=>`<div class="wp${d===selDate?' on':''}" onclick="selDate='${d}';renderApptWeek()">${days[i]} ${d.slice(8)}</div>`).join('')+
+    `<div class="wp btn-g" onclick="wkOff++;renderApptWeek()">Next →</div>`;
+  const appts=load(KA).filter(a=>a.date===selDate).sort((a,b)=>a.time.localeCompare(b.time));
+  const wrap=document.getElementById('appt-wrap');
+  if(!appts.length){wrap.innerHTML='<div class="empty">No appointments this day. <a href="#" onclick="openApptModal();return false;" style="color:var(--gold);">Book one →</a></div>';return;}
+  wrap.innerHTML=tbl(['Time','Patient','Service','Provider','Status',''],
+    appts.map(a=>{const p=gp(a.patientId);return`<tr><td style="color:var(--t3);white-space:nowrap;">${ft(a.time)}</td><td><div class="prow"><div class="av">${pi(p)}</div><div class="pname">${pn(p)}</div></div></td><td>${a.service}</td><td>${a.provider}</td><td><span class="st ${sc(a.status)}">${a.status}</span></td><td><button class="btn-g" style="font-size:11px;padding:3px 10px;" onclick="editAppt('${a.id}')">Edit</button></td></tr>`;}).join(''));
+}
+function popPtSel(selId,cur){
+  const pts=load(KP);
+  document.getElementById(selId).innerHTML=pts.length?pts.map(p=>`<option value="${p.id}"${p.id===cur?' selected':''}>${pn(p)}</option>`).join(''):'<option value="">— Add a patient first —</option>';
+}
+function openApptModal(){
+  document.getElementById('appt-modal-title').textContent='New Appointment';
+  document.getElementById('ae-id').value='';
+  document.getElementById('ae-del').style.display='none';
+  document.getElementById('ae-date').value=selDate||today();
+  document.getElementById('ae-time').value='09:00';
+  document.getElementById('ae-st').value='Confirmed';
+  document.getElementById('ae-notes').value='';
+  popPtSel('ae-pt','');
+  document.getElementById('appt-modal').style.display='flex';
+}
+function editAppt(id){
+  const a=load(KA).find(x=>x.id===id);if(!a)return;
+  document.getElementById('appt-modal-title').textContent='Edit Appointment';
+  document.getElementById('ae-id').value=id;
+  document.getElementById('ae-del').style.display='inline-block';
+  document.getElementById('ae-date').value=a.date;
+  document.getElementById('ae-time').value=a.time;
+  document.getElementById('ae-svc').value=a.service;
+  document.getElementById('ae-prov').value=a.provider;
+  document.getElementById('ae-st').value=a.status;
+  document.getElementById('ae-notes').value=a.notes||'';
+  popPtSel('ae-pt',a.patientId);
+  document.getElementById('appt-modal').style.display='flex';
+}
+function closeApptModal(){document.getElementById('appt-modal').style.display='none';}
+function saveAppt(){
+  const eid=document.getElementById('ae-id').value;
+  const d={id:eid||uid(),patientId:document.getElementById('ae-pt').value,date:document.getElementById('ae-date').value,time:document.getElementById('ae-time').value,service:document.getElementById('ae-svc').value,provider:document.getElementById('ae-prov').value,status:document.getElementById('ae-st').value,notes:document.getElementById('ae-notes').value,created:Date.now()};
+  if(!d.patientId||!d.date||!d.time){alert('Please fill in patient, date, and time.');return;}
+  let list=load(KA);
+  if(eid)list=list.map(a=>a.id===eid?d:a);else list.push(d);
+  save(KA,list);closeApptModal();renderApptWeek();renderDash();
+}
+function deleteAppt(){
+  const id=document.getElementById('ae-id').value;
+  if(!id||!confirm('Delete this appointment?'))return;
+  save(KA,load(KA).filter(a=>a.id!==id));
+  closeApptModal();renderApptWeek();renderDash();
+}
+
+// ── PATIENTS ─────────────────────────────────────────────────────────
+function renderPatients(){
+  const q=(document.getElementById('pt-search').value||'').toLowerCase();
+  let pts=load(KP);
+  if(q)pts=pts.filter(p=>(pn(p)+p.phone+p.email).toLowerCase().includes(q));
+  document.getElementById('pt-count-lbl').textContent=load(KP).length+' patients · '+pts.length+' shown';
+  const appts=load(KA);
+  const wrap=document.getElementById('pt-table');
+  if(!pts.length){wrap.innerHTML='<div class="empty">No patients found.</div>';return;}
+  wrap.innerHTML=tbl(['Patient','Phone','Email','Last Visit','Source',''],
+    pts.map(p=>{
+      const last=appts.filter(a=>a.patientId===p.id&&a.status==='Completed').sort((a,b)=>b.date.localeCompare(a.date))[0];
+      return`<tr><td><div class="prow"><div class="av">${pi(p)}</div><div><div class="pname">${pn(p)}</div></div></div></td><td style="color:var(--t3);font-size:12px;">${p.phone||'—'}</td><td style="color:var(--t3);font-size:12px;">${p.email||'—'}</td><td style="font-size:12px;color:var(--t3);">${last?fd(last.date):'New'}</td><td><span class="st st-info">${p.source||'—'}</span></td><td style="display:flex;gap:5px;"><button class="btn-g" style="font-size:11px;padding:3px 10px;" onclick="viewPatient('${p.id}')">View</button><button class="btn-g" style="font-size:11px;padding:3px 10px;" onclick="editPatient('${p.id}')">Edit</button></td></tr>`;
+    }).join(''));
+}
+function viewPatient(id){
+  const p=gp(id);if(!p.id)return;
+  const appts=load(KA).filter(a=>a.patientId===id).sort((a,b)=>b.date.localeCompare(a.date));
+  const txns=load(KT).filter(t=>t.patientId===id);
+  const ltv=txns.filter(t=>t.status==='Paid').reduce((s,t)=>s+Number(t.amount),0);
+  document.getElementById('pt-detail').innerHTML=`
+  <div class="pd">
+    <div class="pd-hdr">
+      <div class="pd-av">${pi(p)}</div>
+      <div><div class="pd-name">${pn(p)}</div><div class="pd-cred">${p.phone||''} · ${p.email||''}</div></div>
+      <div style="margin-left:auto;display:flex;gap:7px;">
+        <button class="btn-g" onclick="editPatient('${id}')">Edit</button>
+        <button class="btn-sm" onclick="openApptModal()">+ Book</button>
+      </div>
+    </div>
+    <div class="pd-fields">
+      <div class="pd-f"><div class="pd-fl">Date of Birth</div><div class="pd-fv">${fd(p.dob)||'—'}</div></div>
+      <div class="pd-f"><div class="pd-fl">Source</div><div class="pd-fv">${p.source||'—'}</div></div>
+      <div class="pd-f"><div class="pd-fl">Lifetime Value</div><div class="pd-fv">${fa(ltv)}</div></div>
+    </div>
+    ${p.notes?`<div style="background:var(--gold-pale);border:1px solid var(--gold-border);border-radius:8px;padding:.7rem 1rem;font-size:12px;color:var(--t2);margin-bottom:1rem;">Notes: ${p.notes}</div>`:''}
+    <div style="font-size:13px;font-weight:500;margin-bottom:.8rem;">Appointment History</div>
+    ${appts.length?tbl(['Date','Service','Provider','Status'],appts.map(a=>`<tr><td style="color:var(--t3);">${fd(a.date)}</td><td>${a.service}</td><td>${a.provider}</td><td><span class="st ${sc(a.status)}">${a.status}</span></td></tr>`).join('')):'<div style="color:var(--t3);font-size:12px;padding:.5rem 0;">No appointments yet.</div>'}
+  </div>`;
+}
+function openPatientModal(){
+  document.getElementById('pt-modal-title').textContent='New Patient';
+  document.getElementById('pe-id').value='';
+  document.getElementById('pe-del').style.display='none';
+  ['pe-first','pe-last','pe-phone','pe-email','pe-notes'].forEach(i=>document.getElementById(i).value='');
+  document.getElementById('pe-dob').value='';
+  document.getElementById('pt-modal').style.display='flex';
+}
+function editPatient(id){
+  const p=gp(id);
+  document.getElementById('pt-modal-title').textContent='Edit Patient';
+  document.getElementById('pe-id').value=id;
+  document.getElementById('pe-del').style.display='inline-block';
+  document.getElementById('pe-first').value=p.first||'';
+  document.getElementById('pe-last').value=p.last||'';
+  document.getElementById('pe-phone').value=p.phone||'';
+  document.getElementById('pe-email').value=p.email||'';
+  document.getElementById('pe-dob').value=p.dob||'';
+  document.getElementById('pe-src').value=p.source||'Instagram';
+  document.getElementById('pe-notes').value=p.notes||'';
+  document.getElementById('pt-modal').style.display='flex';
+}
+function closePtModal(){document.getElementById('pt-modal').style.display='none';}
+function savePatient(){
+  const eid=document.getElementById('pe-id').value;
+  const first=document.getElementById('pe-first').value.trim();
+  if(!first){alert('First name is required.');return;}
+  const d={id:eid||uid(),first,last:document.getElementById('pe-last').value,phone:document.getElementById('pe-phone').value,email:document.getElementById('pe-email').value,dob:document.getElementById('pe-dob').value,source:document.getElementById('pe-src').value,notes:document.getElementById('pe-notes').value,created:Date.now()};
+  let list=load(KP);
+  if(eid)list=list.map(p=>p.id===eid?d:p);else list.push(d);
+  save(KP,list);closePtModal();renderPatients();renderDash();
+}
+function deletePatient(){
+  const id=document.getElementById('pe-id').value;
+  if(!id||!confirm('Delete this patient?'))return;
+  save(KP,load(KP).filter(p=>p.id!==id));
+  closePtModal();renderPatients();
+  document.getElementById('pt-detail').innerHTML='';
+}
+
+// ── MESSAGES ──────────────────────────────────────────────────────────
+function selMsg(el,name,contact,ch){
+  document.querySelectorAll('.mi').forEach(x=>x.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('msg-name').textContent=name;
+  document.getElementById('msg-info').textContent=contact+' · '+ch;
+  document.getElementById('msg-status').textContent='';
+}
+function fillReply(el){document.getElementById('msg-reply').value=el.textContent;}
+function sendMsg(){
+  const msg=document.getElementById('msg-reply').value.trim();if(!msg)return;
+  const thread=document.getElementById('msg-thread');
+  const div=document.createElement('div');div.style.alignSelf='flex-end';
+  div.innerHTML=`<div class="mb mb-out">${msg}</div><div class="mb-meta" style="text-align:right;">Just now · Sent</div>`;
+  thread.appendChild(div);
+  document.getElementById('msg-reply').value='';
+  document.getElementById('msg-status').textContent='✓ Sent';
+  setTimeout(()=>document.getElementById('msg-status').textContent='',3000);
+}
+
+// ── PAYMENTS ─────────────────────────────────────────────────────────
+let chargeAmt=150;
+function setC(n){chargeAmt=n;document.getElementById('chargeAmt').textContent=fa(n);}
+function prefillAmt(sel){setC(Number(sel.value));}
+function renderPayments(){
+  const txns=load(KT),t=today();
+  const paid=txns.filter(x=>x.status==='Paid');
+  const todayPaid=paid.filter(x=>x.date===t);
+  const pend=txns.filter(x=>x.status==='Due');
+  document.getElementById('pay-today').textContent=fa(todayPaid.reduce((s,x)=>s+Number(x.amount),0));
+  document.getElementById('pay-today-h').textContent=todayPaid.length+' transactions today';
+  document.getElementById('pay-month').textContent=fa(paid.reduce((s,x)=>s+Number(x.amount),0));
+  document.getElementById('pay-pend').textContent=fa(pend.reduce((s,x)=>s+Number(x.amount),0));
+  document.getElementById('pay-ct').textContent=paid.length;
+  document.getElementById('pay-table').innerHTML=txns.length?tbl(['Patient','Service','Amount','Method','Status'],
+    txns.slice().reverse().map(tx=>{const p=gp(tx.patientId);return`<tr><td class="pname">${pn(p)}</td><td style="color:var(--t3);font-size:12px;">${tx.service}</td><td style="font-weight:500;">${fa(tx.amount)}</td><td style="font-size:11px;color:var(--t3);">${tx.method}</td><td><span class="st ${tx.status==='Paid'?'st-ok':'st-pend'}">${tx.status}</span></td></tr>`;}).join('')):'<div class="empty">No transactions yet.</div>';
+  const pts=load(KP);
+  document.getElementById('charge-pt').innerHTML=pts.map(p=>`<option value="${p.id}">${pn(p)}</option>`).join('');
+}
+function processCharge(){
+  const st=document.getElementById('charge-status');
+  const patId=document.getElementById('charge-pt').value;
+  const svcEl=document.getElementById('charge-svc');
+  const svc=svcEl.options[svcEl.selectedIndex].text.split(' — ')[0];
+  const stripeKey=document.getElementById('stripe-key').value.trim();
+  if(!stripeKey){
+    const txns=load(KT);
+    txns.push({id:uid(),patientId:patId,service:svc,amount:chargeAmt,method:'Demo charge',status:'Paid',date:today()});
+    save(KT,txns);st.style.color='var(--green)';st.textContent='✓ Recorded as paid (demo mode)';
+    setTimeout(()=>st.textContent='',3000);renderPayments();
+  } else {
+    st.style.color='var(--t2)';st.textContent='Processing via Stripe...';
+    setTimeout(()=>{st.style.color='var(--green)';st.textContent='✓ Charged successfully';},1500);
+  }
+}
+function sendInvoiceText(){
+  const st=document.getElementById('charge-status');
+  st.style.color='var(--t2)';st.textContent='Invoice sent by text (demo)';
+  setTimeout(()=>st.textContent='',3000);
+}
+function initStripe(){
+  const key=document.getElementById('stripe-key').value.trim();
+  if(!key||!key.startsWith('pk_')){alert('Please enter a valid Stripe publishable key (starts with pk_)');return;}
+  document.getElementById('stripe-card-el').textContent='✓ Stripe connected';
+  document.getElementById('stripe-card-el').style.color='var(--green)';
+}
+
+// ── IMPORT ────────────────────────────────────────────────────────────
+function openImport(){document.getElementById('import-modal').style.display='flex';document.getElementById('import-source-step').style.display='block';document.getElementById('import-upload-step').style.display='none';document.getElementById('import-confirm-btn').style.display='none';}
+function closeImport(){document.getElementById('import-modal').style.display='none';}
+function startImport(src){
+  document.getElementById('import-source-step').style.display='none';
+  document.getElementById('import-upload-step').style.display='block';
+  document.getElementById('import-from-label').textContent='Importing from: '+src+' — drop your export file below.';
+}
+function simulateUpload(){
+  const prog=document.getElementById('import-progress');
+  const bar=document.getElementById('import-bar');
+  const lbl=document.getElementById('import-progress-label');
+  prog.style.display='block';
+  const steps=[
+    [300,'Reading file...',20],[600,'Parsing patient records...',45],[1000,'Matching appointments...',65],[1400,'Checking for duplicates...',85],[1800,'Ready to import',100]
+  ];
+  steps.forEach(([delay,text,pct])=>{
+    setTimeout(()=>{lbl.textContent=text;bar.style.width=pct+'%';
+      if(pct===100){
+        document.getElementById('import-results').style.display='block';
+        document.getElementById('imp-pts').textContent='✓ 47 records';
+        document.getElementById('imp-appts').textContent='✓ 183 appointments';
+        document.getElementById('imp-txns').textContent='✓ 219 transactions';
+        document.getElementById('imp-dups').textContent='6 skipped';
+        document.getElementById('import-confirm-btn').style.display='inline-block';
+      }
+    },delay);
+  });
+}
+function confirmImport(){
+  alert('In production this would import all records into your database. For the demo, your existing data is preserved.');
+  closeImport();
+}
+
+// ── KIOSK ─────────────────────────────────────────────────────────────
+let ksStep=1;
+const ksTot=5;
+function openKiosk(){
+  ksStep=1;
+  document.getElementById('kiosk-overlay').style.display='block';
+  document.body.style.overflow='hidden';
+  document.querySelectorAll('.kiosk-step').forEach(x=>x.classList.remove('active'));
+  document.getElementById('ks-1').classList.add('active');
+  renderKP();initSig();
+  // check c3 by default
+  setTimeout(()=>{const c3=document.getElementById('c3');if(c3)c3.checked=true;},100);
+}
+function closeKiosk(){
+  document.getElementById('kiosk-overlay').style.display='none';
+  document.body.style.overflow='hidden';
+}
+function ksNext(n){
+  document.querySelectorAll('.kiosk-step').forEach(x=>x.classList.remove('active'));
+  document.getElementById('ks-'+n).classList.add('active');
+  ksStep=n;renderKP();
+  document.getElementById('kiosk-overlay').scrollTo(0,0);
+}
+function renderKP(){
+  const pips=document.getElementById('kp');
+  pips.innerHTML=Array.from({length:ksTot},(_,i)=>`<div class="kp-dot${i<ksStep?' done':''}"></div>`).join('');
+}
+function submitIntake(){
+  const first=document.getElementById('ki-first').value||'Patient';
+  const last=document.getElementById('ki-last').value||'';
+  const service=document.getElementById('ki-service').value;
+  const consents=['c1','c2','c4'].map(id=>document.getElementById(id).checked);
+  if(!consents[0]||!consents[1]||!consents[2]){alert('Please check all required consent boxes to continue.');return;}
+  // Save to patient records
+  const newPt={id:uid(),first,last,phone:document.getElementById('ki-phone').value,email:document.getElementById('ki-email').value,dob:document.getElementById('ki-dob').value,source:document.getElementById('ki-source').value,notes:'Via intake form. Service: '+service,created:Date.now()};
+  const pts=load(KP);pts.push(newPt);save(KP,pts);
+  document.getElementById('intake-summary').innerHTML=`<div>${first} ${last}</div><div style="color:var(--t2);">Service: ${service}</div><div style="color:var(--t2);">Source: ${document.getElementById('ki-source').value}</div><div style="color:var(--green);margin-top:.3rem;">✓ Consent signed</div>`;
+  ksNext(6);renderKP();
+  renderDash();renderPatients();
+}
+
+// ── SIGNATURE PAD ─────────────────────────────────────────────────────
+let sigDrawing=false,sigHasData=false;
+function initSig(){
+  const pad=document.getElementById('sig');const wrap=document.getElementById('sig-pad');
+  if(!pad||!wrap)return;
+  pad.width=wrap.offsetWidth||600;pad.height=130;
+  sigDrawing=false;sigHasData=false;
+  const ctx=pad.getContext('2d');
+  ctx.clearRect(0,0,pad.width,pad.height);
+  ctx.strokeStyle='#1a1814';ctx.lineWidth=2.5;ctx.lineCap='round';ctx.lineJoin='round';
+  function getPos(e){
+    const r=pad.getBoundingClientRect();
+    const src=e.touches?e.touches[0]:e;
+    return{x:(src.clientX-r.left)*(pad.width/r.width),y:(src.clientY-r.top)*(pad.height/r.height)};
+  }
+  function start(e){e.preventDefault();sigDrawing=true;sigHasData=true;const p=getPos(e);ctx.beginPath();ctx.moveTo(p.x,p.y);document.getElementById('sig-placeholder').style.display='none';document.getElementById('sig-status').textContent='Signature captured ✓';document.getElementById('sig-status').style.color='var(--green)';}
+  function draw(e){e.preventDefault();if(!sigDrawing)return;const p=getPos(e);ctx.lineTo(p.x,p.y);ctx.stroke();}
+  function stop(e){e.preventDefault();sigDrawing=false;}
+  pad.addEventListener('mousedown',start);pad.addEventListener('mousemove',draw);pad.addEventListener('mouseup',stop);
+  pad.addEventListener('touchstart',start,{passive:false});pad.addEventListener('touchmove',draw,{passive:false});pad.addEventListener('touchend',stop,{passive:false});
+}
+function clearSig(){
+  const pad=document.getElementById('sig');if(!pad)return;
+  pad.getContext('2d').clearRect(0,0,pad.width,pad.height);
+  sigHasData=false;
+  document.getElementById('sig-placeholder').style.display='block';
+  document.getElementById('sig-status').textContent='Draw your signature above';
+  document.getElementById('sig-status').style.color='var(--t3)';
+}
+</script>
+<script>document.addEventListener("DOMContentLoaded",function(){if(document.getElementById("app")){document.getElementById("app").style.display="flex";renderDash&&renderDash();renderApptWeek&&renderApptWeek();renderPatients&&renderPatients();renderPayments&&renderPayments();var now=new Date();var days=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];var dd=document.getElementById("dash-date");if(dd)dd.textContent=days[now.getDay()]+", "+now.toLocaleDateString("en-US",{month:"long",day:"numeric"});var tl=document.getElementById("today-lbl");if(tl)tl.textContent=" — "+now.toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"});}});</script></body>
+</html>
+<!-- ═══════════════════════════════════════════════════════════════
+     CAMERA / BEFORE-AFTER MODULE  — appended to hoc_v2.html
+════════════════════════════════════════════════════════════════ -->
+<style>
+/* ── BEFORE/AFTER VIEW OVERRIDE ─────────────────────────────── */
+#view-photos .ba-grid{display:none;}
+#ba-main{padding:0;}
+
+/* ── SESSION LIST ────────────────────────────────────────────── */
+.ba-session-row{display:flex;align-items:center;gap:14px;padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s;}
+.ba-session-row:hover{background:var(--gold-pale);}
+.ba-session-row:last-child{border-bottom:none;}
+.ba-thumb-pair{display:flex;gap:6px;flex-shrink:0;}
+.ba-thumb{width:52px;height:52px;border-radius:8px;object-fit:cover;background:var(--s2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--t3);}
+.ba-thumb img{width:100%;height:100%;object-fit:cover;border-radius:7px;}
+.ba-session-info{flex:1;min-width:0;}
+.ba-session-name{font-size:13px;font-weight:500;}
+.ba-session-meta{font-size:11px;color:var(--t3);margin-top:2px;}
+.ba-session-note{font-size:11px;color:var(--t2);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ba-session-status{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;}
+
+/* ── NEW SESSION MODAL ───────────────────────────────────────── */
+.zone-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1.2rem;}
+.zone-btn{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:14px 8px;cursor:pointer;text-align:center;transition:all .15s;user-select:none;}
+.zone-btn:hover{border-color:var(--gold);background:var(--gold-pale);}
+.zone-btn.sel{border-color:var(--gold);background:var(--gold-pale);font-weight:500;}
+.zone-icon{font-size:22px;margin-bottom:5px;line-height:1;}
+.zone-label{font-size:11px;color:var(--t2);}
+.zone-btn.sel .zone-label{color:var(--gold-h);}
+
+/* ── CAMERA OVERLAY ──────────────────────────────────────────── */
+#cam-overlay{display:none;position:fixed;inset:0;background:#000;z-index:800;flex-direction:column;}
+.cam-hdr{position:absolute;top:0;left:0;right:0;z-index:10;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(to bottom,rgba(0,0,0,.7),transparent);}
+.cam-hdr-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:#fff;}
+.cam-hdr-sub{font-size:11px;color:rgba(255,255,255,.6);margin-top:2px;}
+.cam-close{background:rgba(255,255,255,.15);border:none;color:#fff;font-size:18px;width:36px;height:36px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+#cam-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+#cam-guide{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;} #cam-ghost{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;opacity:0;transition:opacity .3s;}
+.cam-footer{position:absolute;bottom:0;left:0;right:0;z-index:10;padding:24px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(to top,rgba(0,0,0,.8),transparent);}
+.cam-instruction{font-size:13px;color:rgba(255,255,255,.85);max-width:260px;line-height:1.5;text-align:center;flex:1;}
+.cam-shutter{width:68px;height:68px;border-radius:50%;background:#fff;border:4px solid rgba(255,255,255,.4);cursor:pointer;flex-shrink:0;transition:transform .1s,opacity .1s;display:flex;align-items:center;justify-content:center;}
+.cam-shutter:hover{transform:scale(1.05);}
+.cam-shutter:active{transform:scale(.95);opacity:.8;}
+.cam-shutter-inner{width:54px;height:54px;border-radius:50%;background:#fff;}
+.cam-flip{background:rgba(255,255,255,.15);border:none;color:#fff;font-size:14px;padding:8px 16px;border-radius:20px;cursor:pointer;flex-shrink:0;}
+.cam-phase-pill{position:absolute;top:70px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.55);color:#fff;font-size:11px;padding:5px 14px;border-radius:20px;z-index:11;white-space:nowrap;backdrop-filter:blur(4px);}
+.cam-before-tag{background:rgba(220,38,38,.75);}
+.cam-after-tag{background:rgba(22,163,74,.75);}
+
+/* ── PHOTO REVIEW ────────────────────────────────────────────── */
+#cam-review{display:none;position:fixed;inset:0;background:#000;z-index:810;flex-direction:column;align-items:center;justify-content:center;}
+.review-img-wrap{position:relative;display:inline-block;max-width:90vw;max-height:70vh;}
+.review-img-wrap img{max-width:90vw;max-height:70vh;object-fit:contain;border-radius:12px;}
+.review-guide-overlay{position:absolute;inset:0;pointer-events:none;}
+.review-guide-overlay svg{width:100%;height:100%;}
+.review-actions{display:flex;gap:12px;margin-top:24px;}
+.review-btn-keep{background:var(--gold);color:#fff;border:none;border-radius:10px;padding:12px 28px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.review-btn-retake{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:10px;padding:12px 22px;font-size:14px;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.review-label{font-size:12px;color:rgba(255,255,255,.6);text-align:center;margin-bottom:12px;}
+
+/* ── COMPARISON VIEW ─────────────────────────────────────────── */
+#ba-compare{display:none;position:fixed;inset:0;background:var(--bg);z-index:780;overflow-y:auto;}
+.compare-inner{max-width:960px;margin:0 auto;padding:1.5rem;}
+.compare-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;}
+.compare-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:500;}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:1rem;}
+.compare-slot{border-radius:14px;overflow:hidden;border:1px solid var(--border);background:var(--white);}
+.compare-slot-hdr{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.compare-slot-lbl{font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;}
+.compare-slot-lbl.before{color:var(--red);}
+.compare-slot-lbl.after{color:var(--green);}
+.compare-img-wrap{position:relative;background:var(--s2);aspect-ratio:3/4;}
+.compare-img-wrap img{width:100%;height:100%;object-fit:cover;}
+.compare-img-empty{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:background .15s;background:var(--bg);}
+.compare-img-empty:hover{background:var(--gold-pale);}
+.compare-img-empty-icon{font-size:32px;color:var(--t3);margin-bottom:.5rem;}
+.compare-img-empty-txt{font-size:13px;color:var(--t3);}
+.compare-img-empty-sub{font-size:11px;color:var(--border2);margin-top:3px;}
+.compare-guide-badge{position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.55);color:#fff;font-size:9px;padding:3px 8px;border-radius:10px;backdrop-filter:blur(4px);}
+.note-input{width:100%;padding:10px 13px;border:1px solid var(--border);border-radius:8px;font-size:12.5px;color:var(--text);font-family:'DM Sans',sans-serif;background:var(--white);outline:none;resize:none;}
+.note-input:focus{border-color:var(--gold);}
+</style>
+
+<!-- NEW SESSION MODAL -->
+<div id="ns-modal" class="overlay" style="display:none;" onclick="if(event.target===this)closeNS()">
+  <div class="modal" style="max-width:520px;">
+    <div class="modal-title">New Before &amp; After Session</div>
+    <div class="fr">
+      <label class="fl">Patient</label>
+      <select class="fs" id="ns-patient"></select>
+    </div>
+    <div class="fr">
+      <label class="fl">Treatment Area</label>
+      <div class="zone-grid" id="zone-grid"></div>
+    </div>
+    <div class="fr">
+      <label class="fl">Session Type</label>
+      <select class="fs" id="ns-type">
+        <option value="before">Before only (treatment today)</option>
+        <option value="after">After only (adding to existing session)</option>
+        <option value="both">Before &amp; After (same day)</option>
+      </select>
+    </div>
+    <div class="fr">
+      <label class="fl">Provider Notes</label>
+      <textarea class="fi" id="ns-notes" rows="2" placeholder="e.g. 3 sessions LipoAway abdomen, approx 3in reduction expected"></textarea>
+    </div>
+    <div class="modal-acts">
+      <button class="btn-g" onclick="closeNS()">Cancel</button>
+      <button class="btn-sm" onclick="startSession()">Open Camera →</button>
+    </div>
+  </div>
+</div>
+
+<!-- CAMERA OVERLAY -->
+<div id="cam-overlay">
+  <div class="cam-hdr">
+    <div>
+      <div class="cam-hdr-title" id="cam-title">Before Photo</div>
+      <div class="cam-hdr-sub" id="cam-sub">Align patient to the guide outline</div>
+    </div>
+    <button class="cam-close" onclick="stopCamera()">✕</button>
+  </div>
+  <div class="cam-phase-pill" id="cam-phase-pill"></div>
+  <video id="cam-video" autoplay playsinline muted></video>
+  <svg id="cam-guide" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"></svg>
+  <canvas id="cam-canvas" style="display:none;"></canvas>
+  <img id="cam-ghost" src="" alt="">
+  <div id="cam-level" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:80px;height:1px;pointer-events:none;z-index:12;">
+    <div id="level-line" style="width:100%;height:2px;background:rgba(255,255,255,0.6);border-radius:2px;transition:background .2s;"></div>
+    <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.8);"></div>
+  </div>
+  <div id="cam-ghost-toggle" style="position:absolute;top:72px;right:18px;z-index:12;display:none;">
+    <button onclick="toggleGhost()" style="background:rgba(0,0,0,0.55);color:#fff;border:1px solid rgba(255,255,255,0.3);border-radius:20px;padding:6px 14px;font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;backdrop-filter:blur(4px);" id="ghost-btn">👻 Show Ghost</button>
+  </div>
+  <div class="cam-footer">
+    <button class="cam-flip" onclick="flipCamera()">⟳ Flip</button>
+    <div class="cam-instruction" id="cam-instruction"></div>
+    <button class="cam-shutter" onclick="capturePhoto()"><div class="cam-shutter-inner"></div></button>
+  </div>
+</div>
+
+<!-- PHOTO REVIEW -->
+<div id="cam-review">
+  <div class="review-label" id="review-label">Review your photo</div>
+  <div class="review-img-wrap">
+    <img id="review-img" src="" alt="Review">
+    <div class="review-guide-overlay" id="review-guide"></div>
+  </div>
+  <div class="review-actions">
+    <button class="review-btn-retake" onclick="retakePhoto()">Retake</button>
+    <button class="review-btn-keep" onclick="keepPhoto()">Use This Photo ✓</button>
+  </div>
+</div>
+
+<!-- COMPARISON VIEW -->
+<div id="ba-compare">
+  <div class="compare-inner">
+    <div class="compare-hdr">
+      <div>
+        <div class="compare-title" id="cmp-title">Before &amp; After</div>
+        <div class="pg-sub" id="cmp-sub"></div>
+      </div>
+      <div class="btns">
+        <button class="btn-g" onclick="closeCompare()">← Back</button>
+        <button class="btn-sm" onclick="saveSession()">Save Session</button>
+      </div>
+    </div>
+    <div class="compare-grid">
+      <div class="compare-slot">
+        <div class="compare-slot-hdr"><span class="compare-slot-lbl before">Before</span><button class="btn-g" style="font-size:11px;padding:3px 10px;" onclick="retakeSlot('before')">Retake</button></div>
+        <div class="compare-img-wrap" id="cmp-before-wrap">
+          <div class="compare-img-empty" onclick="retakeSlot('before')">
+            <div class="compare-img-empty-icon">📷</div>
+            <div class="compare-img-empty-txt">Tap to take Before photo</div>
+            <div class="compare-img-empty-sub">Guide overlay will assist positioning</div>
+          </div>
+        </div>
+      </div>
+      <div class="compare-slot">
+        <div class="compare-slot-hdr"><span class="compare-slot-lbl after">After</span><button class="btn-g" style="font-size:11px;padding:3px 10px;" onclick="retakeSlot('after')">Retake</button></div>
+        <div class="compare-img-wrap" id="cmp-after-wrap">
+          <div class="compare-img-empty" onclick="retakeSlot('after')">
+            <div class="compare-img-empty-icon">📷</div>
+            <div class="compare-img-empty-txt">Tap to take After photo</div>
+            <div class="compare-img-empty-sub">Same guide outline ensures match</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="panel" style="padding:1rem;margin-bottom:1rem;">
+      <label class="fl" style="margin-bottom:6px;">Provider Notes</label>
+      <textarea class="note-input" id="cmp-notes" rows="2" placeholder="Document measurements, units used, observations..."></textarea>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════
+//  ZONE DEFINITIONS
+// ══════════════════════════════════════════════════
+const ZONES = {
+  'Full Body Front': {
+    icon: '🧍',
+    instruction: 'Stand feet shoulder-width apart, arms relaxed at sides, facing camera.',
+    silhouette: `
+      <g stroke="#C9A84C" stroke-width="1.2" fill="rgba(201,168,76,0.12)" stroke-linejoin="round" stroke-linecap="round">
+        <ellipse cx="50" cy="10" rx="7.5" ry="8.5"/>
+        <rect x="46" y="18" width="8" height="6" rx="2"/>
+        <path d="M33,24 C27,26 25,31 25,36 L25,56 C25,59 27,60 31,60 L69,60 C73,60 75,59 75,56 L75,36 C75,31 73,26 67,24 C62,22 56,21 50,21 C44,21 38,22 33,24 Z"/>
+        <path d="M25,36 C22,37 20,40 19,44 L18,59 C18,61 19,62 21,62 L26,62 L27,44 Z"/>
+        <path d="M75,36 C78,37 80,40 81,44 L82,59 C82,61 81,62 79,62 L74,62 L73,44 Z"/>
+        <path d="M31,60 C29,64 28,68 29,72 L71,72 C72,68 71,64 69,60 Z"/>
+        <path d="M29,72 C28,78 27,84 26,90 C26,93 28,95 31,95 L42,95 C45,95 46,93 46,90 L48,72 Z"/>
+        <path d="M71,72 C72,78 73,84 74,90 C74,93 72,95 69,95 L58,95 C55,95 54,93 54,90 L52,72 Z"/>
+      </g>
+      <line x1="50" y1="2" x2="50" y2="97" stroke="rgba(201,168,76,0.5)" stroke-width="0.6" stroke-dasharray="3,3"/>
+      <line x1="20" y1="26" x2="80" y2="26" stroke="rgba(255,255,255,0.6)" stroke-width="0.5" stroke-dasharray="2,3"/>
+      <text x="13" y="25.5" font-size="3" fill="rgba(255,255,255,0.8)" font-family="DM Sans,sans-serif">Shoulder</text>
+      <line x1="20" y1="46" x2="80" y2="46" stroke="rgba(255,255,255,0.6)" stroke-width="0.5" stroke-dasharray="2,3"/>
+      <text x="15" y="45.5" font-size="3" fill="rgba(255,255,255,0.8)" font-family="DM Sans,sans-serif">Waist</text>
+      <line x1="20" y1="63" x2="80" y2="63" stroke="rgba(255,255,255,0.6)" stroke-width="0.5" stroke-dasharray="2,3"/>
+      <text x="16" y="62.5" font-size="3" fill="rgba(255,255,255,0.8)" font-family="DM Sans,sans-serif">Hip</text>
+    `
+  },
+  'Full Body Side': {
+    icon: '🚶',
+    instruction: 'Stand in profile, ear over shoulder over hip over ankle in one vertical line.',
+    silhouette: `
+      <g stroke="#C9A84C" stroke-width="1.2" fill="rgba(201,168,76,0.12)" stroke-linejoin="round" stroke-linecap="round">
+        <ellipse cx="50" cy="10" rx="7" ry="8.5"/>
+        <rect x="46" y="18" width="8" height="6" rx="2"/>
+        <path d="M38,24 C34,26 32,30 32,36 C32,44 33,50 35,54 C37,58 40,60 44,61 L58,61 C63,59 65,55 65,52 C66,47 65,40 63,34 C61,28 58,24 54,23 Z"/>
+        <path d="M35,54 C32,58 31,63 33,68 L55,68 C60,63 62,61 58,61 L44,61 Z"/>
+        <path d="M63,28 C67,30 69,34 69,40 L69,58 C69,61 67,62 65,61 L62,61 L62,34 Z" fill="rgba(201,168,76,0.08)"/>
+        <path d="M33,68 C31,75 30,83 30,90 C30,93 32,95 35,95 L44,95 C47,95 48,93 48,90 L50,68 Z"/>
+        <path d="M50,68 L55,68 C58,75 59,83 59,90 C59,93 57,95 54,95 L47,95 L48,68 Z" fill="rgba(201,168,76,0.08)"/>
+      </g>
+      <line x1="50" y1="2" x2="50" y2="97" stroke="rgba(201,168,76,0.6)" stroke-width="0.7" stroke-dasharray="3,3"/>
+      <text x="52" y="12" font-size="2.8" fill="rgba(255,255,255,0.9)" font-family="DM Sans,sans-serif">Ear</text>
+      <text x="52" y="27" font-size="2.8" fill="rgba(255,255,255,0.9)" font-family="DM Sans,sans-serif">Shoulder</text>
+      <text x="52" y="62" font-size="2.8" fill="rgba(255,255,255,0.9)" font-family="DM Sans,sans-serif">Hip</text>
+      <text x="52" y="88" font-size="2.8" fill="rgba(255,255,255,0.9)" font-family="DM Sans,sans-serif">Ankle</text>
+    `
+  },
+  'Abdomen': {
+    icon: '🫃',
+    instruction: 'Face camera, shirt raised, arms out to sides. Relax — do not flex.',
+    silhouette: `
+      <g stroke="#C9A84C" stroke-width="1.3" fill="rgba(201,168,76,0.12)" stroke-linejoin="round">
+        <path d="M22,5 C19,9 17,14 17,22 L17,80 C17,88 21,94 28,96 L72,96 C79,94 83,88 83,80 L83,22 C83,14 81,9 78,5 C69,2 60,0 50,0 C40,0 31,2 22,5 Z"/>
+      </g>
+      <circle cx="50" cy="52" r="2.8" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="1"/>
+      <line x1="50" y1="49" x2="50" y2="43" stroke="rgba(255,255,255,0.6)" stroke-width="0.6"/>
+      <text x="52" y="42" font-size="3" fill="rgba(255,255,255,0.9)" font-family="DM Sans,sans-serif">Navel</text>
+      <line x1="10" y1="30" x2="90" y2="30" stroke="rgba(255,255,255,0.55)" stroke-width="0.5" stroke-dasharray="2,3"/>
+      <text x="2" y="29.5" font-size="2.8" fill="rgba(255,255,255,0.8)" font-family="DM Sans,sans-serif">Chest</text>
+      <line x1="10" y1="46" x2="90" y2="46" stroke="rgba(255,255,255,0.55)" stroke-width="0.5" stroke-dasharray="2,3"/>
+      <text x="2" y="45.5" font-size="2.8" fill="rgba(255,255,255,0.8)" font-family="DM Sans,sans-serif">Waist</text>
+      <line x1="10" y1="66" x2="90" y2="66" stroke="rgba(255,255,255,0.55)" stroke-width="0.5" stroke-dasharray="2,3"/>
+      <text x="4" y="65.5" font-size="2.8" fill="rgba(255,255,255,0.8)" font-family="DM Sans,sans-serif">Hip</text>
+      <line x1="50" y1="2" x2="50" y2="98" stroke="rgba(201,168,76,0.45)" stroke-width="0.5" stroke-dasharray="2,3"/>
+    `
+  },
+  'Flanks / Love Handles': {
+    icon: '↔️',
+    instruction: 'Hands on head, elbows out. Turn 45° to show both flanks. Relax core.',
+    silhouette: `
+      <g stroke="#C9A84C" stroke-width="1.3" fill="rgba(201,168,76,0.12)" stroke-linejoin="round">
+        <path d="M25,5 C22,9 20,14 20,22 L20,78 C20,88 25,94 33,96 L67,96 C75,94 80,88 80,78 L80,22 C80,14 78,9 75,5 C66,2 58,0 50,0 C42,0 34,2 25,5 Z"/>
+      </g>
+      <path d="M14,36 C11,38 10,43 10,50 C10,57 11,62 14,64 L22,62 L22,38 Z" fill="rgba(201,168,76,0.35)" stroke="#C9A84C" stroke-width="1"/>
+      <text x="1" y="52" font-size="3" fill="#C9A84C" font-family="DM Sans,sans-serif">Flank L</text>
+      <path d="M86,36 C89,38 90,43 90,50 C90,57 89,62 86,64 L78,62 L78,38 Z" fill="rgba(201,168,76,0.35)" stroke="#C9A84C" stroke-width="1"/>
+      <text x="80" y="52" font-size="3" fill="#C9A84C" font-family="DM Sans,sans-serif">Flank R</text>
+      <line x1="8" y1="48" x2="92" y2="48" stroke="rgba(255,255,255,0.5)" stroke-width="0.5" stroke-dasharray="2,3"/>
+      <line x1="50" y1="2" x2="50" y2="98" stroke="rgba(201,168,76,0.45)" stroke-width="0.5" stroke-dasharray="2,3"/>
+    `
+  },
+  'Upper Arms': {
+    icon: '💪',
+    instruction: 'Extend both arms horizontally at shoulder height, palms facing up.',
+    silhouette: `
+      <g stroke="#C9A84C" stroke-width="1.2" fill="rgba(201,168,76,0.12)" stroke-linejoin="round">
+        <ellipse cx="50" cy="50" rx="13" ry="20"/>
+        <path d="M37,40 C28,40 16,42 8,45 C5,46 4,49 4,50 C4,51 5,54 8,55 C16,58 28,60 37,60 Z"/>
+        <path d="M63,40 C72,40 84,42 92,45 C95,46 96,49 96,50 C96,51 95,54 92,55 C84,58 72,60 63,60 Z"/>
+      </g>
+      <line x1="26" y1="35" x2="26" y2="65" stroke="rgba(255,255,255,0.7)" stroke-width="0.6" stroke-dasharray="2,2"/>
+      <text x="19" y="33" font-size="2.8" fill="rgba(255,255,255,0.9)" font-family="DM Sans,sans-serif">Elbow</text>
+      <line x1="74" y1="35" x2="74" y2="65" stroke="rgba(255,255,255,0.7)" stroke-width="0.6" stroke-dasharray="2,2"/>
+      <text x="67" y="33" font-size="2.8" fill="rgba(255,255,255,0.9)" font-family="DM Sans,sans-serif">Elbow</text>
+    `
+  },
+  'Thighs': {
+    icon: '🦵',
+    instruction: 'Stand facing camera, feet hip-width apart, hands on hips. Shorts required.',
+    silhouette: `
+      <g stroke="#C9A84C" stroke-width="1.2" fill="rgba(201,168,76,0.12)" stroke-linejoin="round">
+        <path d="M8,5 C6,9 5,14 5,20 L6,78 C6,85 9,91 16,93 L38,93 C45,91 47,85 47,78 L45,20 C44,14 42,9 39,6 Z"/>
+        <path d="M55,5 C53,9 52,14 52,20 L53,78 C53,85 56,91 62,93 L86,93 C93,91 96,85 95,78 L95,20 C94,14 91,9 88,6 Z"/>
+      </g>
+      <line x1="47" y1="10" x2="53" y2="10" stroke="rgba(201,168,76,0.8)" stroke-width="0.8"/>
+      <line x1="4" y1="50" x2="96" y2="50" stroke="rgba(255,255,255,0.45)" stroke-width="0.5" stroke-dasharray="2,3"/>
+      <text x="30" y="49" font-size="2.8" fill="rgba(255,255,255,0.8)" font-family="DM Sans,sans-serif">Mid-thigh</text>
+      <text x="18" y="12" font-size="3" fill="rgba(255,255,255,0.8)" font-family="DM Sans,sans-serif">Left</text>
+      <text x="68" y="12" font-size="3" fill="rgba(255,255,255,0.8)" font-family="DM Sans,sans-serif">Right</text>
+    `
+  },
+  'Back / Bra Roll': {
+    icon: '🔙',
+    instruction: 'Patient faces away, arms slightly raised. Frame shoulder blades to waist.',
+    silhouette: `
+      <g stroke="#C9A84C" stroke-width="1.3" fill="rgba(201,168,76,0.12)" stroke-linejoin="round">
+        <path d="M22,5 C19,9 17,14 17,22 L17,80 C17,88 21,94 28,96 L72,96 C79,94 83,88 83,80 L83,22 C83,14 81,9 78,5 C69,2 60,0 50,0 C40,0 31,2 22,5 Z"/>
+      </g>
+      <rect x="13" y="30" width="74" height="22" rx="3" fill="rgba(201,168,76,0.25)" stroke="#C9A84C" stroke-width="1" stroke-dasharray="3,2"/>
+      <text x="28" y="43" font-size="3.5" fill="#C9A84C" font-family="DM Sans,sans-serif" font-weight="500">Bra Roll Zone</text>
+      <line x1="50" y1="5" x2="50" y2="95" stroke="rgba(255,255,255,0.55)" stroke-width="0.5" stroke-dasharray="2,3"/>
+      <line x1="12" y1="30" x2="88" y2="30" stroke="rgba(255,255,255,0.45)" stroke-width="0.5" stroke-dasharray="2,3"/>
+      <line x1="12" y1="62" x2="88" y2="62" stroke="rgba(255,255,255,0.45)" stroke-width="0.5" stroke-dasharray="2,3"/>
+      <text x="2" y="61" font-size="2.8" fill="rgba(255,255,255,0.8)" font-family="DM Sans,sans-serif">Waist</text>
+    `
+  },
+  'Chin / Neck': {
+    icon: '😶',
+    instruction: 'Seated, head level, neutral expression. Frame chin to collarbone, no tilt.',
+    silhouette: `
+      <g stroke="#C9A84C" stroke-width="1.3" fill="rgba(201,168,76,0.12)" stroke-linejoin="round">
+        <path d="M50,4 C35,4 25,14 25,28 C25,38 30,46 38,51 C39,56 39,60 37,64 L63,64 C61,60 61,56 62,51 C70,46 75,38 75,28 C75,14 65,4 50,4 Z"/>
+        <path d="M37,64 C34,68 33,73 33,77 L67,77 C67,73 66,68 63,64 Z"/>
+        <path d="M22,77 C18,79 14,82 12,86 L88,86 C86,82 82,79 78,77 Z" fill="rgba(201,168,76,0.07)"/>
+      </g>
+      <ellipse cx="50" cy="60" rx="17" ry="7" fill="rgba(201,168,76,0.3)" stroke="#C9A84C" stroke-width="1" stroke-dasharray="2.5,1.5"/>
+      <text x="34" y="74" font-size="3.2" fill="#C9A84C" font-family="DM Sans,sans-serif" font-weight="500">Treatment zone</text>
+      <line x1="8" y1="26" x2="92" y2="26" stroke="rgba(255,255,255,0.5)" stroke-width="0.5" stroke-dasharray="2,3"/>
+      <text x="9" y="25" font-size="2.8" fill="rgba(255,255,255,0.85)" font-family="DM Sans,sans-serif">Eye level</text>
+      <line x1="8" y1="56" x2="92" y2="56" stroke="rgba(255,255,255,0.5)" stroke-width="0.5" stroke-dasharray="2,3"/>
+      <text x="10" y="55" font-size="2.8" fill="rgba(255,255,255,0.85)" font-family="DM Sans,sans-serif">Chin</text>
+      <line x1="50" y1="2" x2="50" y2="98" stroke="rgba(201,168,76,0.45)" stroke-width="0.5" stroke-dasharray="2,3"/>
+    `
+  },
+  'Chest / Breast': {
+    icon: '🫁',
+    instruction: 'Stand facing camera, arms slightly raised. Frame collarbone to lower ribcage.',
+    silhouette: `
+      <g stroke="#C9A84C" stroke-width="1.3" fill="rgba(201,168,76,0.1)" stroke-linejoin="round">
+        <path d="M22,5 C19,9 17,14 17,22 L17,80 C17,88 21,94 28,96 L72,96 C79,94 83,88 83,80 L83,22 C83,14 81,9 78,5 C69,2 60,0 50,0 C40,0 31,2 22,5 Z"/>
+      </g>
+      <ellipse cx="35" cy="45" rx="16" ry="18" fill="rgba(201,168,76,0.15)" stroke="#C9A84C" stroke-width="1"/>
+      <ellipse cx="65" cy="45" rx="16" ry="18" fill="rgba(201,168,76,0.15)" stroke="#C9A84C" stroke-width="1"/>
+      <line x1="12" y1="62" x2="88" y2="62" stroke="#C9A84C" stroke-width="0.7" stroke-dasharray="2,2" opacity="0.8"/>
+      <text x="22" y="61" font-size="2.8" fill="#C9A84C" font-family="DM Sans,sans-serif">Inframammary fold</text>
+      <line x1="12" y1="18" x2="88" y2="18" stroke="rgba(255,255,255,0.5)" stroke-width="0.5" stroke-dasharray="2,3"/>
+      <text x="22" y="17" font-size="2.8" fill="rgba(255,255,255,0.85)" font-family="DM Sans,sans-serif">Collarbone</text>
+      <line x1="50" y1="2" x2="50" y2="98" stroke="rgba(201,168,76,0.45)" stroke-width="0.5" stroke-dasharray="2,3"/>
+    `
+  }
+};
+
+// ══════════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════════
+const KBA = 'hoc_ba';
+let camStream = null, camFacingMode = 'environment';
+let activeZone = 'Full Body Front';
+let sessionData = { patientId:'', zone:'', notes:'', type:'before', before:null, after:null };
+let capturePhase = 'before'; // 'before' or 'after'
+let pendingDataURL = null;
+
+// ══════════════════════════════════════════════════
+//  OVERRIDE Before & After view
+// ══════════════════════════════════════════════════
+function renderPhotosView() {
+  const sessions = load(KBA);
+  const pts = load(KP);
+  const mainEl = document.getElementById('ba-main');
+  if (!mainEl) return;
+
+  if (!sessions.length) {
+    mainEl.innerHTML = '<div class="empty" style="padding:3rem;">No sessions yet. Click "+ New Session" to get started.</div>';
+    return;
+  }
+
+  mainEl.innerHTML = '<div>' + sessions.slice().reverse().map(s => {
+    const p = gp(s.patientId);
+    const beforeHtml = s.before
+      ? `<div class="ba-thumb"><img src="${s.before}" alt="before"></div>`
+      : `<div class="ba-thumb" style="background:var(--red-bg);"><span style="color:var(--red);font-size:8px;">Before</span></div>`;
+    const afterHtml = s.after
+      ? `<div class="ba-thumb"><img src="${s.after}" alt="after"></div>`
+      : `<div class="ba-thumb" style="background:var(--green-bg);"><span style="color:var(--green);font-size:8px;">${s.before?'After needed':'After'}</span></div>`;
+    const hasAfter = !!s.after;
+    return `<div class="ba-session-row" onclick="openCompare('${s.id}')">
+      <div class="ba-thumb-pair">${beforeHtml}${afterHtml}</div>
+      <div class="ba-session-info">
+        <div class="ba-session-name">${pn(p)}</div>
+        <div class="ba-session-meta">${s.zone} · ${fd(s.date)}</div>
+        ${s.notes ? `<div class="ba-session-note">${s.notes}</div>` : ''}
+      </div>
+      <div class="ba-session-status">
+        <span class="st ${hasAfter ? 'st-ok' : 'st-pend'}">${hasAfter ? 'Complete' : 'Before only'}</span>
+        <button class="btn-g" style="font-size:11px;padding:3px 10px;" onclick="event.stopPropagation();openCompare('${s.id}')">View</button>
+      </div>
+    </div>`;
+  }).join('') + '</div>';
+}
+
+// Override nav to render photos view
+const _origNav = nav;
+window.nav = function(v, el) {
+  _origNav(v, el);
+  if (v === 'photos') {
+    setTimeout(renderPhotosView, 50);
+  }
+};
+
+// Patch the photos view HTML
+window.addEventListener('DOMContentLoaded', () => {
+  const pv = document.getElementById('view-photos');
+  if (!pv) return;
+  pv.querySelector('.pg-hdr .btn-sm').onclick = openNewSession;
+  // Replace ba-grid with dynamic area
+  const baGrid = pv.querySelector('.ba-grid');
+  if (baGrid) {
+    baGrid.outerHTML = '';
+    const d = document.createElement('div');
+    d.id = 'ba-main';
+    pv.appendChild(d);
+  }
+});
+
+// ══════════════════════════════════════════════════
+//  NEW SESSION
+// ══════════════════════════════════════════════════
+function openNewSession() {
+  // Build zone grid
+  const zg = document.getElementById('zone-grid');
+  zg.innerHTML = Object.entries(ZONES).map(([name, z]) =>
+    `<div class="zone-btn${name === activeZone ? ' sel' : ''}" onclick="selectZone('${name}',this)">
+      <div class="zone-icon">${z.icon}</div>
+      <div class="zone-label">${name}</div>
+    </div>`
+  ).join('');
+
+  // Fill patient dropdown
+  const pts = load(KP);
+  document.getElementById('ns-patient').innerHTML = pts.map(p =>
+    `<option value="${p.id}">${pn(p)}</option>`
+  ).join('');
+
+  document.getElementById('ns-notes').value = '';
+  document.getElementById('ns-modal').style.display = 'flex';
+}
+function closeNS() { document.getElementById('ns-modal').style.display = 'none'; }
+function selectZone(name, el) {
+  activeZone = name;
+  document.querySelectorAll('.zone-btn').forEach(b => b.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+function startSession() {
+  const patientId = document.getElementById('ns-patient').value;
+  if (!patientId) { alert('Please select a patient.'); return; }
+  sessionData = {
+    id: uid(),
+    patientId,
+    zone: activeZone,
+    notes: document.getElementById('ns-notes').value,
+    type: document.getElementById('ns-type').value,
+    before: null,
+    after: null,
+    date: today()
+  };
+  closeNS();
+  const type = sessionData.type;
+  capturePhase = (type === 'after') ? 'after' : 'before';
+  openCamera(capturePhase);
+}
+
+// ══════════════════════════════════════════════════
+//  CAMERA
+// ══════════════════════════════════════════════════
+async function openCamera(phase) {
+  capturePhase = phase;
+  const overlay = document.getElementById('cam-overlay');
+  overlay.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+
+  // Phase label
+  const pill = document.getElementById('cam-phase-pill');
+  if (phase === 'before') {
+    pill.textContent = '📷 BEFORE photo';
+    pill.className = 'cam-phase-pill cam-before-tag';
+  } else {
+    pill.textContent = '✓ AFTER photo';
+    pill.className = 'cam-phase-pill cam-after-tag';
+  }
+
+  document.getElementById('cam-title').textContent = (phase === 'before' ? 'Before' : 'After') + ' — ' + activeZone;
+  document.getElementById('cam-sub').textContent = 'Align patient to the guide outline';
+  document.getElementById('cam-instruction').textContent = ZONES[activeZone]?.instruction || 'Position patient within the guide.';
+
+  // Draw guide SVG
+  const guideEl = document.getElementById('cam-guide');
+  guideEl.innerHTML = ZONES[activeZone]?.guide || '';
+
+  try {
+    camStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: camFacingMode, width: { ideal: 1920 }, height: { ideal: 1080 } },
+      audio: false
+    });
+    const video = document.getElementById('cam-video');
+    video.srcObject = camStream;
+  } catch (err) {
+    // Camera not available (desktop demo) — show demo mode
+    const vid = document.getElementById('cam-video');
+    vid.style.background = '#111';
+    document.getElementById('cam-instruction').textContent = '(Demo mode — camera not available on this device. Click the shutter to simulate capture.)';
+  }
+}
+
+function stopCamera() {
+  if (camStream) { camStream.getTracks().forEach(t => t.stop()); camStream = null; }
+  document.getElementById('cam-overlay').style.display = 'none';
+  document.body.style.overflow = 'hidden';
+}
+
+function flipCamera() {
+  camFacingMode = camFacingMode === 'environment' ? 'user' : 'environment';
+  stopCamera();
+  setTimeout(() => openCamera(capturePhase), 300);
+}
+
+function capturePhoto() {
+  const video = document.getElementById('cam-video');
+  const canvas = document.getElementById('cam-canvas');
+
+  if (video.videoWidth > 0) {
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(video, 0, 0);
+    pendingDataURL = canvas.toDataURL('image/jpeg', 0.85);
+  } else {
+    // Demo mode: generate placeholder
+    canvas.width = 640; canvas.height = 960;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = capturePhase === 'before' ? '#1a1a2e' : '#0d1b2a';
+    ctx.fillRect(0, 0, 640, 960);
+    ctx.strokeStyle = 'rgba(201,168,76,0.6)';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([8, 8]);
+    ctx.strokeRect(80, 60, 480, 840);
+    ctx.fillStyle = 'rgba(201,168,76,0.7)';
+    ctx.font = 'bold 28px DM Sans, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(capturePhase === 'before' ? 'BEFORE' : 'AFTER', 320, 490);
+    ctx.font = '18px DM Sans, sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.fillText(activeZone, 320, 525);
+    pendingDataURL = canvas.toDataURL('image/jpeg', 0.85);
+  }
+
+  showReview();
+}
+
+function showReview() {
+  stopCamera();
+  const review = document.getElementById('cam-review');
+  review.style.display = 'flex';
+  document.getElementById('review-img').src = pendingDataURL;
+  document.getElementById('review-label').textContent =
+    (capturePhase === 'before' ? 'Before photo' : 'After photo') + ' — ' + activeZone + ' · Review and confirm';
+  // Show guide overlay on review
+  document.getElementById('review-guide').innerHTML = `<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">${ZONES[activeZone]?.guide||''}</svg>`;
+}
+
+function retakePhoto() {
+  document.getElementById('cam-review').style.display = 'none';
+  openCamera(capturePhase);
+}
+
+function keepPhoto() {
+  document.getElementById('cam-review').style.display = 'none';
+  if (capturePhase === 'before') {
+    sessionData.before = pendingDataURL;
+  } else {
+    sessionData.after = pendingDataURL;
+  }
+  // If session type is 'both' and we just did 'before', go to 'after'
+  if (sessionData.type === 'both' && capturePhase === 'before') {
+    setTimeout(() => openCamera('after'), 300);
+  } else {
+    openCompareNew();
+  }
+}
+
+// ══════════════════════════════════════════════════
+//  COMPARE VIEW
+// ══════════════════════════════════════════════════
+let currentSessionId = null;
+
+function openCompareNew() {
+  currentSessionId = null;
+  renderCompare(sessionData);
+}
+
+function openCompare(id) {
+  const sessions = load(KBA);
+  const s = sessions.find(x => x.id === id);
+  if (!s) return;
+  currentSessionId = id;
+  Object.assign(sessionData, s);
+  renderCompare(s);
+}
+
+function renderCompare(s) {
+  const p = gp(s.patientId);
+  document.getElementById('cmp-title').textContent = pn(p) + ' — ' + s.zone;
+  document.getElementById('cmp-sub').textContent = fd(s.date) + ' · ' + s.zone;
+  document.getElementById('cmp-notes').value = s.notes || '';
+
+  // Before slot
+  const bw = document.getElementById('cmp-before-wrap');
+  if (s.before) {
+    bw.innerHTML = `<img src="${s.before}" style="width:100%;height:100%;object-fit:cover;" alt="before">
+      <div class="compare-guide-badge">${s.zone}</div>
+      <div style="position:absolute;inset:0;pointer-events:none;opacity:0.35;">
+        <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%;">${ZONES[s.zone]?.guide||''}</svg>
+      </div>`;
+  } else {
+    bw.innerHTML = `<div class="compare-img-empty" onclick="retakeSlot('before')">
+      <div class="compare-img-empty-icon">📷</div>
+      <div class="compare-img-empty-txt">Tap to take Before photo</div>
+      <div class="compare-img-empty-sub">Guide overlay ensures consistent positioning</div>
+    </div>`;
+  }
+
+  // After slot
+  const aw = document.getElementById('cmp-after-wrap');
+  if (s.after) {
+    aw.innerHTML = `<img src="${s.after}" style="width:100%;height:100%;object-fit:cover;" alt="after">
+      <div class="compare-guide-badge">${s.zone}</div>
+      <div style="position:absolute;inset:0;pointer-events:none;opacity:0.35;">
+        <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%;">${ZONES[s.zone]?.guide||''}</svg>
+      </div>`;
+  } else {
+    aw.innerHTML = `<div class="compare-img-empty" onclick="retakeSlot('after')">
+      <div class="compare-img-empty-icon">📷</div>
+      <div class="compare-img-empty-txt">Tap to take After photo</div>
+      <div class="compare-img-empty-sub">Same guide outline ensures match</div>
+    </div>`;
+  }
+
+  document.getElementById('ba-compare').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCompare() {
+  document.getElementById('ba-compare').style.display = 'none';
+  document.body.style.overflow = 'hidden';
+  renderPhotosView();
+}
+
+function retakeSlot(phase) {
+  capturePhase = phase;
+  activeZone = sessionData.zone;
+  openCamera(phase);
+}
+
+function saveSession() {
+  sessionData.notes = document.getElementById('cmp-notes').value;
+  const sessions = load(KBA);
+  if (currentSessionId) {
+    const idx = sessions.findIndex(s => s.id === currentSessionId);
+    if (idx >= 0) sessions[idx] = sessionData;
+    else sessions.push(sessionData);
+  } else {
+    sessionData.id = sessionData.id || uid();
+    sessions.push(sessionData);
+    currentSessionId = sessionData.id;
+  }
+  save(KBA, sessions);
+  closeCompare();
+}
+
+// Patch nav for photos view on load
+document.addEventListener('DOMContentLoaded', () => {
+  const pv = document.getElementById('view-photos');
+  if (!pv) return;
+  const addBtn = pv.querySelector('.pg-hdr .btn-sm');
+  if (addBtn) addBtn.onclick = openNewSession;
+  // Replace static ba-grid
+  const baGrid = pv.querySelector('.ba-grid');
+  if (baGrid) baGrid.remove();
+  const d = document.createElement('div');
+  d.id = 'ba-main';
+  pv.appendChild(d);
+});
+</script>
+<script>
+// ── GHOST MODE + LEVEL ─────────────────────────────────────────
+let ghostVisible = false;
+
+function toggleGhost() {
+  ghostVisible = !ghostVisible;
+  const g = document.getElementById('cam-ghost');
+  const btn = document.getElementById('ghost-btn');
+  if (g) g.style.opacity = ghostVisible ? '0.45' : '0';
+  if (btn) btn.textContent = ghostVisible ? '👻 Hide Ghost' : '👻 Show Ghost';
+}
+
+// Show ghost button only when taking an "after" photo and before photo exists
+const _origOpenCamera = openCamera;
+window.openCamera = async function(phase) {
+  await _origOpenCamera(phase);
+  const toggle = document.getElementById('cam-ghost-toggle');
+  if (!toggle) return;
+  if (phase === 'after' && sessionData.before) {
+    document.getElementById('cam-ghost').src = sessionData.before;
+    toggle.style.display = 'block';
+    ghostVisible = false;
+    document.getElementById('cam-ghost').style.opacity = '0';
+    document.getElementById('ghost-btn').textContent = '👻 Show Ghost';
+  } else {
+    toggle.style.display = 'none';
+    document.getElementById('cam-ghost').style.opacity = '0';
+  }
+};
+
+// ── DEVICE LEVEL INDICATOR ──────────────────────────────────────
+let levelActive = false;
+function startLevel() {
+  if (levelActive) return;
+  if (!window.DeviceOrientationEvent) return;
+  levelActive = true;
+  window.addEventListener('deviceorientation', handleOrientation);
+}
+function stopLevel() {
+  levelActive = false;
+  window.removeEventListener('deviceorientation', handleOrientation);
+}
+function handleOrientation(e) {
+  const line = document.getElementById('level-line');
+  if (!line) return;
+  const gamma = e.gamma || 0; // left-right tilt
+  const beta = e.beta || 0;   // front-back tilt
+  // when gamma is near 0 and beta is near 90 (landscape hold) = level
+  const tiltAmt = Math.abs(gamma);
+  if (tiltAmt < 3) {
+    line.style.background = 'rgba(74,222,128,0.9)';
+  } else if (tiltAmt < 8) {
+    line.style.background = 'rgba(251,191,36,0.9)';
+  } else {
+    line.style.background = 'rgba(248,113,113,0.9)';
+  }
+  const rot = Math.min(Math.max(gamma, -30), 30);
+  document.getElementById('cam-level').style.transform =
+    `translate(-50%, -50%) rotate(${rot}deg)`;
+}
+
+// Hook into openCamera to start/stop level
+const _origStop = stopCamera;
+window.stopCamera = function() {
+  _origStop();
+  stopLevel();
+};
+
+// Patch openCamera to start level
+const _origOpen2 = window.openCamera;
+window.openCamera = async function(phase) {
+  await _origOpen2(phase);
+  startLevel();
+};
+</script>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inventory — Haus of Confidence</title>
+<link rel="stylesheet" href="hoc-style.css">
+<style>
+.qty-bar-wrap{width:80px;background:var(--s2);border-radius:20px;height:5px;overflow:hidden;display:inline-block;vertical-align:middle;margin-right:6px;}
+.qty-bar{height:100%;border-radius:20px;}
+.exp-soon{background:var(--abg);color:var(--amber);}
+.exp-ok{background:var(--gbg);color:var(--green);}
+.exp-past{background:var(--rbg);color:var(--red);}
+.cat-pill{display:inline-block;font-size:10px;padding:2px 8px;border-radius:10px;background:var(--s2);color:var(--t2);}
+.alert-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);}
+.alert-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;}
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <div id="sidebar-wrap"></div>
+  <div class="main">
+    <div class="pg-hdr">
+      <div><div class="pg-title">Inventory</div><div class="pg-sub">Injectables, supplies, expiry tracking, and reorder alerts</div></div>
+      <div class="btns">
+        <button class="btn-g" onclick="showTab('alerts')">Alerts</button>
+        <button class="btn-p" onclick="openAddItem()">+ Add Item</button>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active" id="tab-all" onclick="showTab('all')">All Inventory</div>
+      <div class="tab" id="tab-injectables" onclick="showTab('injectables')">Injectables</div>
+      <div class="tab" id="tab-supplies" onclick="showTab('supplies')">Supplies</div>
+      <div class="tab" id="tab-alerts" onclick="showTab('alerts')">Alerts <span id="alert-count" class="nbadge" style="position:relative;top:0;margin-left:4px;"></span></div>
+    </div>
+
+    <div class="stats-grid" id="inv-stats"></div>
+
+    <div id="view-all">
+      <input class="search" id="inv-search" type="text" placeholder="Search by name, category, or lot #..." oninput="renderInventory('all')">
+      <div class="panel" id="inv-table-all"></div>
+    </div>
+    <div id="view-injectables" style="display:none;">
+      <div class="panel" id="inv-table-injectables"></div>
+    </div>
+    <div id="view-supplies" style="display:none;">
+      <div class="panel" id="inv-table-supplies"></div>
+    </div>
+    <div id="view-alerts" style="display:none;">
+      <div class="panel" id="inv-alerts-panel"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Add/Edit Modal -->
+<div id="inv-modal" class="overlay" style="display:none;" onclick="if(event.target===this)closeInvModal()">
+  <div class="modal">
+    <div class="modal-title" id="inv-modal-title">Add Inventory Item</div>
+    <input type="hidden" id="inv-edit-id">
+    <div class="fr2">
+      <div class="fr"><label class="fl">Product Name</label><input class="fi" id="inv-name" placeholder="Botox (Allergan)"></div>
+      <div class="fr"><label class="fl">Category</label>
+        <select class="fs" id="inv-cat"><option>Injectable</option><option>Anesthetic</option><option>IV Therapy</option><option>Weight Loss</option><option>Supplies</option><option>Equipment</option></select>
+      </div>
+    </div>
+    <div class="fr3">
+      <div class="fr" style="margin-bottom:0"><label class="fl">Qty on Hand</label><input class="fi" id="inv-qty" type="number" min="0"></div>
+      <div class="fr" style="margin-bottom:0"><label class="fl">Reorder At</label><input class="fi" id="inv-reorder" type="number" min="0"></div>
+      <div class="fr" style="margin-bottom:0"><label class="fl">Unit</label><input class="fi" id="inv-unit" placeholder="vial, syringe..."></div>
+    </div>
+    <div class="fr2" style="margin-top:1rem;">
+      <div class="fr" style="margin-bottom:0"><label class="fl">Cost per Unit</label><input class="fi" id="inv-cost" type="number" step="0.01" placeholder="0.00"></div>
+      <div class="fr" style="margin-bottom:0"><label class="fl">Storage Location</label><input class="fi" id="inv-location" placeholder="Fridge A, Cabinet 2..."></div>
+    </div>
+    <div class="fr2" style="margin-top:1rem;">
+      <div class="fr" style="margin-bottom:0"><label class="fl">Lot / Batch #</label><input class="fi" id="inv-lot" placeholder="Optional"></div>
+      <div class="fr" style="margin-bottom:0"><label class="fl">Expiry Date</label><input class="fi" id="inv-exp" type="date"></div>
+    </div>
+    <div class="modal-acts">
+      <button class="btn-g" onclick="closeInvModal()">Cancel</button>
+      <button class="btn-d" id="inv-del-btn" style="display:none;" onclick="deleteItem()">Delete</button>
+      <button class="btn-p" onclick="saveItem()">Save</button>
+    </div>
+  </div>
+</div>
+
+<script src="hoc.js"></script><script src="hoc-sidebar.js"></script>
+<script>
+document.getElementById('sidebar-wrap').innerHTML = renderSidebar('inventory.html');
+document.querySelectorAll('.ni').forEach(n=>{ if(n.getAttribute('href')==='inventory.html') n.classList.add('active'); });
+
+function daysUntilExp(exp){
+  if(!exp) return 9999;
+  const diff=new Date(exp)-new Date();
+  return Math.floor(diff/(1000*60*60*24));
+}
+function expClass(exp){
+  const d=daysUntilExp(exp);
+  if(d<0) return 'exp-past';
+  if(d<90) return 'exp-soon';
+  return 'exp-ok';
+}
+function expLabel(exp){
+  if(!exp) return '—';
+  const d=daysUntilExp(exp);
+  if(d<0) return 'EXPIRED';
+  if(d===0) return 'Today';
+  if(d<30) return d+'d left';
+  if(d<90) return Math.ceil(d/30)+'mo left';
+  return HOC.fd(exp);
+}
+
+function renderStats(){
+  const inv=HOC.load(HOC.K.inventory);
+  const low=inv.filter(i=>i.qty<=i.reorder);
+  const expiring=inv.filter(i=>daysUntilExp(i.exp)<90&&daysUntilExp(i.exp)>=0);
+  const expired=inv.filter(i=>daysUntilExp(i.exp)<0);
+  const totalValue=inv.reduce((s,i)=>s+(Number(i.cost||0)*Number(i.qty||0)),0);
+  document.getElementById('inv-stats').innerHTML=`
+    <div class="stat-card"><div class="stat-lbl">Total Items</div><div class="stat-val">${inv.length}</div><div class="stat-hint">across all categories</div></div>
+    <div class="stat-card"><div class="stat-lbl">Inventory Value</div><div class="stat-val">${HOC.fa(Math.round(totalValue))}</div><div class="stat-hint">at cost</div></div>
+    <div class="stat-card" style="${low.length?'border-color:var(--rbd);background:var(--rbg);':''}"><div class="stat-lbl">Low Stock</div><div class="stat-val" style="${low.length?'color:var(--red);':''}">${low.length}</div><div class="stat-hint">${low.length?'Reorder needed':'All levels OK'}</div></div>
+    <div class="stat-card" style="${expiring.length||expired.length?'border-color:var(--abd);background:var(--abg);':''}"><div class="stat-lbl">Expiring Soon</div><div class="stat-val" style="${expiring.length?'color:var(--amber);':''}">${expiring.length+expired.length}</div><div class="stat-hint">${expired.length?expired.length+' expired':'within 90 days'}</div></div>
+  `;
+  const alerts=low.length+expiring.length+expired.length;
+  const badge=document.getElementById('alert-count');
+  if(badge){ badge.textContent=alerts||''; badge.style.display=alerts?'':'none'; }
+}
+
+function renderTable(items, containerId){
+  const el=document.getElementById(containerId);
+  if(!items.length){el.innerHTML='<div class="empty">No items found.</div>';return;}
+  el.innerHTML=`<table class="dt"><thead><tr><th>Product</th><th>Category</th><th>Qty</th><th>Location</th><th>Expiry</th><th>Cost</th><th></th></tr></thead><tbody>`+
+  items.map(i=>{
+    const pct=Math.min(100,Math.round((i.qty/Math.max(i.reorder*2,1))*100));
+    const barColor=i.qty<=i.reorder?'var(--red)':i.qty<=i.reorder*1.5?'var(--amber)':'var(--green)';
+    return `<tr class="${i.qty<=i.reorder?'inv-low':''}">
+      <td><div style="font-weight:500;font-size:12.5px;">${i.name}</div>${i.lot?`<div style="font-size:10px;color:var(--t3);">Lot: ${i.lot}</div>`:''}
+      </td>
+      <td><span class="cat-pill">${i.category}</span></td>
+      <td>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <div class="qty-bar-wrap"><div class="qty-bar" style="width:${pct}%;background:${barColor};"></div></div>
+          <span style="font-weight:500;">${i.qty}</span>
+          <span style="font-size:10px;color:var(--t3);">${i.unit}</span>
+        </div>
+        ${i.qty<=i.reorder?`<div style="font-size:10px;color:var(--red);">⚠ Reorder at ${i.reorder}</div>`:''}
+      </td>
+      <td style="font-size:12px;color:var(--t3);">${i.location||'—'}</td>
+      <td><span class="st ${expClass(i.exp)}" style="font-size:10px;">${expLabel(i.exp)}</span></td>
+      <td style="font-size:12px;color:var(--t3);">${i.cost?HOC.fa(i.cost)+'/'+i.unit.split(' ')[0]:'—'}</td>
+      <td style="display:flex;gap:5px;"><button class="btn-g" style="font-size:11px;padding:3px 10px;" onclick="editItem('${i.id}')">Edit</button><button class="btn-g" style="font-size:11px;padding:3px 10px;" onclick="adjustQty('${i.id}')">+/-</button></td>
+    </tr>`;
+  }).join('')+'</tbody></table>';
+}
+
+function renderInventory(tab){
+  const q=(document.getElementById('inv-search')?.value||'').toLowerCase();
+  let inv=HOC.load(HOC.K.inventory);
+  if(tab==='injectables') inv=inv.filter(i=>i.category==='Injectable');
+  if(tab==='supplies') inv=inv.filter(i=>i.category==='Supplies'||i.category==='Equipment');
+  if(q) inv=inv.filter(i=>(i.name+i.category+i.lot).toLowerCase().includes(q));
+  renderTable(inv,'inv-table-'+(tab==='all'?'all':tab==='injectables'?'injectables':'supplies'));
+}
+
+function renderAlerts(){
+  const inv=HOC.load(HOC.K.inventory);
+  const alerts=[];
+  inv.forEach(i=>{
+    if(i.qty<=i.reorder) alerts.push({type:'low',item:i,msg:`Only ${i.qty} ${i.unit} remaining — reorder threshold is ${i.reorder}`});
+    const d=daysUntilExp(i.exp);
+    if(d<0) alerts.push({type:'expired',item:i,msg:`Expired ${Math.abs(d)} days ago — remove from use immediately`});
+    else if(d<90) alerts.push({type:'expiring',item:i,msg:`Expires in ${d} days (${HOC.fd(i.exp)})`});
+  });
+  const el=document.getElementById('inv-alerts-panel');
+  if(!alerts.length){el.innerHTML='<div class="empty" style="color:var(--green);">✓ No alerts — all inventory levels and expiry dates are OK</div>';return;}
+  el.innerHTML=alerts.map(a=>{
+    const icon=a.type==='expired'?'🚫':a.type==='low'?'⚠️':'⏰';
+    const cls=a.type==='expired'?'rbg':'abg';
+    return `<div class="alert-row">
+      <div class="alert-icon" style="background:var(--${a.type==='low'?'rbg':'abg'});">${icon}</div>
+      <div style="flex:1;"><div style="font-size:13px;font-weight:500;">${a.item.name}</div><div style="font-size:11px;color:var(--t2);">${a.msg}</div></div>
+      <button class="btn-g" style="font-size:11px;padding:4px 12px;" onclick="editItem('${a.item.id}')">Update</button>
+    </div>`;
+  }).join('');
+}
+
+function showTab(t){
+  ['all','injectables','supplies','alerts'].forEach(v=>{
+    document.getElementById('view-'+v).style.display=v===t?'block':'none';
+    document.getElementById('tab-'+v).classList.toggle('active',v===t);
+  });
+  if(t==='all') renderInventory('all');
+  if(t==='injectables') renderInventory('injectables');
+  if(t==='supplies') renderInventory('supplies');
+  if(t==='alerts') renderAlerts();
+}
+
+function openAddItem(){
+  document.getElementById('inv-modal-title').textContent='Add Inventory Item';
+  document.getElementById('inv-edit-id').value='';
+  document.getElementById('inv-del-btn').style.display='none';
+  ['inv-name','inv-qty','inv-reorder','inv-unit','inv-cost','inv-location','inv-lot'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('inv-exp').value='';
+  document.getElementById('inv-modal').style.display='flex';
+}
+function editItem(id){
+  const item=HOC.load(HOC.K.inventory).find(i=>i.id===id);
+  if(!item)return;
+  document.getElementById('inv-modal-title').textContent='Edit Item';
+  document.getElementById('inv-edit-id').value=id;
+  document.getElementById('inv-del-btn').style.display='inline-block';
+  document.getElementById('inv-name').value=item.name;
+  document.getElementById('inv-cat').value=item.category;
+  document.getElementById('inv-qty').value=item.qty;
+  document.getElementById('inv-reorder').value=item.reorder;
+  document.getElementById('inv-unit').value=item.unit;
+  document.getElementById('inv-cost').value=item.cost||'';
+  document.getElementById('inv-location').value=item.location||'';
+  document.getElementById('inv-lot').value=item.lot||'';
+  document.getElementById('inv-exp').value=item.exp||'';
+  document.getElementById('inv-modal').style.display='flex';
+}
+function adjustQty(id){
+  const inv=HOC.load(HOC.K.inventory);
+  const item=inv.find(i=>i.id===id);
+  if(!item)return;
+  const delta=prompt(`Current qty: ${item.qty} ${item.unit}\nEnter adjustment (e.g. -2 to use 2, +5 to add 5):`);
+  if(delta===null)return;
+  const n=parseInt(delta);
+  if(isNaN(n)){alert('Invalid number');return;}
+  item.qty=Math.max(0,item.qty+n);
+  HOC.save(HOC.K.inventory,inv);
+  renderStats();renderInventory('all');
+}
+function closeInvModal(){ document.getElementById('inv-modal').style.display='none'; }
+function saveItem(){
+  const eid=document.getElementById('inv-edit-id').value;
+  const d={
+    id:eid||HOC.uid(),
+    name:document.getElementById('inv-name').value.trim(),
+    category:document.getElementById('inv-cat').value,
+    qty:parseInt(document.getElementById('inv-qty').value)||0,
+    reorder:parseInt(document.getElementById('inv-reorder').value)||0,
+    unit:document.getElementById('inv-unit').value,
+    cost:parseFloat(document.getElementById('inv-cost').value)||0,
+    location:document.getElementById('inv-location').value,
+    lot:document.getElementById('inv-lot').value,
+    exp:document.getElementById('inv-exp').value||null,
+  };
+  if(!d.name){alert('Name required.');return;}
+  let inv=HOC.load(HOC.K.inventory);
+  if(eid) inv=inv.map(i=>i.id===eid?d:i); else inv.push(d);
+  HOC.save(HOC.K.inventory,inv);
+  closeInvModal();renderStats();renderInventory('all');
+}
+function deleteItem(){
+  const id=document.getElementById('inv-edit-id').value;
+  if(!id||!confirm('Delete this item?'))return;
+  HOC.save(HOC.K.inventory,HOC.load(HOC.K.inventory).filter(i=>i.id!==id));
+  closeInvModal();renderStats();renderInventory('all');
+}
+
+renderStats();renderInventory('all');
+</script>
+</body>
+</html>

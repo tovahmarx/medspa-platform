@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analytics — Haus of Confidence</title>
+<link rel="stylesheet" href="hoc-style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+.chart-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1.25rem;margin-bottom:1.25rem;}
+.chart-title{font-size:13px;font-weight:500;margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;}
+.chart-sub{font-size:11px;color:var(--t3);font-weight:400;margin-top:2px;}
+.big-metric{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:500;line-height:1;}
+.metric-change{font-size:12px;margin-top:4px;}
+.leaderboard-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);}
+.leaderboard-row:last-child{border-bottom:none;}
+.lb-rank{width:22px;height:22px;border-radius:50%;background:var(--gold-l);color:var(--gold-h);font-size:10px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.lb-bar-wrap{flex:1;background:var(--s2);border-radius:20px;height:6px;overflow:hidden;}
+.lb-bar{height:100%;background:var(--gold);border-radius:20px;transition:width .4s;}
+.funnel-step{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);}
+.funnel-step:last-child{border-bottom:none;}
+.funnel-n{font-size:22px;font-weight:300;font-family:'Cormorant Garamond',serif;min-width:60px;}
+.funnel-bar-wrap{flex:1;background:var(--s2);border-radius:4px;height:8px;overflow:hidden;}
+.funnel-bar{height:100%;border-radius:4px;transition:width .4s;}
+.date-range{display:flex;gap:6px;margin-bottom:1.4rem;flex-wrap:wrap;}
+.dr{padding:5px 14px;border-radius:20px;font-size:12px;cursor:pointer;color:var(--t2);background:var(--white);border:1px solid var(--border);transition:all .1s;}
+.dr:hover{border-color:var(--gold);}
+.dr.on{background:var(--gold);color:var(--white);border-color:var(--gold);font-weight:500;}
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <div id="sidebar-wrap"></div>
+  <div class="main">
+    <div class="pg-hdr">
+      <div><div class="pg-title">Analytics</div><div class="pg-sub">Revenue, retention, provider performance, and growth</div></div>
+      <div class="btns">
+        <button class="btn-g">Export Report</button>
+      </div>
+    </div>
+
+    <div class="date-range">
+      <div class="dr on" onclick="setRange('mtd',this)">Month to Date</div>
+      <div class="dr" onclick="setRange('last30',this)">Last 30 Days</div>
+      <div class="dr" onclick="setRange('q1',this)">Q1 2026</div>
+      <div class="dr" onclick="setRange('ytd',this)">Year to Date</div>
+    </div>
+
+    <!-- Top stats -->
+    <div class="stats-grid" id="top-stats"></div>
+
+    <!-- Revenue + Appointments charts -->
+    <div class="g2">
+      <div class="chart-card">
+        <div class="chart-title">Revenue This Month<div class="chart-sub">Daily totals</div></div>
+        <div style="height:220px;"><canvas id="chart-revenue"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Appointments by Status<div class="chart-sub">This month</div></div>
+        <div style="height:220px;"><canvas id="chart-appts"></canvas></div>
+      </div>
+    </div>
+
+    <div class="g2">
+      <!-- Revenue by Service -->
+      <div class="chart-card">
+        <div class="chart-title">Revenue by Service</div>
+        <div style="height:220px;"><canvas id="chart-services"></canvas></div>
+      </div>
+      <!-- Provider leaderboard -->
+      <div class="chart-card">
+        <div class="chart-title">Revenue by Provider</div>
+        <div id="provider-leaderboard"></div>
+      </div>
+    </div>
+
+    <!-- Patient acquisition + retention -->
+    <div class="g2">
+      <div class="chart-card">
+        <div class="chart-title">New Patients by Source<div class="chart-sub">All time</div></div>
+        <div style="height:220px;"><canvas id="chart-sources"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Patient Retention Funnel</div>
+        <div id="funnel"></div>
+      </div>
+    </div>
+
+    <!-- Top patients -->
+    <div class="chart-card">
+      <div class="chart-title">Top Patients by Lifetime Value</div>
+      <table class="dt" id="top-patients-table"></table>
+    </div>
+
+    <!-- No-shows and reminders -->
+    <div class="g2">
+      <div class="chart-card">
+        <div class="chart-title">No-Show & Cancellation Rate<div class="chart-sub">Last 30 days</div></div>
+        <div style="display:flex;align-items:center;gap:2rem;padding:1rem 0;">
+          <div style="text-align:center;">
+            <div class="big-metric" style="color:var(--green);">94%</div>
+            <div style="font-size:12px;color:var(--t3);margin-top:4px;">Show rate</div>
+          </div>
+          <div style="text-align:center;">
+            <div class="big-metric" style="color:var(--amber);">4%</div>
+            <div style="font-size:12px;color:var(--t3);margin-top:4px;">Cancellations</div>
+          </div>
+          <div style="text-align:center;">
+            <div class="big-metric" style="color:var(--red);">2%</div>
+            <div style="font-size:12px;color:var(--t3);margin-top:4px;">No-shows</div>
+          </div>
+        </div>
+        <div style="background:var(--gbg);border:1px solid var(--gbd);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--green);margin-top:.5rem;">
+          ✓ Automated SMS reminders active — sending 48hr and day-of notifications
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Average Spend per Visit</div>
+        <div style="padding:1rem 0;">
+          <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:.5rem;">
+            <div class="big-metric">$<span id="avg-spend">810</span></div>
+            <div class="metric-change stat-up">↑ 19% vs last month</div>
+          </div>
+          <div style="font-size:12px;color:var(--t3);margin-bottom:1rem;">Per appointment average</div>
+          <div style="display:flex;flex-direction:column;gap:6px;" id="spend-by-service"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="hoc.js"></script>
+<script src="hoc-sidebar.js"></script>
+<script>
+document.getElementById('sidebar-wrap').innerHTML = renderSidebar('analytics.html');
+document.querySelectorAll('.ni').forEach(n=>{ if(n.getAttribute('href')==='analytics.html') n.classList.add('active'); });
+
+const GOLD = '#C9A84C', GOLD2 = '#b8943e', GOLD3 = '#f5edda';
+const COLORS = ['#C9A84C','#b8943e','#9a7a2e','#7a5e20','#d4b86a','#e8d5a3'];
+
+Chart.defaults.font.family = "'DM Sans', sans-serif";
+Chart.defaults.font.size = 11;
+Chart.defaults.color = '#a09890';
+
+function setRange(r,el){ document.querySelectorAll('.dr').forEach(d=>d.classList.remove('on')); el.classList.add('on'); renderAll(); }
+
+function renderAll() {
+  renderTopStats();
+  renderRevenueChart();
+  renderApptsChart();
+  renderServicesChart();
+  renderProviderLeaderboard();
+  renderSourcesChart();
+  renderFunnel();
+  renderTopPatients();
+  renderSpendByService();
+}
+
+function renderTopStats() {
+  const txns = HOC.load(HOC.K.txns).filter(t=>t.status==='Paid');
+  const appts = HOC.load(HOC.K.appts);
+  const pts = HOC.load(HOC.K.pts);
+  const totalRev = txns.reduce((s,t)=>s+Number(t.amount),0);
+  const todayAppts = appts.filter(a=>a.date===HOC.today());
+  const members = HOC.load('hoc_members').filter(m=>m.status==='Active');
+  const memberships = HOC.load(HOC.K.memberships);
+  const mrr = members.reduce((s,m)=>{
+    const plan = memberships.find(p=>p.id===m.membershipId);
+    return s+(plan?.price||0);
+  },0);
+  document.getElementById('top-stats').innerHTML = `
+    <div class="stat-card"><div class="stat-lbl">Total Revenue</div><div class="stat-val">${HOC.fa(totalRev)}</div><div class="stat-hint metric-change stat-up">↑ 23% vs last month</div></div>
+    <div class="stat-card"><div class="stat-lbl">Active Patients</div><div class="stat-val">${pts.length}</div><div class="stat-hint metric-change stat-up">↑ 8 new this month</div></div>
+    <div class="stat-card"><div class="stat-lbl">MRR (Memberships)</div><div class="stat-val">${HOC.fa(mrr)}</div><div class="stat-hint">${members.length} active members</div></div>
+    <div class="stat-card"><div class="stat-lbl">Today's Appointments</div><div class="stat-val">${todayAppts.length}</div><div class="stat-hint">${todayAppts.filter(a=>a.status==='Pending').length} pending</div></div>
+  `;
+}
+
+function renderRevenueChart() {
+  const txns = HOC.load(HOC.K.txns).filter(t=>t.status==='Paid');
+  const days=[], amounts=[];
+  for(let i=14;i>=0;i--){
+    const d=new Date(); d.setDate(d.getDate()-i);
+    const ds=d.toISOString().slice(0,10);
+    days.push(HOC.fd(ds));
+    amounts.push(txns.filter(t=>t.date===ds).reduce((s,t)=>s+Number(t.amount),0));
+  }
+  const ctx=document.getElementById('chart-revenue');
+  if(ctx._chart) ctx._chart.destroy();
+  ctx._chart=new Chart(ctx,{type:'bar',data:{labels:days,datasets:[{data:amounts,backgroundColor:GOLD3,borderColor:GOLD,borderWidth:1.5,borderRadius:4}]},options:{plugins:{legend:{display:false}},scales:{y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{callback:v=>'$'+v.toLocaleString()}},x:{grid:{display:false}}}}});
+}
+
+function renderApptsChart() {
+  const appts=HOC.load(HOC.K.appts);
+  const counts={Confirmed:0,Completed:0,Pending:0,Cancelled:0};
+  appts.forEach(a=>{ if(counts[a.status]!==undefined) counts[a.status]++; });
+  const ctx=document.getElementById('chart-appts');
+  if(ctx._chart) ctx._chart.destroy();
+  ctx._chart=new Chart(ctx,{type:'doughnut',data:{labels:Object.keys(counts),datasets:[{data:Object.values(counts),backgroundColor:['#C9A84C','#16a34a','#b45309','#dc2626'],borderWidth:0}]},options:{plugins:{legend:{position:'right'}},cutout:'65%'}});
+}
+
+function renderServicesChart() {
+  const txns=HOC.load(HOC.K.txns).filter(t=>t.status==='Paid');
+  const byService={};
+  txns.forEach(t=>{ byService[t.service]=(byService[t.service]||0)+Number(t.amount); });
+  const sorted=Object.entries(byService).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  const ctx=document.getElementById('chart-services');
+  if(ctx._chart) ctx._chart.destroy();
+  ctx._chart=new Chart(ctx,{type:'bar',data:{labels:sorted.map(s=>s[0].length>16?s[0].slice(0,16)+'…':s[0]),datasets:[{data:sorted.map(s=>s[1]),backgroundColor:COLORS,borderRadius:4,borderWidth:0}]},options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(0,0,0,.04)'},ticks:{callback:v=>'$'+v.toLocaleString()}},y:{grid:{display:false}}}}});
+}
+
+function renderProviderLeaderboard() {
+  const txns=HOC.load(HOC.K.txns).filter(t=>t.status==='Paid');
+  const appts=HOC.load(HOC.K.appts);
+  const byProvider={};
+  appts.forEach(a=>{
+    const t=txns.find(tx=>tx.patientId===a.patientId&&tx.date===a.date);
+    if(t) byProvider[a.provider]=(byProvider[a.provider]||0)+Number(t.amount);
+  });
+  // demo data
+  byProvider['Dr. Sara Ameli']=(byProvider['Dr. Sara Ameli']||0)+6800;
+  byProvider['Dr. Todd Malan']=(byProvider['Dr. Todd Malan']||0)+8200;
+  byProvider['Jacqueline']=(byProvider['Jacqueline']||0)+2100;
+  const sorted=Object.entries(byProvider).sort((a,b)=>b[1]-a[1]);
+  const max=sorted[0]?.[1]||1;
+  document.getElementById('provider-leaderboard').innerHTML=sorted.map((p,i)=>`
+    <div class="leaderboard-row">
+      <div class="lb-rank">${i+1}</div>
+      <div style="min-width:120px;font-size:13px;">${p[0]}</div>
+      <div class="lb-bar-wrap"><div class="lb-bar" style="width:${Math.round(p[1]/max*100)}%"></div></div>
+      <div style="min-width:60px;text-align:right;font-size:13px;font-weight:500;">${HOC.fa(p[1])}</div>
+    </div>`).join('');
+}
+
+function renderSourcesChart() {
+  const pts=HOC.load(HOC.K.pts);
+  const bySrc={};
+  pts.forEach(p=>{ bySrc[p.source||'Unknown']=(bySrc[p.source||'Unknown']||0)+1; });
+  const ctx=document.getElementById('chart-sources');
+  if(ctx._chart) ctx._chart.destroy();
+  ctx._chart=new Chart(ctx,{type:'pie',data:{labels:Object.keys(bySrc),datasets:[{data:Object.values(bySrc),backgroundColor:COLORS,borderWidth:0}]},options:{plugins:{legend:{position:'right'}}}});
+}
+
+function renderFunnel() {
+  const pts=HOC.load(HOC.K.pts);
+  const appts=HOC.load(HOC.K.appts);
+  const returning=pts.filter(p=>appts.filter(a=>a.patientId===p.id).length>1).length;
+  const members=HOC.load('hoc_members').filter(m=>m.status==='Active').length;
+  const steps=[
+    {label:'New patients',n:pts.length,color:'#C9A84C'},
+    {label:'Had 2+ appointments',n:returning,color:'#b8943e'},
+    {label:'Active members',n:members,color:'#9a7a2e'},
+  ];
+  const max=steps[0].n||1;
+  document.getElementById('funnel').innerHTML=steps.map(s=>`
+    <div class="funnel-step">
+      <div class="funnel-n">${s.n}</div>
+      <div>
+        <div style="font-size:12px;margin-bottom:4px;">${s.label}</div>
+        <div class="funnel-bar-wrap" style="width:220px;"><div class="funnel-bar" style="width:${Math.round(s.n/max*100)}%;background:${s.color};"></div></div>
+      </div>
+      <div style="font-size:12px;color:var(--t3);">${Math.round(s.n/max*100)}%</div>
+    </div>`).join('');
+}
+
+function renderTopPatients() {
+  const txns=HOC.load(HOC.K.txns);
+  const pts=HOC.load(HOC.K.pts);
+  const byPt={};
+  txns.filter(t=>t.status==='Paid').forEach(t=>{ byPt[t.patientId]=(byPt[t.patientId]||0)+Number(t.amount); });
+  const sorted=Object.entries(byPt).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  const appts=HOC.load(HOC.K.appts);
+  document.getElementById('top-patients-table').innerHTML=`<thead><tr><th>Patient</th><th>Lifetime Value</th><th>Appointments</th><th>Last Visit</th><th>Member</th></tr></thead><tbody>`+
+  sorted.map(([pid,ltv])=>{
+    const p=HOC.gp(pid);
+    const pAppts=appts.filter(a=>a.patientId===pid);
+    const last=pAppts.sort((a,b)=>b.date.localeCompare(a.date))[0];
+    const isMember=HOC.load('hoc_members').some(m=>m.patientId===pid&&m.status==='Active');
+    return `<tr><td><div class="prow"><div class="av">${HOC.pi(p)}</div><div class="pname">${HOC.pn(p)}</div></div></td><td style="font-weight:500;color:var(--gold-h);">${HOC.fa(ltv)}</td><td>${pAppts.length}</td><td style="color:var(--t3);">${last?HOC.fd(last.date):'—'}</td><td>${isMember?'<span class="st st-purple">Member</span>':'—'}</td></tr>`;
+  }).join('')+'</tbody>';
+}
+
+function renderSpendByService() {
+  const txns=HOC.load(HOC.K.txns).filter(t=>t.status==='Paid');
+  const byS={};
+  txns.forEach(t=>{ if(!byS[t.service])byS[t.service]={total:0,count:0}; byS[t.service].total+=Number(t.amount); byS[t.service].count++; });
+  const sorted=Object.entries(byS).map(([s,d])=>({s,avg:Math.round(d.total/d.count)})).sort((a,b)=>b.avg-a.avg).slice(0,5);
+  document.getElementById('spend-by-service').innerHTML=sorted.map(r=>`
+    <div style="display:flex;align-items:center;justify-content:space-between;font-size:12px;">
+      <span style="color:var(--t2);">${r.s.length>22?r.s.slice(0,22)+'…':r.s}</span>
+      <span style="font-weight:500;">${HOC.fa(r.avg)} avg</span>
+    </div>`).join('');
+}
+
+renderAll();
+</script>
+</body>
+</html>

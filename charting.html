@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Charting — Haus of Confidence</title>
+<link rel="stylesheet" href="hoc-style.css">
+<style>
+.soap-card{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:1.25rem;}
+.soap-hdr{padding:1rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.soap-body{padding:1.25rem;display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.soap-field{background:var(--bg);border-radius:8px;padding:.9rem;}
+.soap-label{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);font-weight:500;margin-bottom:5px;}
+.soap-val{font-size:13px;color:var(--text);line-height:1.6;}
+.soap-full{grid-column:1/-1;}
+.inj-table{width:100%;border-collapse:collapse;font-size:12px;}
+.inj-table th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--t3);padding:6px 10px;background:var(--bg);font-weight:400;}
+.inj-table td{padding:8px 10px;border-top:1px solid var(--border);color:var(--text);}
+.soap-note-input{width:100%;padding:10px 13px;border:1px solid var(--border2);border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;resize:vertical;min-height:80px;outline:none;color:var(--text);}
+.soap-note-input:focus{border-color:var(--gold);}
+.inj-row{display:grid;grid-template-columns:2fr 1fr 2fr 1fr 1fr;gap:8px;align-items:center;margin-bottom:8px;}
+.inj-row input,.inj-row select{padding:7px 10px;border:1px solid var(--border2);border-radius:7px;font-size:12px;font-family:'DM Sans',sans-serif;color:var(--text);background:var(--white);outline:none;}
+.inj-row input:focus,.inj-row select:focus{border-color:var(--gold);}
+.pt-picker{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1.25rem;}
+.pt-pick-card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:12px;cursor:pointer;transition:all .12s;display:flex;align-items:center;gap:10px;}
+.pt-pick-card:hover,.pt-pick-card.sel{border-color:var(--gold);background:var(--gold-p);}
+.timeline{display:flex;flex-direction:column;gap:0;}
+.tl-item{display:flex;gap:14px;position:relative;}
+.tl-item::before{content:'';position:absolute;left:16px;top:32px;bottom:0;width:1px;background:var(--border);}
+.tl-item:last-child::before{display:none;}
+.tl-dot{width:32px;height:32px;border-radius:50%;background:var(--gold-l);border:2px solid var(--gold-b);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;font-weight:500;color:var(--gold-h);margin-top:2px;}
+.tl-content{flex:1;padding-bottom:1.25rem;}
+.tl-date{font-size:11px;color:var(--t3);margin-bottom:4px;}
+.tl-title{font-size:13px;font-weight:500;margin-bottom:3px;}
+.tl-sub{font-size:12px;color:var(--t2);}
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <div id="sidebar-wrap"></div>
+  <div class="main">
+    <div class="pg-hdr">
+      <div><div class="pg-title">Charting & SOAP Notes</div><div class="pg-sub">Treatment records, injectable logs, clinical documentation</div></div>
+      <div class="btns">
+        <button class="btn-g" onclick="showTab('history')">View All Records</button>
+        <button class="btn-p" onclick="openNewChart()">+ New Chart Note</button>
+      </div>
+    </div>
+
+    <!-- tabs -->
+    <div class="tabs">
+      <div class="tab active" id="tab-new" onclick="showTab('new')">New Chart Note</div>
+      <div class="tab" id="tab-history" onclick="showTab('history')">Treatment History</div>
+      <div class="tab" id="tab-injectables" onclick="showTab('injectables')">Injectable Log</div>
+    </div>
+
+    <!-- NEW CHART NOTE -->
+    <div id="view-new">
+      <div class="panel">
+        <div class="panel-hdr">Patient & Visit</div>
+        <div class="panel-body">
+          <div class="fr2">
+            <div class="fr">
+              <label class="fl">Patient</label>
+              <select class="fs" id="chart-patient" onchange="updatePatientInfo()"></select>
+            </div>
+            <div class="fr">
+              <label class="fl">Provider</label>
+              <select class="fs" id="chart-provider">
+                <option>Dr. Sara Ameli</option>
+                <option>Dr. Todd Malan</option>
+                <option>Jacqueline</option>
+              </select>
+            </div>
+          </div>
+          <div class="fr3">
+            <div class="fr" style="margin-bottom:0">
+              <label class="fl">Date</label>
+              <input class="fi" type="date" id="chart-date">
+            </div>
+            <div class="fr" style="margin-bottom:0">
+              <label class="fl">Service</label>
+              <select class="fs" id="chart-service">
+                <option>LipoAway Procedure</option>
+                <option>Fat Transfer</option>
+                <option>Botox</option>
+                <option>Dermal Fillers</option>
+                <option>Sculptra & Radiesse</option>
+                <option>RF Microneedling</option>
+                <option>PDO Thread Lift</option>
+                <option>Medical Weight Loss</option>
+                <option>Hormone Replacement Therapy</option>
+                <option>IV Therapy</option>
+                <option>Facial</option>
+                <option>Consultation</option>
+              </select>
+            </div>
+            <div class="fr" style="margin-bottom:0">
+              <label class="fl">Chart Type</label>
+              <select class="fs" id="chart-type">
+                <option value="SOAP">SOAP Note</option>
+                <option value="Progress">Progress Note</option>
+                <option value="Consult">Consultation Note</option>
+                <option value="Followup">Follow-Up Note</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SOAP -->
+      <div class="panel">
+        <div class="panel-hdr">SOAP Note</div>
+        <div class="panel-body" style="display:flex;flex-direction:column;gap:1rem;">
+          <div>
+            <label class="fl">S — Subjective <span style="color:var(--t3);text-transform:none;letter-spacing:0;">(Patient's chief complaint and history)</span></label>
+            <textarea class="soap-note-input" id="soap-s" placeholder="Patient reports... Chief complaint is... History of..."></textarea>
+          </div>
+          <div>
+            <label class="fl">O — Objective <span style="color:var(--t3);text-transform:none;letter-spacing:0;">(Measurable findings, exam results)</span></label>
+            <textarea class="soap-note-input" id="soap-o" placeholder="Vital signs... Physical exam findings... Measurements..."></textarea>
+          </div>
+          <div>
+            <label class="fl">A — Assessment <span style="color:var(--t3);text-transform:none;letter-spacing:0;">(Clinical impression)</span></label>
+            <textarea class="soap-note-input" id="soap-a" placeholder="Assessment of patient condition... Diagnosis or clinical impression..."></textarea>
+          </div>
+          <div>
+            <label class="fl">P — Plan <span style="color:var(--t3);text-transform:none;letter-spacing:0;">(Treatment plan and follow-up)</span></label>
+            <textarea class="soap-note-input" id="soap-p" placeholder="Treatment performed... Products used... Follow-up plan... Patient instructions..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Injectable Tracker -->
+      <div class="panel">
+        <div class="panel-hdr">
+          Injectable Tracker
+          <button class="btn-g" style="font-size:11px;padding:4px 12px;" onclick="addInjRow()">+ Add Product</button>
+        </div>
+        <div class="panel-body">
+          <div style="display:grid;grid-template-columns:2fr 1fr 2fr 1fr 1fr;gap:8px;margin-bottom:6px;">
+            <span style="font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--t3);">Product</span>
+            <span style="font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--t3);">Units</span>
+            <span style="font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--t3);">Treatment Zones</span>
+            <span style="font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--t3);">Lot #</span>
+            <span style="font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--t3);"></span>
+          </div>
+          <div id="inj-rows"></div>
+          <div id="no-inj" style="font-size:12px;color:var(--t3);padding:.5rem 0;">No injectables recorded. Click "+ Add Product" if injectables were used.</div>
+        </div>
+      </div>
+
+      <!-- Pre/Post Care -->
+      <div class="panel">
+        <div class="panel-hdr">Pre & Post Care Instructions
+          <select class="fs" style="width:auto;font-size:12px;padding:4px 10px;" id="care-template" onchange="loadCareTemplate()">
+            <option value="">Load template...</option>
+            <option value="botox">Botox</option>
+            <option value="filler">Dermal Fillers</option>
+            <option value="lipo">LipoAway</option>
+            <option value="micro">RF Microneedling</option>
+          </select>
+        </div>
+        <div class="panel-body" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <div>
+            <label class="fl">Pre-Treatment Instructions</label>
+            <textarea class="soap-note-input" id="care-pre" rows="4" placeholder="Instructions sent to patient before treatment..."></textarea>
+          </div>
+          <div>
+            <label class="fl">Post-Treatment Instructions</label>
+            <textarea class="soap-note-input" id="care-post" rows="4" placeholder="Aftercare instructions for patient..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:2rem;">
+        <button class="btn-g" onclick="clearChart()">Clear</button>
+        <button class="btn-g">Save Draft</button>
+        <button class="btn-p" onclick="saveChart()">Sign & Save Chart ✓</button>
+      </div>
+    </div>
+
+    <!-- TREATMENT HISTORY -->
+    <div id="view-history" style="display:none;">
+      <input class="search" id="history-search" type="text" placeholder="Search by patient or service..." oninput="renderHistory()">
+      <div id="history-list"></div>
+    </div>
+
+    <!-- INJECTABLE LOG -->
+    <div id="view-injectables" style="display:none;">
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-lbl">Total Units This Month</div><div class="stat-val" id="inj-units-month">0</div><div class="stat-hint">across all products</div></div>
+        <div class="stat-card"><div class="stat-lbl">Botox Units</div><div class="stat-val" id="inj-botox">0</div><div class="stat-hint">this month</div></div>
+        <div class="stat-card"><div class="stat-lbl">Filler Syringes</div><div class="stat-val" id="inj-filler">0</div><div class="stat-hint">this month</div></div>
+        <div class="stat-card"><div class="stat-lbl">Patients Treated</div><div class="stat-val" id="inj-pts">0</div><div class="stat-hint">with injectables</div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-hdr">Injectable Log — All Records</div>
+        <div id="inj-log-table"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Saved confirmation toast -->
+<div id="toast" style="position:fixed;bottom:24px;right:24px;background:var(--text);color:var(--white);padding:12px 20px;border-radius:10px;font-size:13px;z-index:999;display:none;box-shadow:0 4px 20px rgba(0,0,0,.2);">Chart saved ✓</div>
+
+<script src="hoc.js"></script>
+<script src="hoc-sidebar.js"></script>
+<script>
+document.getElementById('sidebar-wrap').innerHTML = renderSidebar('charting.html');
+document.querySelectorAll('.ni').forEach(n=>{ if(n.getAttribute('href')==='charting.html') n.classList.add('active'); });
+document.getElementById('chart-date').value = HOC.today();
+
+// Populate patient dropdown
+function populatePts() {
+  const pts = HOC.load(HOC.K.pts);
+  const sel = document.getElementById('chart-patient');
+  sel.innerHTML = pts.map(p=>`<option value="${p.id}">${HOC.pn(p)}</option>`).join('');
+}
+populatePts();
+
+// Tabs
+function showTab(t) {
+  ['new','history','injectables'].forEach(v=>{
+    document.getElementById('view-'+v).style.display = v===t?'block':'none';
+    document.getElementById('tab-'+v).classList.toggle('active',v===t);
+  });
+  if(t==='history') renderHistory();
+  if(t==='injectables') renderInjLog();
+}
+
+// Injectable rows
+let injRows = [];
+function addInjRow(data={}) {
+  const id = HOC.uid();
+  injRows.push(id);
+  const inv = HOC.load(HOC.K.inventory).filter(i=>i.category==='Injectable');
+  const opts = inv.map(i=>`<option value="${i.name}"${data.product===i.name?' selected':''}>${i.name}</option>`).join('');
+  const el = document.createElement('div');
+  el.className = 'inj-row';
+  el.id = 'inj-'+id;
+  el.innerHTML = `
+    <select onchange="this.dataset.product=this.value">${opts}</select>
+    <input type="number" placeholder="Units" value="${data.units||''}" min="0" step="0.5">
+    <input type="text" placeholder="Zones (e.g. Forehead 20u)" value="${data.zones||''}">
+    <input type="text" placeholder="Lot #" value="${data.lot||''}">
+    <button onclick="removeInjRow('${id}')" style="background:var(--rbg);color:var(--red);border:1px solid var(--rbd);border-radius:6px;padding:6px 10px;cursor:pointer;font-size:11px;">✕</button>
+  `;
+  document.getElementById('inj-rows').appendChild(el);
+  document.getElementById('no-inj').style.display = 'none';
+}
+function removeInjRow(id) {
+  document.getElementById('inj-'+id)?.remove();
+  injRows = injRows.filter(r=>r!==id);
+  if(!injRows.length) document.getElementById('no-inj').style.display='block';
+}
+function getInjData() {
+  return injRows.map(id=>{
+    const el = document.getElementById('inj-'+id);
+    if(!el) return null;
+    const inputs = el.querySelectorAll('input,select');
+    return { product:inputs[0].value, units:parseFloat(inputs[1].value)||0, zones:inputs[2].value, lot:inputs[3].value };
+  }).filter(Boolean).filter(r=>r.product);
+}
+
+// Care templates
+const CARE = {
+  botox: {
+    pre: 'Avoid blood thinners (aspirin, ibuprofen, fish oil) 1 week prior.\nNo alcohol 24 hours before treatment.\nArrive with clean skin, no makeup.',
+    post: 'Do not touch or rub treated area for 4 hours.\nStay upright for 4 hours post-treatment.\nAvoid exercise, heat, and saunas for 24 hours.\nNo facials or facial massage for 2 weeks.\nResults appear in 3-7 days, full effect at 2 weeks.'
+  },
+  filler: {
+    pre: 'Avoid blood thinners 1 week prior.\nStay hydrated day before and day of treatment.\nArrive with clean skin.',
+    post: 'Apply ice to reduce swelling.\nAvoid touching or massaging treated area unless instructed.\nAvoid strenuous activity for 24 hours.\nBruising and swelling normal for 3-5 days.\nAvoid dental procedures for 2 weeks.'
+  },
+  lipo: {
+    pre: 'No food or drink 4 hours prior.\nWear loose, comfortable clothing.\nArrange transportation home.\nAvoid blood thinners 1 week prior.\nHydrate well the day before.',
+    post: 'Wear compression garment 24/7 for 2 weeks.\nExpect swelling, bruising, and tenderness for 2-4 weeks.\nLight walking encouraged; no strenuous exercise for 2 weeks.\nFollow-up appointment in 4 weeks.\nContact us immediately for excessive pain, fever, or unusual discharge.'
+  },
+  micro: {
+    pre: 'Avoid retinol and exfoliants 3 days prior.\nCome with clean, dry skin — no makeup.\nStay out of the sun 1 week prior.',
+    post: 'Skin will be red and sensitive for 24-72 hours.\nUse gentle cleanser and moisturizer only.\nApply SPF 50+ daily — avoid direct sun.\nNo retinol, acids, or active ingredients for 5 days.\nResult in 4-6 weeks as collagen builds.'
+  }
+};
+function loadCareTemplate() {
+  const v = document.getElementById('care-template').value;
+  if(!v) return;
+  const t = CARE[v];
+  document.getElementById('care-pre').value = t.pre;
+  document.getElementById('care-post').value = t.post;
+}
+
+function clearChart() {
+  ['soap-s','soap-o','soap-a','soap-p','care-pre','care-post'].forEach(id=>document.getElementById(id).value='');
+  injRows = [];
+  document.getElementById('inj-rows').innerHTML = '';
+  document.getElementById('no-inj').style.display = 'block';
+}
+
+function saveChart() {
+  const patientId = document.getElementById('chart-patient').value;
+  if(!patientId) { alert('Please select a patient.'); return; }
+  const chart = {
+    id: HOC.uid(),
+    patientId,
+    date: document.getElementById('chart-date').value,
+    provider: document.getElementById('chart-provider').value,
+    service: document.getElementById('chart-service').value,
+    type: document.getElementById('chart-type').value,
+    subjective: document.getElementById('soap-s').value,
+    objective: document.getElementById('soap-o').value,
+    assessment: document.getElementById('soap-a').value,
+    plan: document.getElementById('soap-p').value,
+    injectables: getInjData(),
+    carePost: document.getElementById('care-post').value,
+    carePre: document.getElementById('care-pre').value,
+    created: Date.now()
+  };
+  const charts = HOC.load(HOC.K.charts);
+  charts.push(chart);
+  HOC.save(HOC.K.charts, charts);
+  clearChart();
+  const toast = document.getElementById('toast');
+  toast.style.display = 'block';
+  setTimeout(()=>toast.style.display='none', 2500);
+}
+
+function openNewChart() { showTab('new'); }
+
+// Render history
+function renderHistory() {
+  const q = (document.getElementById('history-search').value||'').toLowerCase();
+  let charts = HOC.load(HOC.K.charts).slice().reverse();
+  if(q) charts = charts.filter(c=>{
+    const p = HOC.gp(c.patientId);
+    return (HOC.pn(p)+c.service+c.provider).toLowerCase().includes(q);
+  });
+  const el = document.getElementById('history-list');
+  if(!charts.length){ el.innerHTML='<div class="empty">No chart notes found.</div>'; return; }
+  el.innerHTML = charts.map(c=>{
+    const p = HOC.gp(c.patientId);
+    const hasInj = c.injectables?.length > 0;
+    return `<div class="soap-card">
+      <div class="soap-hdr">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div class="av">${HOC.pi(p)}</div>
+          <div>
+            <div style="font-size:13px;font-weight:500;">${HOC.pn(p)} — ${c.service}</div>
+            <div style="font-size:11px;color:var(--t3);">${HOC.fd(c.date)} · ${c.provider} · ${c.type}</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center;">
+          ${hasInj?'<span class="st st-purple">💉 Injectables</span>':''}
+          <span class="st st-ok">Signed</span>
+        </div>
+      </div>
+      <div class="soap-body">
+        ${c.subjective?`<div class="soap-field"><div class="soap-label">S — Subjective</div><div class="soap-val">${c.subjective}</div></div>`:''}
+        ${c.objective?`<div class="soap-field"><div class="soap-label">O — Objective</div><div class="soap-val">${c.objective}</div></div>`:''}
+        ${c.assessment?`<div class="soap-field"><div class="soap-label">A — Assessment</div><div class="soap-val">${c.assessment}</div></div>`:''}
+        ${c.plan?`<div class="soap-field"><div class="soap-label">P — Plan</div><div class="soap-val">${c.plan}</div></div>`:''}
+        ${hasInj?`<div class="soap-field soap-full">
+          <div class="soap-label">💉 Injectables Used</div>
+          <table class="inj-table"><thead><tr><th>Product</th><th>Units</th><th>Zones</th><th>Lot #</th></tr></thead><tbody>
+          ${c.injectables.map(i=>`<tr><td>${i.product}</td><td>${i.units}</td><td>${i.zones}</td><td style="color:var(--t3);">${i.lot||'—'}</td></tr>`).join('')}
+          </tbody></table>
+        </div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderInjLog() {
+  const charts = HOC.load(HOC.K.charts);
+  const allInj = [];
+  let botoxUnits=0, fillerSyringes=0, ptSet=new Set();
+  charts.forEach(c=>{
+    (c.injectables||[]).forEach(i=>{
+      allInj.push({...i, date:c.date, provider:c.provider, patientId:c.patientId});
+      if(i.product?.toLowerCase().includes('botox')) botoxUnits+=Number(i.units||0);
+      else fillerSyringes+=Number(i.units||0);
+      ptSet.add(c.patientId);
+    });
+  });
+  document.getElementById('inj-units-month').textContent = botoxUnits+fillerSyringes;
+  document.getElementById('inj-botox').textContent = botoxUnits+'u';
+  document.getElementById('inj-filler').textContent = fillerSyringes+'ml';
+  document.getElementById('inj-pts').textContent = ptSet.size;
+  const el = document.getElementById('inj-log-table');
+  if(!allInj.length){ el.innerHTML='<div class="empty">No injectable records yet.</div>'; return; }
+  el.innerHTML = `<table class="dt"><thead><tr><th>Date</th><th>Patient</th><th>Product</th><th>Units/ml</th><th>Zones</th><th>Provider</th><th>Lot #</th></tr></thead><tbody>
+  ${allInj.slice().reverse().map(i=>{
+    const p=HOC.gp(i.patientId);
+    return `<tr><td style="color:var(--t3);">${HOC.fd(i.date)}</td><td><div class="prow"><div class="av">${HOC.pi(p)}</div><div class="pname">${HOC.pn(p)}</div></div></td><td><span class="chip">${i.product}</span></td><td style="font-weight:500;">${i.units}</td><td style="color:var(--t2);font-size:12px;">${i.zones}</td><td style="color:var(--t3);font-size:12px;">${i.provider}</td><td style="color:var(--t3);font-size:11px;">${i.lot||'—'}</td></tr>`;
+  }).join('')}
+  </tbody></table>`;
+}
+</script>
+</body>
+</html>
