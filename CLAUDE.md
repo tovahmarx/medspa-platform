@@ -99,3 +99,4 @@ Location switcher is in the sidebar. Active location stored in `localStorage('ho
 ## Rules
 
 - Every time any feature is added, changed, or removed from the platform, update the knowledge base in hoc-chat.js to reflect the change. This is required on every task — never skip it.
+- After every task, always: `git add -A && git commit` with a descriptive message, then `git push org master`, then `vercel --prod`. Never skip the commit, push, or deploy.
