@@ -682,15 +682,17 @@ canvas#sig{position:absolute;inset:0;width:100%;height:100%;}
 
 <script>
 // ── DATA ─────────────────────────────────────────────────────────────
-const KA='hoc_a',KP='hoc_p',KT='hoc_t';
+const KA='hoc_a',KP='hoc_p',KT='hoc_t',KM='hoc_msgs',KTP='hoc_txplans',KW='hoc_waitlist';
 function load(k){try{return JSON.parse(localStorage.getItem(k)||'[]')}catch{return[];}}
 function save(k,d){localStorage.setItem(k,JSON.stringify(d));}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
 function today(){return new Date().toISOString().slice(0,10);}
 
-if(!localStorage.getItem('hoc_seed_v5')){
-  // Clear old seeds
-  localStorage.removeItem('hoc_seed');localStorage.removeItem('hoc_seed_v4');
+// Always re-seed if version changed or today's appointments are missing
+var _needsSeed=!localStorage.getItem('hoc_seed_v9');
+if(_needsSeed){
+  // Clear ALL old data
+  var _keys=[];for(var _i=0;_i<localStorage.length;_i++){var _k=localStorage.key(_i);if(_k&&_k.startsWith('hoc'))_keys.push(_k);}_keys.forEach(function(k){localStorage.removeItem(k);});
   const pts=[
     {id:'p1',first:'Maria',last:'G',phone:'(602) 555-0143',email:'maria@email.com',dob:'1988-04-12',source:'Instagram',notes:'No known allergies',created:Date.now()},
     {id:'p2',first:'Jessica',last:'T',phone:'(480) 555-0287',email:'jessica@email.com',dob:'1995-07-23',source:'Google',notes:'',created:Date.now()},
@@ -752,30 +754,61 @@ if(!localStorage.getItem('hoc_seed_v5')){
     {id:'a43',patientId:'p5',date:dayOff(-90),time:'11:00',service:'Botox',provider:'Sara Ameli',status:'Completed',notes:''},
   ];
   const txns=[
-    {id:'t1',patientId:'p1',service:'LipoAway Consult',amount:150,method:'Visa ···4821',status:'Paid',date:t},
-    {id:'t2',patientId:'p2',service:'Dermal Fillers',amount:720,method:'Visa ···2290',status:'Paid',date:t},
-    {id:'t3',patientId:'p4',service:'Medical Weight Loss',amount:350,method:'Amex ···3804',status:'Paid',date:t},
-    {id:'t4',patientId:'p3',service:'RF Microneedling',amount:1200,method:'Pending',status:'Due',date:t},
-    {id:'t5',patientId:'p6',service:'Fat Transfer Consult',amount:200,method:'Pending',status:'Due',date:t},
-    {id:'t6',patientId:'p1',service:'LipoAway Consult',amount:150,method:'Visa ···4821',status:'Paid',date:dayOff(-5)},
-    {id:'t7',patientId:'p2',service:'Botox',amount:350,method:'MC ···9912',status:'Paid',date:dayOff(-10)},
-    {id:'t8',patientId:'p3',service:'RF Microneedling',amount:1200,method:'Cash',status:'Paid',date:dayOff(-8)},
-    {id:'t9',patientId:'p4',service:'Medical Weight Loss',amount:350,method:'Visa ···7721',status:'Paid',date:dayOff(-15)},
-    {id:'t10',patientId:'p5',service:'Dermal Fillers',amount:720,method:'Amex ···5544',status:'Paid',date:dayOff(-12)},
-    {id:'t11',patientId:'p1',service:'Fat Transfer',amount:2400,method:'Affirm',status:'Paid',date:dayOff(-20)},
-    {id:'t12',patientId:'p6',service:'Botox',amount:350,method:'Visa ···3381',status:'Paid',date:dayOff(-18)},
-    {id:'t13',patientId:'p7',service:'Stem Cell Therapy',amount:3500,method:'Visa ···6622',status:'Paid',date:dayOff(-7)},
-    {id:'t14',patientId:'p8',service:'IPL Photofacial',amount:450,method:'Cash',status:'Paid',date:dayOff(-3)},
-    {id:'t15',patientId:'p2',service:'Lip Fillers',amount:720,method:'Visa ···2290',status:'Paid',date:dayOff(-30)},
-    {id:'t16',patientId:'p3',service:'Facial',amount:180,method:'Visa ···8821',status:'Paid',date:dayOff(-25)},
-    {id:'t17',patientId:'p4',service:'Botox',amount:350,method:'Amex ···3804',status:'Paid',date:dayOff(-45)},
-    {id:'t18',patientId:'p5',service:'Botox',amount:350,method:'Visa ···5544',status:'Paid',date:dayOff(-90)},
-    // Maria G rich history — high LTV demo patient
-    {id:'t20',patientId:'p1',service:'LipoAway Procedure',amount:4800,method:'Affirm Financing',status:'Paid',date:dayOff(-60)},
-    {id:'t21',patientId:'p1',service:'Botox',amount:420,method:'Visa ···4821',status:'Paid',date:dayOff(-45)},
-    {id:'t22',patientId:'p1',service:'Dermal Fillers',amount:720,method:'Visa ···4821',status:'Paid',date:dayOff(-30)},
-    {id:'t23',patientId:'p1',service:'Facial',amount:180,method:'Visa ···4821',status:'Paid',date:dayOff(-15)},
-    {id:'t24',patientId:'p1',service:'IV Therapy',amount:199,method:'Cash',status:'Paid',date:dayOff(-8)},
+    // Today — realistic busy day ~$14k
+    {id:'t1',patientId:'p1',service:'LipoAway Procedure',amount:4800,method:'Affirm Financing',status:'Paid',date:t},
+    {id:'t2',patientId:'p2',service:'Dermal Fillers',amount:1440,method:'Visa ···2290',status:'Paid',date:t},
+    {id:'t3',patientId:'p5',service:'Botox',amount:520,method:'Amex ···5544',status:'Paid',date:t},
+    {id:'t4',patientId:'p4',service:'Medical Weight Loss',amount:350,method:'Amex ···3804',status:'Paid',date:t},
+    {id:'t5',patientId:'p7',service:'Stem Cell Therapy',amount:3500,method:'Visa ···6622',status:'Paid',date:t},
+    {id:'t5b',patientId:'p8',service:'Facial',amount:180,method:'Cash',status:'Paid',date:t},
+    {id:'t5c',patientId:'p3',service:'RF Microneedling',amount:1200,method:'Visa ···8821',status:'Paid',date:t},
+    {id:'t5d',patientId:'p6',service:'Fat Transfer Consult',amount:200,method:'Pending',status:'Due',date:t},
+    // Yesterday ~$9k
+    {id:'t6',patientId:'p1',service:'Botox',amount:420,method:'Visa ···4821',status:'Paid',date:dayOff(-1)},
+    {id:'t6b',patientId:'p3',service:'LipoAway Procedure',amount:4800,method:'Cherry Financing',status:'Paid',date:dayOff(-1)},
+    {id:'t6c',patientId:'p5',service:'Sculptra & Radiesse',amount:1600,method:'Visa ···5544',status:'Paid',date:dayOff(-1)},
+    {id:'t6d',patientId:'p2',service:'PDO Thread Lift',amount:2200,method:'Amex ···2290',status:'Paid',date:dayOff(-1)},
+    // 2 days ago ~$12k
+    {id:'t7',patientId:'p4',service:'BodyTite',amount:5500,method:'Affirm Financing',status:'Paid',date:dayOff(-2)},
+    {id:'t7b',patientId:'p6',service:'Dermal Fillers',amount:1440,method:'Visa ···3381',status:'Paid',date:dayOff(-2)},
+    {id:'t7c',patientId:'p8',service:'IPL Photofacial',amount:450,method:'Cash',status:'Paid',date:dayOff(-2)},
+    {id:'t7d',patientId:'p7',service:'Fat Transfer',amount:4800,method:'Visa ···6622',status:'Paid',date:dayOff(-2)},
+    // 3 days ago ~$7k
+    {id:'t8',patientId:'p2',service:'Botox',amount:480,method:'MC ···9912',status:'Paid',date:dayOff(-3)},
+    {id:'t8b',patientId:'p1',service:'RF Microneedling',amount:1200,method:'Visa ···4821',status:'Paid',date:dayOff(-3)},
+    {id:'t8c',patientId:'p5',service:'LipoAway Consult',amount:150,method:'Amex ···5544',status:'Paid',date:dayOff(-3)},
+    {id:'t8d',patientId:'p3',service:'Hair Restoration',amount:2400,method:'Visa ···8821',status:'Paid',date:dayOff(-3)},
+    {id:'t8e',patientId:'p4',service:'Hormone Replacement Therapy',amount:250,method:'Cash',status:'Paid',date:dayOff(-3)},
+    {id:'t8f',patientId:'p8',service:'Chemical Peel',amount:180,method:'Visa ···1245',status:'Paid',date:dayOff(-3)},
+    {id:'t8g',patientId:'p6',service:'Kybella / Liquid Lipo',amount:1200,method:'Visa ···3381',status:'Paid',date:dayOff(-3)},
+    // 4 days ago ~$11k
+    {id:'t9',patientId:'p1',service:'Fat Transfer',amount:4800,method:'Affirm Financing',status:'Paid',date:dayOff(-4)},
+    {id:'t9b',patientId:'p7',service:'Botox',amount:650,method:'Visa ···6622',status:'Paid',date:dayOff(-4)},
+    {id:'t9c',patientId:'p2',service:'Lip Fillers',amount:980,method:'Visa ···2290',status:'Paid',date:dayOff(-4)},
+    {id:'t9d',patientId:'p3',service:'IV Therapy',amount:399,method:'Cash',status:'Paid',date:dayOff(-4)},
+    {id:'t9e',patientId:'p5',service:'LipoAway Procedure',amount:4800,method:'Cherry Financing',status:'Paid',date:dayOff(-4)},
+    // 5 days ago ~$8k
+    {id:'t10',patientId:'p4',service:'Stem Cell Therapy',amount:3500,method:'Visa ···3804',status:'Paid',date:dayOff(-5)},
+    {id:'t10b',patientId:'p6',service:'Sculptra & Radiesse',amount:1600,method:'Amex ···3381',status:'Paid',date:dayOff(-5)},
+    {id:'t10c',patientId:'p8',service:'Laser Hair Removal',amount:380,method:'Cash',status:'Paid',date:dayOff(-5)},
+    {id:'t10d',patientId:'p1',service:'Botox',amount:520,method:'Visa ···4821',status:'Paid',date:dayOff(-5)},
+    {id:'t10e',patientId:'p2',service:'Medical Weight Loss',amount:350,method:'MC ···9912',status:'Paid',date:dayOff(-5)},
+    {id:'t10f',patientId:'p7',service:'Facial',amount:280,method:'Visa ···6622',status:'Paid',date:dayOff(-5)},
+    {id:'t10g',patientId:'p3',service:'Dermal Fillers',amount:1440,method:'Visa ···8821',status:'Paid',date:dayOff(-5)},
+    // 6 days ago ~$10k
+    {id:'t11',patientId:'p5',service:'BodyTite',amount:5500,method:'Affirm Financing',status:'Paid',date:dayOff(-6)},
+    {id:'t11b',patientId:'p1',service:'Dermal Fillers',amount:1440,method:'Visa ···4821',status:'Paid',date:dayOff(-6)},
+    {id:'t11c',patientId:'p4',service:'Botox',amount:420,method:'Amex ···3804',status:'Paid',date:dayOff(-6)},
+    {id:'t11d',patientId:'p6',service:'RF Microneedling',amount:1200,method:'Cash',status:'Paid',date:dayOff(-6)},
+    {id:'t11e',patientId:'p8',service:'IV Therapy',amount:399,method:'Visa ···1245',status:'Paid',date:dayOff(-6)},
+    // Older history for LTV
+    {id:'t15',patientId:'p2',service:'Lip Fillers',amount:720,method:'Visa ···2290',status:'Paid',date:dayOff(-14)},
+    {id:'t16',patientId:'p3',service:'Facial',amount:180,method:'Visa ···8821',status:'Paid',date:dayOff(-21)},
+    {id:'t17',patientId:'p4',service:'Botox',amount:350,method:'Amex ···3804',status:'Paid',date:dayOff(-28)},
+    {id:'t18',patientId:'p5',service:'Botox',amount:350,method:'Visa ···5544',status:'Paid',date:dayOff(-35)},
+    {id:'t20',patientId:'p1',service:'LipoAway Procedure',amount:4800,method:'Affirm Financing',status:'Paid',date:dayOff(-42)},
+    {id:'t21',patientId:'p1',service:'Botox',amount:420,method:'Visa ···4821',status:'Paid',date:dayOff(-56)},
+    {id:'t22',patientId:'p1',service:'Dermal Fillers',amount:720,method:'Visa ···4821',status:'Paid',date:dayOff(-70)},
   ];
   // More Maria past appointments
   appts.push(
@@ -791,7 +824,7 @@ if(!localStorage.getItem('hoc_seed_v5')){
     {id:'w1',patientId:'p4',service:'LipoAway Procedure',provider:'Dr. Todd Malan',notes:'Wants next available Friday',date:today()},
     {id:'w2',patientId:'p8',service:'Botox',provider:'Sara Ameli',notes:'Flexible on time, prefers mornings',date:dayOff(-2)},
   ]);
-  localStorage.setItem('hoc_seed_v5','1');
+  localStorage.setItem('hoc_seed_v9','1');
 }
 
 // ── HELPERS ───────────────────────────────────────────────────────────
@@ -815,23 +848,26 @@ function launch(){
   document.getElementById('ae-date').value=today();
 }
 function nav(v,el){
-  document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
-  document.querySelectorAll('.ni').forEach(x=>x.classList.remove('active'));
-  document.getElementById('view-'+v).classList.add('active');
-  el.classList.add('active');
-  if(v==='dashboard')renderDash();
-  if(v==='appointments')renderApptWeek();
-  if(v==='patients'){renderPatients();document.getElementById('pt-detail').innerHTML='';}
-  if(v==='payments')renderPayments();
-  if(v==='messages'){renderMsgList();if(!activeMsgId){const msgs=load(KM);if(msgs.length)selMsg(msgs[0].id);}}
+  try{
+    document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
+    var target=document.getElementById('view-'+v);
+    if(!target){console.warn('nav: no view-'+v);return;}
+    target.classList.add('active');
+    document.querySelectorAll('.ni').forEach(x=>x.classList.remove('active'));
+    if(el)el.classList.add('active');
+    if(v==='dashboard')renderDash();
+    if(v==='appointments')renderApptWeek();
+    if(v==='patients'){renderPatients();document.getElementById('pt-detail').innerHTML='';}
+    if(v==='payments')renderPayments();
+    if(v==='messages'){renderMsgList();if(!activeMsgId){var ms=load(KM);if(ms.length)selMsg(ms[0].id);}}
+  }catch(err){console.error('nav error:',err);}
 }
 
 // ── DASHBOARD ──────────────────────────────────────────────────────────
 function resetDemo(){
   if(!confirm('Reset all demo data? This clears everything and reloads fresh seed data.'))return;
-  const keys=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith('hoc'))keys.push(k);}
-  keys.forEach(k=>localStorage.removeItem(k));
-  location.reload();
+  localStorage.clear();
+  location.href='app.html';
 }
 function renderDash(){
   const appts=load(KA),pts=load(KP),txns=load(KT),t=today();
@@ -857,9 +893,9 @@ function renderDash(){
   const unreadHint=document.getElementById('d-unread-h');
   if(unreadHint)unreadHint.textContent=unread+' awaiting reply';
   // Revenue sparkline
-  renderDashChart(txns);
+  try{renderDashChart(txns);}catch(e){console.error('chart:',e);}
   // Timeline
-  renderDashTimeline(ta);
+  try{renderDashTimeline(ta);}catch(e){console.error('timeline:',e);}
   const sorted=ta.slice().sort((a,b)=>a.time.localeCompare(b.time));
   const el=document.getElementById('dash-sched');
   if(!sorted.length){el.innerHTML='<div class="empty">No appointments today. <a href="#" onclick="openApptModal();return false;" style="color:var(--pri);">Add one →</a></div>';renderRebookPrompts();renderTxPlans();return;}
@@ -871,35 +907,47 @@ function renderDashChart(txns){
   const c=document.getElementById('dash-chart');if(!c)return;
   const ctx=c.getContext('2d');
   const w=c.width=c.parentElement.clientWidth-40;
-  const h=c.height=120;
+  const h=c.height=130;
   ctx.clearRect(0,0,w,h);
-  // Last 7 days revenue
   const days=[];const amounts=[];
   for(let i=6;i>=0;i--){
     const d=new Date();d.setDate(d.getDate()-i);
     const ds=d.toISOString().slice(0,10);
+    const isToday=i===0;
     const dayName=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()];
-    days.push(dayName);
+    days.push(isToday?'Today':dayName);
     amounts.push(txns.filter(t=>t.status==='Paid'&&t.date===ds).reduce((s,t)=>s+Number(t.amount),0));
   }
-  const max=Math.max(...amounts,100);
-  const barW=Math.min(30,(w-60)/7);
-  const gap=(w-barW*7)/(7+1);
-  // Bars
+  const max=Math.max(...amounts,500);
+  const barW=Math.floor((w-40)/7*0.55);
+  const step=(w-20)/7;
+  const baseY=h-22;
   amounts.forEach((a,i)=>{
-    const x=gap+(barW+gap)*i;
-    const barH=Math.max(2,(a/max)*(h-30));
-    const y=h-20-barH;
-    // Gradient bar
-    const grad=ctx.createLinearGradient(x,y,x,h-20);
-    grad.addColorStop(0,'#F00573');grad.addColorStop(1,'#722A82');
+    const cx2=15+step*i+step/2;
+    const x=cx2-barW/2;
+    // Day label
+    ctx.fillStyle=i===6?'#F00573':'#9890a0';
+    ctx.font=(i===6?'600 ':'')+'11px Montserrat,sans-serif';
+    ctx.textAlign='center';
+    ctx.fillText(days[i],cx2,h-4);
+    if(a===0){
+      // Subtle dot for zero days
+      ctx.fillStyle='#e5e1e8';
+      ctx.beginPath();ctx.arc(cx2,baseY-2,2,0,Math.PI*2);ctx.fill();
+      return;
+    }
+    const barH=Math.max(8,(a/max)*(baseY-30));
+    const y=baseY-barH;
+    const grad=ctx.createLinearGradient(x,y,x,baseY);
+    grad.addColorStop(0,'#F00573');grad.addColorStop(1,'#9b3aad');
     ctx.fillStyle=grad;
-    ctx.beginPath();ctx.roundRect(x,y,barW,barH,3);ctx.fill();
-    // Label
-    ctx.fillStyle='#9890a0';ctx.font='10px Montserrat,sans-serif';ctx.textAlign='center';
-    ctx.fillText(days[i],x+barW/2,h-6);
-    // Amount on top
-    if(a>0){ctx.fillStyle='#1a1418';ctx.font='500 10px Montserrat,sans-serif';ctx.fillText('$'+Math.round(a/1000)+'k',x+barW/2,y-4);}
+    ctx.fillRect(x,y,barW,barH);
+    // Round top
+    ctx.beginPath();ctx.arc(cx2,y,barW/2,Math.PI,0);ctx.fill();
+    // Amount label
+    const label=a>=1000?'$'+Math.round(a/100)/10+'k':'$'+a;
+    ctx.fillStyle='#1a1418';ctx.font='600 10px Montserrat,sans-serif';
+    ctx.fillText(label,cx2,y-8);
   });
 }
 function renderDashTimeline(ta){
@@ -1108,7 +1156,7 @@ function deletePatient(){
 }
 
 // ── MESSAGES ──────────────────────────────────────────────────────────
-const KM='hoc_msgs';
+// KM defined at top with other keys
 let activeMsgId=null;
 function initMessages(){
   if(load(KM).length)return;
@@ -1288,7 +1336,7 @@ function renderProviderCal(){
 }
 
 // ── TREATMENT PLANS ─────────────────────────────────────────────────
-const KTP='hoc_txplans';
+// KTP defined at top with other keys
 function renderTxPlans(){
   const plans=load(KTP);
   const el=document.getElementById('dash-txplans');
@@ -1395,7 +1443,7 @@ function renderRebookPrompts(){
     </div>`).join('')}</div>`;
 }
 // ── WAITLIST ─────────────────────────────────────────────────────────
-const KW='hoc_waitlist';
+// KW defined at top with other keys
 function openWaitlistView(){
   const wl=load(KW);
   const el=document.getElementById('waitlist-view');
@@ -1731,25 +1779,27 @@ document.addEventListener("DOMContentLoaded",function(){
     if(el) el.classList.add('active');
   }
 
-  // Intercept internal sidebar links (app.html#view)
+  // Intercept sidebar clicks for internal views
   wrap.addEventListener('click', function(e){
     var link = e.target.closest('a.ni');
     if(!link) return;
-    var href = link.getAttribute('href');
-    // Dashboard link (no hash)
+    var href = link.getAttribute('href')||'';
+    // Only intercept app.html links — let external pages (charting.html etc) navigate normally
     if(href === 'app.html'){
       e.preventDefault();
       nav('dashboard', link);
+      markActive('');
       return;
     }
-    if(!href || href.indexOf('app.html#') !== 0) return;
-    e.preventDefault();
-    var view = href.split('#')[1];
-    if(view === 'kiosk'){
-      document.getElementById('kiosk-overlay').style.display='flex';
+    if(href.indexOf('app.html#') === 0){
+      e.preventDefault();
+      var view = href.split('#')[1];
+      if(view === 'kiosk'){ openKiosk(); return; }
+      nav(view, link);
+      markActive(view);
       return;
     }
-    nav(view, link);
+    // Everything else (charting.html, analytics.html, etc) — do nothing, let browser navigate
   });
 
   // Init dashboard
@@ -1777,14 +1827,7 @@ document.addEventListener("DOMContentLoaded",function(){
     }
   }
 
-  // Patch nav() to update sidebar active state via markActive
-  var _origNav = window.nav;
-  window.nav = function(v, el){
-    _origNav(v, el);
-    // Clear any active set by _origNav, then let markActive be the single source of truth
-    wrap.querySelectorAll('.ni').forEach(function(n){ n.classList.remove('active'); });
-    markActive(v === 'dashboard' ? '' : v);
-  };
+  // No need to patch nav — markActive is called directly in the click handler above
 });
 </script>
 <script src="hoc-chat.js"></script>
