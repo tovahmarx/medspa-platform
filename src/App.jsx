@@ -15,6 +15,11 @@ const Retention = lazy(() => import('./pages/Retention'));
 const Email = lazy(() => import('./pages/Email'));
 const TextMessages = lazy(() => import('./pages/TextMessages'));
 const SocialMedia = lazy(() => import('./pages/SocialMedia'));
+const Inbox = lazy(() => import('./pages/Inbox'));
+const BeforeAfter = lazy(() => import('./pages/BeforeAfter'));
+const Charts = lazy(() => import('./pages/Charts'));
+const Waivers = lazy(() => import('./pages/Waivers'));
+const CheckIn = lazy(() => import('./pages/CheckIn'));
 const Reports = lazy(() => import('./pages/Reports'));
 const Settings = lazy(() => import('./pages/Settings'));
 
@@ -32,11 +37,16 @@ export default function App() {
             <Route path="/patients" element={<Patients />} />
             <Route path="/schedule" element={<Schedule />} />
             <Route path="/treatments" element={<Treatments />} />
+            <Route path="/charts" element={<Charts />} />
+            <Route path="/photos" element={<BeforeAfter />} />
+            <Route path="/waivers" element={<Waivers />} />
+            <Route path="/checkin" element={<CheckIn />} />
             <Route path="/inventory" element={<Inventory />} />
             <Route path="/retention" element={<Retention />} />
             <Route path="/email" element={<Email />} />
             <Route path="/texts" element={<TextMessages />} />
             <Route path="/social" element={<SocialMedia />} />
+            <Route path="/inbox" element={<Inbox />} />
             <Route path="/reports" element={<Reports />} />
             <Route path="/settings" element={<Settings />} />
           </Routes>

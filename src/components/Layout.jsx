@@ -6,17 +6,22 @@ import { getSettings } from '../data/store';
 const NAV_ITEMS = [
   { section: 'Overview', items: [
     { path: '/', label: 'Dashboard', icon: 'grid' },
+    { path: '/checkin', label: 'Check-In', icon: 'clipboard' },
   ]},
   { section: 'Patients', items: [
     { path: '/patients', label: 'Patients', icon: 'users' },
     { path: '/schedule', label: 'Schedule', icon: 'calendar' },
     { path: '/treatments', label: 'Treatment Plans', icon: 'clipboard' },
+    { path: '/charts', label: 'Clinical Charts', icon: 'clipboard' },
+    { path: '/photos', label: 'Before & After', icon: 'heart' },
+    { path: '/waivers', label: 'Consent & Waivers', icon: 'clipboard' },
   ]},
   { section: 'Operations', items: [
     { path: '/inventory', label: 'Inventory', icon: 'package' },
     { path: '/retention', label: 'Retention', icon: 'heart' },
   ]},
   { section: 'Marketing', items: [
+    { path: '/inbox', label: 'DM Inbox', icon: 'message' },
     { path: '/email', label: 'Email', icon: 'mail' },
     { path: '/texts', label: 'Text Messages', icon: 'message' },
     { path: '/social', label: 'Social Media', icon: 'share' },
