@@ -13,7 +13,10 @@ function loadAssignments() { try { return JSON.parse(localStorage.getItem(ASSIGN
 function saveAssignments(a) { localStorage.setItem(ASSIGN_KEY, JSON.stringify(a)); }
 
 function initInbox() {
-  if (localStorage.getItem(INBOX_KEY)) return;
+  const existing = loadConversations();
+  if (existing.length >= 11) return;
+  // Reseed with full conversation set including TikTok
+  localStorage.removeItem(INBOX_KEY);
   const now = new Date();
   const ago = (min) => new Date(now - min * 60000).toISOString();
 

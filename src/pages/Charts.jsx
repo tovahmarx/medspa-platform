@@ -216,9 +216,10 @@ function VitalsPanel({ form, setForm, s }) {
 // ── Seed data ─────────────────────────────────────────────────────────────────
 
 function initCharts() {
-  // Always reseed if empty or only has old 3 charts
+  // Reseed if empty, old format (no mapType), or insufficient charts
   const existing = getCharts();
-  if (existing.length >= 8) return;
+  const hasNewFormat = existing.length > 0 && existing[0].mapType;
+  if (existing.length >= 8 && hasNewFormat) return;
   localStorage.removeItem('ms_charts_init');
   saveCharts([
     {
