@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStyles, getAvatarGradient } from '../theme';
 import { getPatients, getAppointments, getInventory, getRetentionAlerts, getServices, getProviders, subscribe } from '../data/store';
+import DemoTour from '../components/DemoTour';
 
 const fmt = (cents) => `$${(cents / 100).toLocaleString('en-US', { minimumFractionDigits: 0 })}`;
 
@@ -121,6 +122,7 @@ export default function Dashboard() {
   const s = useStyles();
   const nav = useNavigate();
   const [, setTick] = useState(0);
+  const [showTour, setShowTour] = useState(false);
   useEffect(() => subscribe(() => setTick(t => t + 1)), []);
 
   const patients = getPatients();
@@ -210,6 +212,14 @@ export default function Dashboard() {
           <div style={{
             display: 'flex', alignItems: 'center', gap: 12,
           }}>
+            <button onClick={() => setShowTour(true)} style={{
+              ...s.pillOutline, padding: '7px 16px', fontSize: 12,
+              display: 'flex', alignItems: 'center', gap: 6,
+            }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              Take a Tour
+            </button>
+            <div style={{ width: 1, height: 20, background: 'rgba(0,0,0,0.08)' }} />
             <div style={{ textAlign: 'right' }}>
               <div style={{ font: `500 10px ${s.MONO}`, textTransform: 'uppercase', letterSpacing: 1.5, color: s.text3, marginBottom: 2 }}>Today's Revenue</div>
               <div style={{ font: `600 20px ${s.FONT}`, color: s.accent }}>
@@ -440,6 +450,8 @@ export default function Dashboard() {
           .dashboard-main-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
+
+      <DemoTour showTour={showTour} onClose={() => setShowTour(false)} />
     </div>
   );
 }

@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useStyles } from '../theme';
 import { getAppointments, updateAppointment, getPatients, getServices, getProviders, getSettings, subscribe } from '../data/store';
+import CheckoutDrawer from '../components/CheckoutDrawer';
 
 const CHECKIN_KEY = 'ms_checkins';
 function getCheckins() { try { return JSON.parse(localStorage.getItem(CHECKIN_KEY)) || []; } catch { return []; } }
@@ -16,6 +17,7 @@ export default function CheckIn() {
   const [search, setSearch] = useState('');
   const [showVerify, setShowVerify] = useState(null);
   const [verifyForm, setVerifyForm] = useState({ phone: '', dob: '', allergies: '', medications: '', pregnant: false });
+  const [checkoutAppt, setCheckoutAppt] = useState(null);
 
   const today = new Date().toISOString().slice(0, 10);
   const appointments = getAppointments().filter(a => a.date === today && a.status !== 'cancelled');
@@ -74,6 +76,9 @@ export default function CheckIn() {
       updateAppointment(apptId, { status: 'confirmed' });
     } else if (status === 'complete') {
       updateAppointment(apptId, { status: 'completed' });
+      // Open checkout drawer for the completed appointment
+      const appt = appointments.find(a => a.id === apptId);
+      if (appt) setCheckoutAppt(appt);
     }
   };
 
@@ -231,6 +236,12 @@ export default function CheckIn() {
           </div>
         </div>
       )}
+
+      <CheckoutDrawer
+        open={!!checkoutAppt}
+        onClose={() => setCheckoutAppt(null)}
+        appointment={checkoutAppt}
+      />
     </div>
   );
 }

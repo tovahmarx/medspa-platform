@@ -108,6 +108,7 @@ export default function Layout({ children }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [showTheme, setShowTheme] = useState(false);
   const [cmdOpen, setCmdOpen] = useState(false);
+  const [showTour, setShowTour] = useState(false);
   const { theme } = useTheme();
   const s = useStyles();
   const location = useLocation();
@@ -317,6 +318,7 @@ export default function Layout({ children }) {
       <CommandPalette open={cmdOpen} onClose={() => setCmdOpen(false)} />
       <ThemePicker show={showTheme} onClose={() => setShowTheme(false)} />
       <HelpChat />
+      <DemoTour showTour={showTour} onClose={() => setShowTour(false)} />
 
       <style>{`
         @media (max-width: 860px) {
