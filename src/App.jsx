@@ -6,6 +6,7 @@ import { initStore } from './data/store';
 
 initStore();
 
+const Home = lazy(() => import('./pages/Home'));
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Patients = lazy(() => import('./pages/Patients'));
 const Schedule = lazy(() => import('./pages/Schedule'));
@@ -41,10 +42,14 @@ export default function App() {
     <ThemeProvider>
       <Suspense fallback={<Loader />}>
         <Routes>
+          {/* Public pages — no sidebar */}
+          <Route path="/" element={<Home />} />
           <Route path="/portal" element={<Portal />} />
           <Route path="/book" element={<BookOnline />} />
           <Route path="/pricing" element={<Pricing />} />
-          <Route path="/*" element={
+
+          {/* Admin — with sidebar */}
+          <Route path="/admin/*" element={
             <Layout>
               <Routes>
                 <Route path="/" element={<Dashboard />} />

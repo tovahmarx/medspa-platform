@@ -6,40 +6,40 @@ import HelpChat from './HelpChat';
 
 const NAV_ITEMS = [
   { section: 'Overview', items: [
-    { path: '/', label: 'Dashboard', icon: 'grid' },
-    { path: '/checkin', label: 'Check-In', icon: 'clipboard' },
+    { path: '/admin', label: 'Dashboard', icon: 'grid' },
+    { path: '/admin/checkin', label: 'Check-In', icon: 'clipboard' },
   ]},
   { section: 'Patients', items: [
-    { path: '/patients', label: 'Patients', icon: 'users' },
-    { path: '/schedule', label: 'Schedule', icon: 'calendar' },
-    { path: '/treatments', label: 'Treatment Plans', icon: 'clipboard' },
-    { path: '/charts', label: 'Clinical Charts', icon: 'clipboard' },
-    { path: '/photos', label: 'Before & After', icon: 'heart' },
-    { path: '/waivers', label: 'Consent & Waivers', icon: 'clipboard' },
-    { path: '/aftercare', label: 'Aftercare', icon: 'heart' },
+    { path: '/admin/patients', label: 'Patients', icon: 'users' },
+    { path: '/admin/schedule', label: 'Schedule', icon: 'calendar' },
+    { path: '/admin/treatments', label: 'Treatment Plans', icon: 'clipboard' },
+    { path: '/admin/charts', label: 'Clinical Charts', icon: 'clipboard' },
+    { path: '/admin/photos', label: 'Before & After', icon: 'heart' },
+    { path: '/admin/waivers', label: 'Consent & Waivers', icon: 'clipboard' },
+    { path: '/admin/aftercare', label: 'Aftercare', icon: 'heart' },
   ]},
   { section: 'Billing', items: [
-    { path: '/memberships', label: 'Memberships', icon: 'users' },
-    { path: '/wallet', label: 'Patient Wallet', icon: 'package' },
-    { path: '/referrals', label: 'Referrals', icon: 'share' },
+    { path: '/admin/memberships', label: 'Memberships', icon: 'users' },
+    { path: '/admin/wallet', label: 'Patient Wallet', icon: 'package' },
+    { path: '/admin/referrals', label: 'Referrals', icon: 'share' },
   ]},
   { section: 'Operations', items: [
-    { path: '/inventory', label: 'Inventory', icon: 'package' },
-    { path: '/retention', label: 'Retention', icon: 'heart' },
-    { path: '/waitlist', label: 'Waitlist', icon: 'calendar' },
-    { path: '/reviews', label: 'Reviews', icon: 'heart' },
+    { path: '/admin/inventory', label: 'Inventory', icon: 'package' },
+    { path: '/admin/retention', label: 'Retention', icon: 'heart' },
+    { path: '/admin/waitlist', label: 'Waitlist', icon: 'calendar' },
+    { path: '/admin/reviews', label: 'Reviews', icon: 'heart' },
   ]},
   { section: 'Marketing', items: [
-    { path: '/inbox', label: 'DM Inbox', icon: 'message' },
-    { path: '/email', label: 'Email', icon: 'mail' },
-    { path: '/texts', label: 'Text Messages', icon: 'message' },
-    { path: '/social', label: 'Social Media', icon: 'share' },
+    { path: '/admin/inbox', label: 'DM Inbox', icon: 'message' },
+    { path: '/admin/email', label: 'Email', icon: 'mail' },
+    { path: '/admin/texts', label: 'Text Messages', icon: 'message' },
+    { path: '/admin/social', label: 'Social Media', icon: 'share' },
   ]},
   { section: 'Reporting', items: [
-    { path: '/reports', label: 'Reports', icon: 'bar-chart' },
+    { path: '/admin/reports', label: 'Reports', icon: 'bar-chart' },
   ]},
   { section: 'System', items: [
-    { path: '/settings', label: 'Settings', icon: 'settings' },
+    { path: '/admin/settings', label: 'Settings', icon: 'settings' },
   ]},
 ];
 
@@ -185,7 +185,7 @@ export default function Layout({ children }) {
               </div>
             )}
             {section.items.map(item => (
-              <NavLink key={item.path} to={item.path} end={item.path === '/'}
+              <NavLink key={item.path} to={item.path} end={item.path === '/admin'}
                 onClick={() => mobile && setMobileOpen(false)}
                 style={({ isActive }) => linkStyleNew(isActive)}
               >
@@ -255,10 +255,27 @@ export default function Layout({ children }) {
             {ICONS.menu}
           </button>
           <div />
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <span style={{ font: "400 12px 'JetBrains Mono', monospace", color: '#AAA', letterSpacing: 0.5 }}>
               {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
             </span>
+            <div style={{ width: 1, height: 20, background: 'rgba(0,0,0,0.08)' }} />
+            <button onClick={() => window.location.href = '/portal'} style={{
+              padding: '6px 14px', borderRadius: 100, border: '1px solid rgba(0,0,0,0.08)',
+              background: 'rgba(255,255,255,0.5)', font: "500 11px 'Inter', sans-serif", color: '#666',
+              cursor: 'pointer', backdropFilter: 'blur(8px)', transition: 'all 0.2s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = theme.accent + '40'; e.currentTarget.style.color = theme.accent; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.08)'; e.currentTarget.style.color = '#666'; }}
+            >Member Portal</button>
+            <button onClick={() => window.location.href = '/'} style={{
+              padding: '6px 14px', borderRadius: 100, border: '1px solid rgba(0,0,0,0.08)',
+              background: 'rgba(255,255,255,0.5)', font: "500 11px 'Inter', sans-serif", color: '#666',
+              cursor: 'pointer', backdropFilter: 'blur(8px)', transition: 'all 0.2s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = theme.accent + '40'; e.currentTarget.style.color = theme.accent; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.08)'; e.currentTarget.style.color = '#666'; }}
+            >Home</button>
           </div>
         </div>
 
