@@ -7,6 +7,94 @@ import { getPatients, getProviders, getSettings, subscribe } from '../data/store
 const INBOX_KEY = 'ms_inbox';
 const ASSIGN_KEY = 'ms_inbox_assignments';
 
+// ── Platform Revenue Metrics (demo data) ──
+const PLATFORM_METRICS = [
+  {
+    id: 'instagram',
+    name: 'Instagram',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <rect x="2" y="2" width="20" height="20" rx="5" stroke="#E1306C" strokeWidth="2"/>
+        <circle cx="12" cy="12" r="5" stroke="#E1306C" strokeWidth="2"/>
+        <circle cx="17.5" cy="6.5" r="1.5" fill="#E1306C"/>
+      </svg>
+    ),
+    color: '#E1306C',
+    bgGradient: 'linear-gradient(135deg, #E1306C08, #E1306C18, #833AB408)',
+    borderColor: '#E1306C30',
+    revenue: 47200,
+    conversations: 142,
+    bookedFromDMs: 38,
+    conversionRate: 26.8,
+    trend: 12,
+    trendLabel: null,
+  },
+  {
+    id: 'facebook',
+    name: 'Facebook',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="#1877F2">
+        <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/>
+      </svg>
+    ),
+    color: '#1877F2',
+    bgGradient: 'linear-gradient(135deg, #1877F208, #1877F218, #1877F208)',
+    borderColor: '#1877F230',
+    revenue: 18600,
+    conversations: 67,
+    bookedFromDMs: 15,
+    conversionRate: 22.4,
+    trend: 8,
+    trendLabel: null,
+  },
+  {
+    id: 'tiktok',
+    name: 'TikTok',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.11V9a6.33 6.33 0 00-.79-.05A6.34 6.34 0 003.15 15.3a6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.34-6.34V9.37a8.16 8.16 0 004.76 1.52v-3.4a4.85 4.85 0 01-1-.8z" fill="#FE2C55"/>
+      </svg>
+    ),
+    color: '#FE2C55',
+    bgGradient: 'linear-gradient(135deg, #FE2C5508, #FE2C5518, #25F4EE08)',
+    borderColor: '#FE2C5530',
+    revenue: 8400,
+    conversations: 89,
+    bookedFromDMs: 12,
+    conversionRate: 13.5,
+    trend: 34,
+    trendLabel: 'Fastest growing!',
+  },
+];
+
+// ── Conversion Funnel (demo data) ──
+const CONVERSION_FUNNEL = [
+  { label: 'DMs Received', value: 298, raw: 298 },
+  { label: 'Replied', value: 247, raw: 247 },
+  { label: 'Booked', value: 65, raw: 65 },
+  { label: 'Revenue', value: '$74,200', raw: 74200 },
+];
+
+// ── Lifetime values & hot lead flags for seed data ──
+const CONVERSATION_ENRICHMENT = {
+  'DM-1':  { lifetimeValue: 2800, isHotLead: true },   // asks "how much"
+  'DM-2':  { lifetimeValue: 1450, isHotLead: false },
+  'DM-3':  { lifetimeValue: 3200, isHotLead: true },    // asks about pricing/payment
+  'DM-4':  { lifetimeValue: null, isHotLead: true },     // wants to book
+  'DM-5':  { lifetimeValue: 960, isHotLead: false },
+  'DM-6':  { lifetimeValue: 780, isHotLead: false },
+  'DM-7':  { lifetimeValue: null, isHotLead: false },
+  'DM-8':  { lifetimeValue: null, isHotLead: true },     // asks about getting treatment
+  'DM-9':  { lifetimeValue: null, isHotLead: true },     // asks "how much"
+  'DM-10': { lifetimeValue: null, isHotLead: false },
+  'DM-11': { lifetimeValue: 4100, isHotLead: false },
+  'DM-12': { lifetimeValue: 650, isHotLead: false },
+  'DM-13': { lifetimeValue: 1300, isHotLead: true },     // asks pricing
+  'DM-14': { lifetimeValue: 1800, isHotLead: false },
+  'DM-15': { lifetimeValue: null, isHotLead: true },     // new, wants treatments
+  'DM-16': { lifetimeValue: 520, isHotLead: false },
+};
+
 function loadConversations() { try { return JSON.parse(localStorage.getItem(INBOX_KEY)) || []; } catch { return []; } }
 function saveConversations(c) { localStorage.setItem(INBOX_KEY, JSON.stringify(c)); }
 function loadAssignments() { try { return JSON.parse(localStorage.getItem(ASSIGN_KEY)) || {}; } catch { return {}; } }
@@ -185,6 +273,12 @@ function computeLeaderboard(conversations, assignments, providers) {
   }).sort((a, b) => b.responseScore - a.responseScore);
 }
 
+// ── Format currency ──
+function fmtRevenue(n) {
+  if (typeof n === 'string') return n;
+  return '$' + n.toLocaleString();
+}
+
 export default function Inbox() {
   const s = useStyles();
   const [, setTick] = useState(0);
@@ -200,6 +294,7 @@ export default function Inbox() {
   const [currentStaff, setCurrentStaff] = useState('PRV-2'); // who is "logged in"
   const [activeTab, setActiveTab] = useState('inbox'); // 'inbox' | 'leaderboard'
   const [leaderboardPeriod, setLeaderboardPeriod] = useState('week'); // 'week' | 'alltime'
+  const [metricsCollapsed, setMetricsCollapsed] = useState(false);
   const messagesEndRef = useRef(null);
 
   const providers = getProviders();
@@ -221,9 +316,17 @@ export default function Inbox() {
 
   const byTime = (a, b) => new Date(b.lastActivity) - new Date(a.lastActivity);
 
-  const yourDMs = searchFiltered.filter(c => assignments[c.id] === currentStaff).sort(byTime);
-  const unassignedDMs = searchFiltered.filter(c => !assignments[c.id]).sort(byTime);
-  const otherStaffDMs = searchFiltered.filter(c => assignments[c.id] && assignments[c.id] !== currentStaff).sort(byTime);
+  // Sort hot leads first within each group
+  const hotLeadSort = (a, b) => {
+    const aHot = CONVERSATION_ENRICHMENT[a.id]?.isHotLead ? 1 : 0;
+    const bHot = CONVERSATION_ENRICHMENT[b.id]?.isHotLead ? 1 : 0;
+    if (bHot !== aHot) return bHot - aHot;
+    return byTime(a, b);
+  };
+
+  const yourDMs = searchFiltered.filter(c => assignments[c.id] === currentStaff).sort(hotLeadSort);
+  const unassignedDMs = searchFiltered.filter(c => !assignments[c.id]).sort(hotLeadSort);
+  const otherStaffDMs = searchFiltered.filter(c => assignments[c.id] && assignments[c.id] !== currentStaff).sort(hotLeadSort);
 
   const totalUnread = conversations.reduce((sum, c) => sum + (c.unread || 0), 0);
   const unassignedCount = conversations.filter(c => !assignments[c.id]).length;
@@ -331,15 +434,21 @@ export default function Inbox() {
     const assignedProv = providers.find(p => p.id === assigned);
     const lastMsg = c.messages[c.messages.length - 1];
     const rtBadge = responseTimeBadge(c.avgResponseTime);
+    const enrichment = CONVERSATION_ENRICHMENT[c.id] || {};
+    const isHotLead = enrichment.isHotLead;
+    const ltv = enrichment.lifetimeValue;
+    const isNewLead = !c.patientId && !ltv;
+
     return (
       <div key={c.id} onClick={() => selectConversation(c.id)} style={{
         padding: '14px 16px', cursor: 'pointer', borderBottom: '1px solid #F8F8F8',
-        background: activeId === c.id ? s.accentLight : c.unread > 0 ? '#FAFAFA' : 'transparent',
+        background: activeId === c.id ? s.accentLight : isHotLead && c.unread > 0 ? '#FFF8F0' : c.unread > 0 ? '#FAFAFA' : 'transparent',
         opacity: dimmed ? 0.45 : 1,
         transition: 'background 0.1s, opacity 0.2s',
+        borderLeft: isHotLead ? '3px solid #F97316' : '3px solid transparent',
       }}
       onMouseEnter={e => { if (activeId !== c.id) e.currentTarget.style.background = '#FAFAFA'; }}
-      onMouseLeave={e => { if (activeId !== c.id) e.currentTarget.style.background = c.unread > 0 ? '#FAFAFA' : 'transparent'; }}
+      onMouseLeave={e => { if (activeId !== c.id) e.currentTarget.style.background = isHotLead && c.unread > 0 ? '#FFF8F0' : c.unread > 0 ? '#FAFAFA' : 'transparent'; }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <div style={{
@@ -356,8 +465,22 @@ export default function Inbox() {
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
-              <span style={{ font: `${c.unread > 0 ? '600' : '400'} 13px ${s.FONT}`, color: s.text }}>{c.name}</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ font: `${c.unread > 0 ? '600' : '400'} 13px ${s.FONT}`, color: s.text }}>{c.name}</span>
+                {isHotLead && (
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 2, padding: '1px 6px', borderRadius: 4, background: '#FFF3E0', color: '#F97316', font: `600 8px ${s.FONT}`, whiteSpace: 'nowrap' }}>
+                    <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#F97316', display: 'inline-block', animation: 'hotPulse 1.5s ease-in-out infinite' }} />
+                    HOT
+                  </span>
+                )}
+              </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+                {ltv && (
+                  <span style={{ padding: '1px 6px', borderRadius: 4, background: '#ECFDF5', color: '#059669', font: `600 8px ${s.FONT}` }}>$ {fmtRevenue(ltv)}</span>
+                )}
+                {isNewLead && (
+                  <span style={{ padding: '1px 6px', borderRadius: 4, background: '#EFF6FF', color: '#3B82F6', font: `600 8px ${s.FONT}` }}>New Lead</span>
+                )}
                 {rtBadge && (
                   <span style={{ padding: '1px 6px', borderRadius: 4, background: rtBadge.bg, color: rtBadge.color, font: `600 8px ${s.FONT}` }}>{rtBadge.label}</span>
                 )}
@@ -388,6 +511,151 @@ export default function Inbox() {
   const renderSectionHeader = (label, count) => (
     <div style={{ padding: '10px 16px 6px', font: `600 10px ${s.MONO}`, color: s.text3, textTransform: 'uppercase', letterSpacing: 1.5, background: '#FAFAFA', borderBottom: '1px solid #F0F0F0' }}>
       {label} ({count})
+    </div>
+  );
+
+  // ── Platform Revenue Dashboard ──
+  const renderPlatformMetrics = () => (
+    <div className="platform-metrics-section" style={{ marginBottom: 16 }}>
+      {/* Collapse toggle */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: metricsCollapsed ? 0 : 12 }}>
+        <div style={{ font: `600 13px ${s.FONT}`, color: s.text, display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span style={{ font: `500 10px ${s.MONO}`, color: s.text3, textTransform: 'uppercase', letterSpacing: 1.5 }}>Platform Revenue</span>
+          <span style={{ padding: '2px 8px', borderRadius: 100, background: '#ECFDF5', color: '#059669', font: `600 10px ${s.FONT}` }}>Live</span>
+        </div>
+        <button onClick={() => setMetricsCollapsed(!metricsCollapsed)} style={{
+          background: 'none', border: '1px solid #E5E5E5', borderRadius: 6, padding: '3px 10px',
+          cursor: 'pointer', font: `400 10px ${s.FONT}`, color: s.text3, transition: 'all 0.2s',
+        }}>
+          {metricsCollapsed ? 'Show Metrics' : 'Hide'}
+        </button>
+      </div>
+
+      {!metricsCollapsed && (
+        <>
+          {/* Platform cards */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14 }} className="platform-cards-grid">
+            {PLATFORM_METRICS.map(pm => (
+              <div key={pm.id} style={{
+                ...s.cardStyle,
+                padding: '20px',
+                background: pm.bgGradient,
+                border: `1px solid ${pm.borderColor}`,
+                position: 'relative',
+                overflow: 'hidden',
+                transition: 'transform 0.2s, box-shadow 0.2s',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = `0 8px 24px ${pm.color}15`; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; }}
+              >
+                {/* Platform header */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    {pm.icon}
+                    <span style={{ font: `600 14px ${s.FONT}`, color: s.text }}>{pm.name}</span>
+                  </div>
+                  <div style={{
+                    display: 'flex', alignItems: 'center', gap: 3,
+                    padding: '2px 8px', borderRadius: 100,
+                    background: '#ECFDF5', color: '#059669',
+                    font: `600 10px ${s.FONT}`,
+                  }}>
+                    <span style={{ fontSize: 10 }}>{'\u2191'}</span> {pm.trend}%
+                    {pm.trendLabel && <span style={{ marginLeft: 2, fontSize: 8, opacity: 0.8 }}>({pm.trendLabel})</span>}
+                  </div>
+                </div>
+
+                {/* Revenue — BIG */}
+                <div style={{ font: `700 28px ${s.FONT}`, color: pm.color, marginBottom: 14, letterSpacing: -0.5 }}>
+                  {fmtRevenue(pm.revenue)}
+                </div>
+
+                {/* Stats row */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
+                  <div>
+                    <div style={{ font: `600 16px ${s.FONT}`, color: s.text }}>{pm.conversations}</div>
+                    <div style={{ font: `400 9px ${s.FONT}`, color: s.text3 }}>Conversations</div>
+                  </div>
+                  <div>
+                    <div style={{ font: `600 16px ${s.FONT}`, color: s.text }}>{pm.bookedFromDMs}</div>
+                    <div style={{ font: `400 9px ${s.FONT}`, color: s.text3 }}>Booked</div>
+                  </div>
+                  <div>
+                    <div style={{ font: `600 16px ${s.FONT}`, color: pm.color }}>{pm.conversionRate}%</div>
+                    <div style={{ font: `400 9px ${s.FONT}`, color: s.text3 }}>Conv. Rate</div>
+                  </div>
+                </div>
+
+                {/* Subtle decorative accent */}
+                <div style={{
+                  position: 'absolute', top: -30, right: -30,
+                  width: 80, height: 80, borderRadius: '50%',
+                  background: `${pm.color}06`,
+                }} />
+              </div>
+            ))}
+          </div>
+
+          {/* Conversion Funnel */}
+          <div style={{
+            ...s.cardStyle, padding: '16px 24px', marginTop: 14,
+            background: 'linear-gradient(135deg, #FAFAFA, #FFFFFF)',
+          }}>
+            <div className="conversion-funnel" style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              gap: 0, flexWrap: 'wrap',
+            }}>
+              {CONVERSION_FUNNEL.map((step, i) => {
+                const isLast = i === CONVERSION_FUNNEL.length - 1;
+                const prevStep = i > 0 ? CONVERSION_FUNNEL[i - 1] : null;
+                const dropPct = prevStep && typeof step.raw === 'number' && typeof prevStep.raw === 'number'
+                  ? Math.round((step.raw / prevStep.raw) * 100)
+                  : null;
+
+                return (
+                  <div key={step.label} style={{ display: 'flex', alignItems: 'center' }}>
+                    {/* Arrow with drop % */}
+                    {i > 0 && (
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '0 10px' }}>
+                        <div style={{
+                          font: `500 9px ${s.MONO}`, color: s.text3,
+                          marginBottom: 2,
+                        }}>
+                          {dropPct != null ? `${dropPct}%` : ''}
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', color: s.accent }}>
+                          <div style={{ width: 24, height: 2, background: `linear-gradient(90deg, ${s.accent}40, ${s.accent})` }} />
+                          <div style={{ width: 0, height: 0, borderTop: '5px solid transparent', borderBottom: '5px solid transparent', borderLeft: `6px solid ${s.accent}` }} />
+                        </div>
+                      </div>
+                    )}
+                    {/* Step box */}
+                    <div style={{
+                      padding: '10px 18px', borderRadius: 10,
+                      background: isLast ? `linear-gradient(135deg, ${s.accent}10, ${s.accent}20)` : '#F8F8F8',
+                      border: isLast ? `1.5px solid ${s.accent}40` : '1px solid #EBEBEB',
+                      textAlign: 'center',
+                      minWidth: 100,
+                      transition: 'transform 0.2s',
+                    }}>
+                      <div style={{
+                        font: `700 ${isLast ? '20px' : '18px'} ${s.FONT}`,
+                        color: isLast ? s.accent : s.text,
+                        marginBottom: 2,
+                      }}>
+                        {typeof step.value === 'number' ? step.value.toLocaleString() : step.value}
+                      </div>
+                      <div style={{ font: `500 9px ${s.MONO}`, color: s.text3, textTransform: 'uppercase', letterSpacing: 1 }}>
+                        {step.label}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 
@@ -428,6 +696,9 @@ export default function Inbox() {
 
       {activeTab === 'inbox' && (
         <>
+          {/* Platform Revenue Dashboard */}
+          {renderPlatformMetrics()}
+
           {/* Quick Stats Bar */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 16 }}>
             {[
@@ -506,7 +777,19 @@ export default function Inbox() {
                     <button className="inbox-back-btn" onClick={() => setActiveId(null)} style={{ display: 'none', background: 'none', border: 'none', cursor: 'pointer', color: s.text2, font: `500 13px ${s.FONT}`, padding: '4px 0', marginRight: 4 }}>← Back</button>
                     <div style={{ width: 36, height: 36, borderRadius: '50%', background: s.accentLight, display: 'flex', alignItems: 'center', justifyContent: 'center', font: `500 12px ${s.FONT}`, color: s.accent }}>{active.avatar}</div>
                     <div>
-                      <div style={{ font: `600 14px ${s.FONT}`, color: s.text }}>{active.name}</div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <span style={{ font: `600 14px ${s.FONT}`, color: s.text }}>{active.name}</span>
+                        {CONVERSATION_ENRICHMENT[active.id]?.isHotLead && (
+                          <span style={{ padding: '1px 6px', borderRadius: 4, background: '#FFF3E0', color: '#F97316', font: `600 9px ${s.FONT}`, display: 'flex', alignItems: 'center', gap: 3 }}>
+                            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#F97316', display: 'inline-block' }} /> HOT LEAD
+                          </span>
+                        )}
+                        {CONVERSATION_ENRICHMENT[active.id]?.lifetimeValue && (
+                          <span style={{ padding: '1px 6px', borderRadius: 4, background: '#ECFDF5', color: '#059669', font: `600 9px ${s.FONT}` }}>
+                            LTV: {fmtRevenue(CONVERSATION_ENRICHMENT[active.id].lifetimeValue)}
+                          </span>
+                        )}
+                      </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                         <span style={{ font: `400 11px ${s.FONT}`, color: s.text3 }}>{active.handle} · {active.platform}</span>
                         {active.avgResponseTime != null && (() => {
@@ -672,7 +955,14 @@ export default function Inbox() {
       )}
 
       <style>{`
+        @keyframes hotPulse {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.5; transform: scale(1.3); }
+        }
         @media (max-width: 768px) {
+          .platform-metrics-section {
+            display: none !important;
+          }
           .inbox-grid {
             grid-template-columns: 1fr !important;
             height: calc(100vh - 380px) !important;
@@ -688,6 +978,15 @@ export default function Inbox() {
           }
           .inbox-back-btn {
             display: inline-flex !important;
+          }
+        }
+        @media (max-width: 900px) {
+          .platform-cards-grid {
+            grid-template-columns: 1fr !important;
+          }
+          .conversion-funnel {
+            flex-direction: column !important;
+            gap: 8px !important;
           }
         }
       `}</style>
