@@ -75,7 +75,7 @@ export default function Home() {
       </nav>
 
       {/* Hero — compact, elegant */}
-      <div style={{
+      <div className="home-hero-section" style={{
         textAlign: 'center', padding: '100px 24px 40px', position: 'relative', zIndex: 10,
       }}>
         <div style={{
@@ -107,7 +107,7 @@ export default function Home() {
       </div>
 
       {/* Live Dashboard Preview — real data from localStorage */}
-      <div style={{
+      <div className="home-preview-section" style={{
         maxWidth: 1000, margin: '0 auto', padding: '0 24px 60px',
         position: 'relative', zIndex: 10,
       }}>
@@ -221,20 +221,61 @@ export default function Home() {
       </div>
 
       <style>{`
-        @media (max-width: 640px) {
-          h1 { font-size: 32px !important; }
-          nav { padding: 16px 20px !important; flex-wrap: wrap; gap: 8px; }
-        }
         @media (max-width: 768px) {
           .home-kpi-grid {
             grid-template-columns: repeat(2, 1fr) !important;
           }
           .home-nav-btns {
-            flex-wrap: wrap !important;
+            gap: 6px !important;
           }
           .home-nav-btns button {
-            padding: 6px 14px !important;
-            font-size: 12px !important;
+            padding: 6px 12px !important;
+            font-size: 11px !important;
+          }
+          .home-hero-section {
+            padding: 80px 18px 24px !important;
+          }
+          .home-hero-section h1 {
+            font-size: 30px !important;
+          }
+          .home-hero-section p {
+            font-size: 14px !important;
+          }
+          .home-hero-section .home-hero-btns {
+            flex-direction: column !important;
+            width: 100% !important;
+          }
+          .home-hero-section .home-hero-btns button {
+            width: 100% !important;
+          }
+          .home-preview-section {
+            padding: 0 14px 40px !important;
+          }
+          .home-features-pills {
+            padding: 0 14px 30px !important;
+          }
+          .home-quick-links {
+            flex-direction: column !important;
+            padding: 10px 14px 30px !important;
+          }
+          .home-quick-links button {
+            width: 100% !important;
+          }
+          .home-services-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 8px !important;
+            padding: 0 14px !important;
+          }
+          nav {
+            padding: 12px 14px !important;
+          }
+        }
+        @media (max-width: 380px) {
+          .home-nav-btns button:not(:last-child) {
+            display: none !important;
+          }
+          .home-hero-section h1 {
+            font-size: 26px !important;
           }
         }
       `}</style>

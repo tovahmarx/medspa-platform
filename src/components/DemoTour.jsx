@@ -116,8 +116,10 @@ export default function DemoTour({ showTour, onClose }) {
   const [visible, setVisible] = useState(false);
   const [animating, setAnimating] = useState(false);
 
-  // Show on first visit if never completed
+  // Show on first visit if never completed (skip in embed mode)
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('embed')) return;
     if (showTour) {
       setStep(0);
       setVisible(true);
