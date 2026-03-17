@@ -14,9 +14,11 @@ function saveAssignments(a) { localStorage.setItem(ASSIGN_KEY, JSON.stringify(a)
 
 function initInbox() {
   const existing = loadConversations();
-  if (existing.length >= 16) return;
-  // Reseed with full conversation set including TikTok + expanded volume
+  const hasResponseData = existing.length > 0 && existing.some(c => c.avgResponseTime !== undefined);
+  if (existing.length >= 16 && hasResponseData) return;
+  // Force clear old data and reseed
   localStorage.removeItem(INBOX_KEY);
+  localStorage.removeItem(ASSIGN_KEY);
   const now = new Date();
   const ago = (min) => new Date(now - min * 60000).toISOString();
 
