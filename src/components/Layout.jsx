@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useTheme, useStyles, PRESETS } from '../theme';
 import { getSettings } from '../data/store';
+import HelpChat from './HelpChat';
 
 const NAV_ITEMS = [
   { section: 'Overview', items: [
@@ -268,6 +269,7 @@ export default function Layout({ children }) {
       </div>
 
       <ThemePicker show={showTheme} onClose={() => setShowTheme(false)} />
+      <HelpChat />
 
       <style>{`
         @media (max-width: 860px) {

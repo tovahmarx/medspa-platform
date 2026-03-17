@@ -342,6 +342,10 @@ export function initStore() {
 
 // Seeds data for keys that are empty — runs every load to fill gaps
 function seedIfEmpty(d, today) {
+  // Ensure settings always exist
+  if (!localStorage.getItem('ms_settings')) {
+    set('ms_settings', { businessName: 'Your MedSpa', tagline: 'Where Science Meets Beauty', email: 'info@yourmedspa.com', phone: '(480) 555-0100' });
+  }
   if (get('ms_emails', []).length > 0 && get('ms_texts', []).length > 0 && get('ms_social_posts', []).length > 0 && get('ms_checkins', []).length > 0) return;
 
   // Seed Sent Emails

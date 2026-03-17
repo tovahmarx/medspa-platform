@@ -80,11 +80,11 @@ export default function Schedule() {
     return (
       <div onClick={() => openEdit(appt)} style={{
         padding: compact ? '6px 8px' : '10px 14px', borderRadius: 8, cursor: 'pointer',
-        background: '#F8F8F8', borderLeft: `3px solid ${statusColor(appt.status)}`,
+        background: 'rgba(255,255,255,0.5)', backdropFilter: 'blur(8px)', borderLeft: `3px solid ${statusColor(appt.status)}`,
         marginBottom: 4, transition: 'all 0.15s',
       }}
-      onMouseEnter={e => e.currentTarget.style.background = '#F0F0F0'}
-      onMouseLeave={e => e.currentTarget.style.background = '#F8F8F8'}
+      onMouseEnter={e => e.currentTarget.style.background = 'rgba(0,0,0,0.04)'}
+      onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.5)'}
       >
         <div style={{ font: `500 ${compact ? 11 : 13}px ${s.FONT}`, color: s.text }}>{appt.patientName}</div>
         <div style={{ font: `400 ${compact ? 10 : 12}px ${s.FONT}`, color: s.text2 }}>
@@ -114,7 +114,7 @@ export default function Schedule() {
           <button onClick={() => navigate(1)} style={{ ...s.pillGhost, padding: '6px 12px' }}>→</button>
           <button onClick={() => setCurrentDate(new Date().toISOString().slice(0, 10))} style={{ ...s.pillGhost, padding: '6px 12px', fontSize: 11 }}>Today</button>
         </div>
-        <div style={{ display: 'flex', gap: 0, background: '#F0F0F0', borderRadius: 8, overflow: 'hidden' }}>
+        <div style={{ display: 'flex', gap: 0, background: 'rgba(0,0,0,0.04)', borderRadius: 8, overflow: 'hidden' }}>
           {['day', 'week', 'list'].map(v => (
             <button key={v} onClick={() => setView(v)} style={{
               padding: '7px 16px', background: view === v ? '#fff' : 'transparent', border: 'none',
@@ -132,8 +132,8 @@ export default function Schedule() {
           {hours.map(h => {
             const hourAppts = dayAppts.filter(a => parseInt(a.time.split(':')[0]) === h);
             return (
-              <div key={h} style={{ display: 'flex', borderBottom: '1px solid #F5F5F5', minHeight: 72 }}>
-                <div style={{ width: 80, padding: '12px 16px', font: `400 12px ${s.MONO}`, color: s.text3, borderRight: '1px solid #F5F5F5', flexShrink: 0 }}>
+              <div key={h} style={{ display: 'flex', borderBottom: '1px solid rgba(0,0,0,0.03)', minHeight: 72 }}>
+                <div style={{ width: 80, padding: '12px 16px', font: `400 12px ${s.MONO}`, color: s.text3, borderRight: '1px solid rgba(0,0,0,0.03)', flexShrink: 0 }}>
                   {h > 12 ? h - 12 : h}:00 {h >= 12 ? 'PM' : 'AM'}
                 </div>
                 <div style={{ flex: 1, padding: '8px 12px', cursor: 'pointer' }} onClick={() => openNew(currentDate, `${String(h).padStart(2, '0')}:00`)}>
@@ -153,9 +153,9 @@ export default function Schedule() {
               const isToday = day === new Date().toISOString().slice(0, 10);
               const dayA = appointments.filter(a => a.date === day).sort((a, b) => a.time.localeCompare(b.time));
               return (
-                <div key={day} style={{ borderRight: '1px solid #F0F0F0', minHeight: 300 }}>
+                <div key={day} style={{ borderRight: '1px solid rgba(0,0,0,0.04)', minHeight: 300 }}>
                   <div style={{
-                    padding: '12px 10px', borderBottom: '1px solid #F0F0F0', textAlign: 'center',
+                    padding: '12px 10px', borderBottom: '1px solid rgba(0,0,0,0.04)', textAlign: 'center',
                     background: isToday ? s.accentLight : 'transparent',
                   }}>
                     <div style={{ font: `400 10px ${s.MONO}`, color: s.text3, textTransform: 'uppercase' }}>
@@ -194,7 +194,7 @@ export default function Schedule() {
                 const svc = services.find(sv => sv.id === a.serviceId);
                 const prov = providers.find(p => p.id === a.providerId);
                 return (
-                  <tr key={a.id} style={{ borderBottom: '1px solid #F5F5F5' }}>
+                  <tr key={a.id} style={{ borderBottom: '1px solid rgba(0,0,0,0.03)' }}>
                     <td style={{ padding: '14px 16px', font: `500 13px ${s.MONO}`, color: s.text }}>{a.time}</td>
                     <td style={{ padding: '14px 16px', font: `500 13px ${s.FONT}`, color: s.text }}>{a.patientName}</td>
                     <td style={{ padding: '14px 16px', font: `400 13px ${s.FONT}`, color: s.text2 }}>{svc?.name || '—'}</td>

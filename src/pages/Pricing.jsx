@@ -1,5 +1,4 @@
-// Pricing page — internal strategy doc for Tovah & Saleem
-// Shows the research, competitor pricing, frankenstack cost, and how we got to $1,500/mo
+// Pricing strategy and backend roadmap
 import { useState } from 'react';
 import { useStyles, useTheme } from '../theme';
 import { getSettings } from '../data/store';
