@@ -119,34 +119,52 @@ export default function Layout({ children }) {
     background: isActive ? theme.accentLight : 'transparent',
   });
 
+  // Dark sidebar uses accent color
+  const sidebarBg = theme.accent;
+  const sidebarText = theme.accentText;
+  const sidebarMuted = theme.accentText + '88';
+  const sidebarBorder = theme.accentText + '15';
+  const sidebarHover = theme.accentText + '12';
+  const sidebarActive = theme.accentText + '22';
+
+  const linkStyleNew = (isActive) => ({
+    display: 'flex', alignItems: 'center', gap: 12, padding: collapsed ? '10px 0' : '10px 16px',
+    justifyContent: collapsed ? 'center' : 'flex-start',
+    borderRadius: 8, textDecoration: 'none', transition: 'all 0.15s',
+    font: `${isActive ? '500' : '400'} 13px 'Inter', sans-serif`,
+    color: isActive ? '#FFFFFF' : sidebarMuted,
+    background: isActive ? sidebarActive : 'transparent',
+  });
+
   const Sidebar = ({ mobile }) => (
     <div style={{
       width: mobile ? 260 : sidebarWidth,
       height: '100vh', position: 'fixed', left: 0, top: 0,
-      background: '#FFFFFF', borderRight: '1px solid #E5E5E5',
+      background: sidebarBg,
       display: 'flex', flexDirection: 'column',
-      transition: 'width 0.2s ease',
+      transition: 'all 0.3s ease',
       zIndex: mobile ? 200 : 100,
-      ...(mobile ? { boxShadow: '4px 0 24px rgba(0,0,0,0.1)' } : {}),
+      ...(mobile ? { boxShadow: '4px 0 24px rgba(0,0,0,0.2)' } : {}),
     }}>
       {/* Logo */}
       <div style={{
-        padding: collapsed ? '20px 10px' : '20px 20px', borderBottom: '1px solid #F0F0F0',
+        padding: collapsed ? '20px 10px' : '20px 20px', borderBottom: `1px solid ${sidebarBorder}`,
         display: 'flex', alignItems: 'center', gap: 12, minHeight: 68,
       }}>
         <div style={{
-          width: 34, height: 34, borderRadius: 10, background: theme.accent,
+          width: 34, height: 34, borderRadius: 10, background: theme.accentText + '20',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          color: theme.accentText, font: "700 14px 'Inter', sans-serif", flexShrink: 0,
+          color: '#FFFFFF', font: "700 14px 'Inter', sans-serif", flexShrink: 0,
+          border: `1.5px solid ${theme.accentText}30`,
         }}>
           {(settings.businessName || 'M')[0]}
         </div>
         {!collapsed && (
           <div>
-            <div style={{ font: "600 14px 'Inter', sans-serif", color: '#111', lineHeight: 1.2 }}>
+            <div style={{ font: "600 14px 'Inter', sans-serif", color: '#FFFFFF', lineHeight: 1.2 }}>
               {settings.businessName || 'MedSpa'}
             </div>
-            <div style={{ font: "400 11px 'Inter', sans-serif", color: '#999' }}>
+            <div style={{ font: "400 11px 'Inter', sans-serif", color: sidebarMuted }}>
               {settings.tagline || 'Platform'}
             </div>
           </div>
@@ -160,7 +178,7 @@ export default function Layout({ children }) {
             {!collapsed && (
               <div style={{
                 font: "500 10px 'JetBrains Mono', monospace", textTransform: 'uppercase',
-                letterSpacing: 1.2, color: '#BBB', padding: '0 16px 6px',
+                letterSpacing: 1.2, color: sidebarMuted, padding: '0 16px 6px',
               }}>
                 {section.section}
               </div>
@@ -168,7 +186,7 @@ export default function Layout({ children }) {
             {section.items.map(item => (
               <NavLink key={item.path} to={item.path} end={item.path === '/'}
                 onClick={() => mobile && setMobileOpen(false)}
-                style={({ isActive }) => linkStyle(isActive)}
+                style={({ isActive }) => linkStyleNew(isActive)}
               >
                 <span style={{ flexShrink: 0, display: 'flex' }}>{ICONS[item.icon]}</span>
                 {!collapsed && <span>{item.label}</span>}
@@ -179,21 +197,21 @@ export default function Layout({ children }) {
       </nav>
 
       {/* Theme picker button */}
-      <div style={{ padding: '12px', borderTop: '1px solid #F0F0F0' }}>
+      <div style={{ padding: '12px', borderTop: `1px solid ${sidebarBorder}` }}>
         <button onClick={() => setShowTheme(true)} style={{
           display: 'flex', alignItems: 'center', gap: 10, width: '100%',
           padding: collapsed ? '10px 0' : '10px 16px', justifyContent: collapsed ? 'center' : 'flex-start',
           background: 'transparent', border: 'none', borderRadius: 8, cursor: 'pointer',
-          font: "400 13px 'Inter', sans-serif", color: '#666', transition: 'all 0.15s',
+          font: "400 13px 'Inter', sans-serif", color: sidebarMuted, transition: 'all 0.15s',
         }}>
-          <span style={{ width: 18, height: 18, borderRadius: '50%', background: theme.accent, border: '2px solid #e5e5e5', flexShrink: 0 }} />
+          <span style={{ width: 18, height: 18, borderRadius: '50%', background: theme.accentText + '30', border: `2px solid ${theme.accentText}40`, flexShrink: 0 }} />
           {!collapsed && 'Brand Color'}
         </button>
         {!mobile && (
           <button onClick={() => setCollapsed(!collapsed)} style={{
             display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%',
             padding: '8px', background: 'transparent', border: 'none', borderRadius: 8,
-            cursor: 'pointer', color: '#999', marginTop: 4,
+            cursor: 'pointer', color: sidebarMuted, marginTop: 4,
           }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" style={{ transform: collapsed ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}>
               <polyline points="15 18 9 12 15 6"/>
