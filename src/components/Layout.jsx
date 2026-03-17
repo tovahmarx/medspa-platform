@@ -1,8 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useTheme, useStyles, PRESETS } from '../theme';
 import { getSettings } from '../data/store';
 import HelpChat from './HelpChat';
+import CommandPalette from './CommandPalette';
+import NotificationBell from './NotificationBell';
+import DemoTour from './DemoTour';
 
 const NAV_ITEMS = [
   { section: 'Overview', items: [
@@ -104,10 +107,23 @@ export default function Layout({ children }) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [showTheme, setShowTheme] = useState(false);
+  const [cmdOpen, setCmdOpen] = useState(false);
   const { theme } = useTheme();
   const s = useStyles();
   const location = useLocation();
   const settings = getSettings();
+
+  // Global Cmd+K / Ctrl+K listener
+  useEffect(() => {
+    const handler = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setCmdOpen(prev => !prev);
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []);
 
   const sidebarWidth = collapsed ? 68 : 240;
 
@@ -256,9 +272,30 @@ export default function Layout({ children }) {
           </button>
           <div />
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            {/* Search / Cmd+K trigger */}
+            <button onClick={() => setCmdOpen(true)} style={{
+              display: 'flex', alignItems: 'center', gap: 8,
+              padding: '6px 12px 6px 10px', borderRadius: 100,
+              border: '1px solid rgba(0,0,0,0.08)',
+              background: 'rgba(255,255,255,0.5)',
+              font: "400 12px 'Inter', sans-serif", color: '#AAA',
+              cursor: 'pointer', backdropFilter: 'blur(8px)',
+              transition: 'all 0.2s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.8)'; e.currentTarget.style.color = '#666'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.5)'; e.currentTarget.style.color = '#AAA'; }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <span className="cmd-k-label" style={{ font: "400 11px 'JetBrains Mono', monospace", color: '#CCC' }}>
+                {typeof navigator !== 'undefined' && navigator.platform?.includes('Mac') ? '\u2318K' : 'Ctrl K'}
+              </span>
+            </button>
+            <div style={{ width: 1, height: 20, background: 'rgba(0,0,0,0.08)' }} />
             <span style={{ font: "400 12px 'JetBrains Mono', monospace", color: '#AAA', letterSpacing: 0.5 }}>
               {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
             </span>
+            <div style={{ width: 1, height: 20, background: 'rgba(0,0,0,0.08)' }} />
+            <NotificationBell />
             <div style={{ width: 1, height: 20, background: 'rgba(0,0,0,0.08)' }} />
             <button onClick={() => window.location.href = '/'} style={{
               padding: '6px 14px', borderRadius: 100, border: '1px solid rgba(0,0,0,0.08)',
@@ -277,6 +314,7 @@ export default function Layout({ children }) {
         </div>
       </div>
 
+      <CommandPalette open={cmdOpen} onClose={() => setCmdOpen(false)} />
       <ThemePicker show={showTheme} onClose={() => setShowTheme(false)} />
       <HelpChat />
 
@@ -296,6 +334,9 @@ export default function Layout({ children }) {
           .mobile-menu-btn {
             flex-shrink: 0 !important;
             margin-right: 8px !important;
+          }
+          .cmd-k-label {
+            display: none !important;
           }
         }
       `}</style>

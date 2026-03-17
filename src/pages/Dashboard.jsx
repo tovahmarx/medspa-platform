@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useStyles } from '../theme';
+import { useStyles, getAvatarGradient } from '../theme';
 import { getPatients, getAppointments, getInventory, getRetentionAlerts, getServices, getProviders, subscribe } from '../data/store';
 
 const fmt = (cents) => `$${(cents / 100).toLocaleString('en-US', { minimumFractionDigits: 0 })}`;

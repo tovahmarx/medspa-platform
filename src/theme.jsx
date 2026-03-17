@@ -55,6 +55,22 @@ export function useTheme() {
   return useContext(ThemeContext);
 }
 
+// Generate a unique gradient for patient avatars based on their name
+const AVATAR_PALETTES = [
+  ['#FF6B6B', '#EE5A24'], ['#A29BFE', '#6C5CE7'], ['#55E6C1', '#1ABC9C'],
+  ['#FDA7DF', '#D980FA'], ['#74B9FF', '#0984E3'], ['#FDCB6E', '#F39C12'],
+  ['#E17055', '#D63031'], ['#00CEC9', '#00B894'], ['#B2BEC3', '#636E72'],
+  ['#FAB1A0', '#E17055'], ['#81ECEC', '#00CEC9'], ['#DFE6E9', '#B2BEC3'],
+];
+
+export function getAvatarGradient(name) {
+  let hash = 0;
+  for (let i = 0; i < (name || '').length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  const idx = Math.abs(hash) % AVATAR_PALETTES.length;
+  const [c1, c2] = AVATAR_PALETTES[idx];
+  return `linear-gradient(135deg, ${c1}, ${c2})`;
+}
+
 // Shared style helpers that use current theme
 export function useStyles() {
   const { theme } = useTheme();
