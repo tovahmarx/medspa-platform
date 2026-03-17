@@ -31,7 +31,10 @@ const INJECTION_ZONES = [
 ];
 
 function initCharts() {
-  if (localStorage.getItem('ms_charts_init')) return;
+  // Always reseed if empty or only has old 3 charts
+  const existing = getCharts();
+  if (existing.length >= 8) return;
+  localStorage.removeItem('ms_charts_init');
   saveCharts([
     {
       id: 'CHT-1', patientId: 'PAT-1000', patientName: 'Emma Johnson', providerId: 'PRV-1',

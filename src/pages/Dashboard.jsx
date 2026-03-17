@@ -50,12 +50,10 @@ export default function Dashboard() {
     <div onClick={onClick} style={{
       ...s.cardStyle, padding: '28px 24px', cursor: onClick ? 'pointer' : 'default',
       animation: `fadeInUp 0.5s cubic-bezier(0.16,1,0.3,1) ${idx * 80}ms backwards`,
-      position: 'relative', overflow: 'hidden',
     }}
     onMouseEnter={e => { e.currentTarget.style.boxShadow = s.shadowMd; e.currentTarget.style.transform = 'translateY(-2px)'; }}
     onMouseLeave={e => { e.currentTarget.style.boxShadow = s.shadow; e.currentTarget.style.transform = 'translateY(0)'; }}
     >
-      <div style={{ position: 'absolute', top: -20, right: -20, width: 80, height: 80, borderRadius: '50%', background: `${s.accent}08` }} />
       <div style={{ font: `500 10px ${s.MONO}`, textTransform: 'uppercase', letterSpacing: 1.5, color: s.text3, marginBottom: 10 }}>{label}</div>
       <div style={{ font: `600 34px ${s.FONT}`, color: s.text, marginBottom: 6, letterSpacing: '-0.5px' }}>{value}</div>
       {sub && <div style={{ font: `400 13px ${s.FONT}`, color: s.text2 }}>{sub}</div>}
