@@ -144,7 +144,7 @@ export default function Referrals() {
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
           <button onClick={() => setShowSettings(true)} style={s.pillGhost}>Settings</button>
-          <button onClick={() => setShowGenerate(true)} style={s.pillAccent}>Generate Link</button>
+          <button onClick={() => setShowGenerate(true)} style={s.pillOutline}>View Patient Links</button>
         </div>
       </div>
 

@@ -29,6 +29,7 @@ const Wallet = lazy(() => import('./pages/Wallet'));
 const Reports = lazy(() => import('./pages/Reports'));
 const Settings = lazy(() => import('./pages/Settings'));
 const Portal = lazy(() => import('./pages/Portal'));
+const BookOnline = lazy(() => import('./pages/BookOnline'));
 
 function Loader() {
   return <div style={{ padding: 60, textAlign: 'center', color: '#999', font: "400 14px 'Inter', sans-serif" }}>Loading...</div>;
@@ -40,6 +41,7 @@ export default function App() {
       <Suspense fallback={<Loader />}>
         <Routes>
           <Route path="/portal" element={<Portal />} />
+          <Route path="/book" element={<BookOnline />} />
           <Route path="/*" element={
             <Layout>
               <Routes>
