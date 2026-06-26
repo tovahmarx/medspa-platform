@@ -486,14 +486,14 @@ canvas#sig{position:absolute;inset:0;width:100%;height:100%;}
           <div class="ml-hdr">Inbox <span style="font-size:9px;background:var(--red-bg);color:var(--red);padding:1px 6px;border-radius:8px;margin-left:5px;border:1px solid var(--red-bd);">5</span></div>
           <div class="mi on" onclick="selMsg(this,'Amanda K.','(623) 555-0391','SMS')"><div class="mi-name">Amanda K.<span class="mi-time">9:41am</span></div><div class="mi-prev">Quick question about my appt...</div><div class="mi-ch">SMS</div></div>
           <div class="mi" onclick="selMsg(this,'Nicole B.','(480) 555-0518','SMS')"><div class="mi-name">Nicole B.<span class="mi-time">8:15am</span></div><div class="mi-prev">Can I reschedule to 2pm?</div><div class="mi-ch">SMS</div></div>
-          <div class="mi" onclick="selMsg(this,'Sarah P.','sarah@email.com','Email')"><div class="mi-name">Sarah P.<span class="mi-time">Yesterday</span></div><div class="mi-prev">Thank you so much Sara!</div><div class="mi-ch">Email</div></div>
+          <div class="mi" onclick="selMsg(this,'Sarah P.','sarah@email.com','Email')"><div class="mi-name">Sarah P.<span class="mi-time">Yesterday</span></div><div class="mi-prev">Thank you so much Nadia!</div><div class="mi-ch">Email</div></div>
           <div class="mi" onclick="selMsg(this,'Carmen L.','carmen@email.com','Email')"><div class="mi-name">Carmen L.<span class="mi-time">Yesterday</span></div><div class="mi-prev">What's the recovery time for...</div><div class="mi-ch">Email</div></div>
           <div class="mi" onclick="selMsg(this,'Maria G.','(602) 555-0143','SMS')"><div class="mi-name">Maria G.<span class="mi-time">Mon</span></div><div class="mi-prev">Your appointment is confirmed...</div><div class="mi-ch">SMS · Auto-sent</div></div>
         </div>
         <div class="md">
           <div class="md-hdr"><div><span id="msg-name">Amanda K.</span><span class="md-ph" id="msg-info">(623) 555-0391 · SMS</span></div><span id="msg-status" style="font-size:11px;color:var(--green);"></span></div>
           <div class="msg-thread" id="msg-thread">
-            <div style="align-self:flex-end;"><div class="mb mb-out">Hi Amanda! Your RF Microneedling is confirmed for tomorrow at 11:15am with Shay. Reply STOP to opt out.</div><div class="mb-meta" style="text-align:right;">Mar 16 · 4:02pm · Auto-reminder</div></div>
+            <div style="align-self:flex-end;"><div class="mb mb-out">Hi Amanda! Your RF Microneedling is confirmed for tomorrow at 11:15am with Remy. Reply STOP to opt out.</div><div class="mb-meta" style="text-align:right;">Mar 16 · 4:02pm · Auto-reminder</div></div>
             <div style="align-self:flex-start;"><div class="mb mb-in">Hey! Quick question — do I need to do anything to prep my skin before coming in?</div><div class="mb-meta">Amanda K. · 9:41am</div></div>
             <div style="text-align:center;font-size:10px;color:var(--t3);padding:2px 0;">Suggested replies</div>
             <div class="sug-row"><div class="sug" onclick="fillReply(this)">Avoid retinol 24hrs prior</div><div class="sug" onclick="fillReply(this)">Come with clean, dry skin</div><div class="sug" onclick="fillReply(this)">Send prep guide PDF</div></div>
@@ -576,7 +576,7 @@ canvas#sig{position:absolute;inset:0;width:100%;height:100%;}
       <select class="fs" id="ae-svc"><option>LipoAway Consult</option><option>LipoAway Procedure</option><option>Fat Transfer</option><option>BodyTite</option><option>Botox</option><option>Dermal Fillers</option><option>Lip Fillers</option><option>Sculptra &amp; Radiesse</option><option>PDO Thread Lift</option><option>Kybella / Liquid Lipo</option><option>RF Microneedling</option><option>IPL Photofacial</option><option>Chemical Peel</option><option>Laser Skin Resurfacing</option><option>Laser Hair Removal</option><option>Unicorn Facial</option><option>Facial</option><option>Stem Cell Therapy</option><option>Natural Growth Factor Injections</option><option>Hormone Replacement Therapy</option><option>Medical Weight Loss</option><option>IV Therapy</option><option>Hair Restoration</option><option>FemiLift</option><option>BTL Emsella</option><option>Regenerative Joint Therapy</option><option>Biological Age Testing</option><option>Consultation</option></select>
     </div>
     <div class="fr"><label class="fl">Provider</label>
-      <select class="fs" id="ae-prov"><option>Nadia Reyes</option><option>Dr. Todd Malan</option><option>Dr. Margaret Husami</option><option>Shay</option><option>Cierra</option></select>
+      <select class="fs" id="ae-prov"><option>Nadia Reyes</option><option>Dr. Adrian Voss</option><option>Dr. Lena Hart</option><option>Remy</option><option>Talia</option></select>
     </div>
     <div class="fr"><label class="fl">Status</label>
       <select class="fs" id="ae-st"><option>Confirmed</option><option>Pending</option><option>Completed</option><option>Cancelled</option></select>
@@ -717,49 +717,49 @@ if(_needsSeed){
   function dayOff(n){const d=new Date();d.setDate(d.getDate()+n);return d.toISOString().slice(0,10);}
   const appts=[
     // Today — full day across all providers
-    {id:'a1',patientId:'p1',date:t,time:'09:00',service:'LipoAway Consult',provider:'Dr. Todd Malan',status:'Confirmed',notes:''},
+    {id:'a1',patientId:'p1',date:t,time:'09:00',service:'LipoAway Consult',provider:'Dr. Adrian Voss',status:'Confirmed',notes:''},
     {id:'a2',patientId:'p2',date:t,time:'09:00',service:'Dermal Fillers',provider:'Nadia Reyes',status:'Confirmed',notes:''},
-    {id:'a3',patientId:'p3',date:t,time:'10:00',service:'RF Microneedling',provider:'Shay',status:'Pending',notes:''},
-    {id:'a4',patientId:'p8',date:t,time:'10:00',service:'Facial',provider:'Cierra',status:'Confirmed',notes:''},
-    {id:'a5',patientId:'p4',date:t,time:'11:00',service:'Medical Weight Loss',provider:'Dr. Margaret Husami',status:'Confirmed',notes:''},
+    {id:'a3',patientId:'p3',date:t,time:'10:00',service:'RF Microneedling',provider:'Remy',status:'Pending',notes:''},
+    {id:'a4',patientId:'p8',date:t,time:'10:00',service:'Facial',provider:'Talia',status:'Confirmed',notes:''},
+    {id:'a5',patientId:'p4',date:t,time:'11:00',service:'Medical Weight Loss',provider:'Dr. Lena Hart',status:'Confirmed',notes:''},
     {id:'a6',patientId:'p5',date:t,time:'13:00',service:'Botox',provider:'Nadia Reyes',status:'Confirmed',notes:''},
-    {id:'a7',patientId:'p6',date:t,time:'14:00',service:'Fat Transfer Consult',provider:'Dr. Todd Malan',status:'Pending',notes:''},
-    {id:'a8',patientId:'p7',date:t,time:'15:00',service:'IPL Photofacial',provider:'Shay',status:'Confirmed',notes:''},
+    {id:'a7',patientId:'p6',date:t,time:'14:00',service:'Fat Transfer Consult',provider:'Dr. Adrian Voss',status:'Pending',notes:''},
+    {id:'a8',patientId:'p7',date:t,time:'15:00',service:'IPL Photofacial',provider:'Remy',status:'Confirmed',notes:''},
     // Tomorrow
-    {id:'a9',patientId:'p1',date:dayOff(1),time:'09:00',service:'LipoAway Procedure',provider:'Dr. Todd Malan',status:'Confirmed',notes:''},
-    {id:'a10',patientId:'p3',date:dayOff(1),time:'09:30',service:'Chemical Peel',provider:'Cierra',status:'Confirmed',notes:''},
+    {id:'a9',patientId:'p1',date:dayOff(1),time:'09:00',service:'LipoAway Procedure',provider:'Dr. Adrian Voss',status:'Confirmed',notes:''},
+    {id:'a10',patientId:'p3',date:dayOff(1),time:'09:30',service:'Chemical Peel',provider:'Talia',status:'Confirmed',notes:''},
     {id:'a11',patientId:'p5',date:dayOff(1),time:'10:00',service:'Lip Fillers',provider:'Nadia Reyes',status:'Confirmed',notes:''},
-    {id:'a12',patientId:'p7',date:dayOff(1),time:'11:00',service:'Stem Cell Therapy',provider:'Dr. Todd Malan',status:'Pending',notes:''},
-    {id:'a13',patientId:'p4',date:dayOff(1),time:'13:00',service:'Hormone Replacement Therapy',provider:'Dr. Margaret Husami',status:'Confirmed',notes:''},
-    {id:'a14',patientId:'p8',date:dayOff(1),time:'14:00',service:'Laser Hair Removal',provider:'Shay',status:'Confirmed',notes:''},
+    {id:'a12',patientId:'p7',date:dayOff(1),time:'11:00',service:'Stem Cell Therapy',provider:'Dr. Adrian Voss',status:'Pending',notes:''},
+    {id:'a13',patientId:'p4',date:dayOff(1),time:'13:00',service:'Hormone Replacement Therapy',provider:'Dr. Lena Hart',status:'Confirmed',notes:''},
+    {id:'a14',patientId:'p8',date:dayOff(1),time:'14:00',service:'Laser Hair Removal',provider:'Remy',status:'Confirmed',notes:''},
     // Day after tomorrow
     {id:'a15',patientId:'p2',date:dayOff(2),time:'09:00',service:'Sculptra & Radiesse',provider:'Nadia Reyes',status:'Confirmed',notes:''},
-    {id:'a16',patientId:'p6',date:dayOff(2),time:'10:00',service:'BodyTite',provider:'Dr. Todd Malan',status:'Confirmed',notes:''},
-    {id:'a17',patientId:'p3',date:dayOff(2),time:'11:00',service:'Unicorn Facial',provider:'Cierra',status:'Confirmed',notes:''},
-    {id:'a18',patientId:'p1',date:dayOff(2),time:'14:00',service:'IV Therapy',provider:'Dr. Margaret Husami',status:'Pending',notes:''},
+    {id:'a16',patientId:'p6',date:dayOff(2),time:'10:00',service:'BodyTite',provider:'Dr. Adrian Voss',status:'Confirmed',notes:''},
+    {id:'a17',patientId:'p3',date:dayOff(2),time:'11:00',service:'Unicorn Facial',provider:'Talia',status:'Confirmed',notes:''},
+    {id:'a18',patientId:'p1',date:dayOff(2),time:'14:00',service:'IV Therapy',provider:'Dr. Lena Hart',status:'Pending',notes:''},
     // 3 days out
     {id:'a19',patientId:'p4',date:dayOff(3),time:'09:00',service:'Botox',provider:'Nadia Reyes',status:'Confirmed',notes:''},
-    {id:'a20',patientId:'p7',date:dayOff(3),time:'10:00',service:'RF Microneedling',provider:'Shay',status:'Confirmed',notes:''},
+    {id:'a20',patientId:'p7',date:dayOff(3),time:'10:00',service:'RF Microneedling',provider:'Remy',status:'Confirmed',notes:''},
     {id:'a21',patientId:'p5',date:dayOff(3),time:'13:00',service:'PDO Thread Lift',provider:'Nadia Reyes',status:'Confirmed',notes:''},
     {id:'a22',patientId:'p8',date:dayOff(3),time:'15:00',service:'Kybella / Liquid Lipo',provider:'Nadia Reyes',status:'Pending',notes:''},
     // 4 days out
     {id:'a23',patientId:'p6',date:dayOff(4),time:'09:00',service:'Dermal Fillers',provider:'Nadia Reyes',status:'Confirmed',notes:''},
-    {id:'a24',patientId:'p2',date:dayOff(4),time:'10:00',service:'Facial',provider:'Cierra',status:'Confirmed',notes:''},
-    {id:'a25',patientId:'p1',date:dayOff(4),time:'11:00',service:'Consultation',provider:'Dr. Todd Malan',status:'Confirmed',notes:''},
+    {id:'a24',patientId:'p2',date:dayOff(4),time:'10:00',service:'Facial',provider:'Talia',status:'Confirmed',notes:''},
+    {id:'a25',patientId:'p1',date:dayOff(4),time:'11:00',service:'Consultation',provider:'Dr. Adrian Voss',status:'Confirmed',notes:''},
     // Past completed appointments (for analytics & rebooking)
-    {id:'a30',patientId:'p1',date:dayOff(-5),time:'10:00',service:'LipoAway Consult',provider:'Dr. Todd Malan',status:'Completed',notes:''},
+    {id:'a30',patientId:'p1',date:dayOff(-5),time:'10:00',service:'LipoAway Consult',provider:'Dr. Adrian Voss',status:'Completed',notes:''},
     {id:'a31',patientId:'p2',date:dayOff(-10),time:'11:00',service:'Botox',provider:'Nadia Reyes',status:'Completed',notes:''},
-    {id:'a32',patientId:'p3',date:dayOff(-8),time:'09:30',service:'RF Microneedling',provider:'Shay',status:'Completed',notes:''},
-    {id:'a33',patientId:'p4',date:dayOff(-15),time:'14:00',service:'Medical Weight Loss',provider:'Dr. Margaret Husami',status:'Completed',notes:''},
+    {id:'a32',patientId:'p3',date:dayOff(-8),time:'09:30',service:'RF Microneedling',provider:'Remy',status:'Completed',notes:''},
+    {id:'a33',patientId:'p4',date:dayOff(-15),time:'14:00',service:'Medical Weight Loss',provider:'Dr. Lena Hart',status:'Completed',notes:''},
     {id:'a34',patientId:'p5',date:dayOff(-12),time:'13:30',service:'Dermal Fillers',provider:'Nadia Reyes',status:'Completed',notes:''},
-    {id:'a35',patientId:'p1',date:dayOff(-20),time:'10:00',service:'Fat Transfer',provider:'Dr. Todd Malan',status:'Completed',notes:''},
+    {id:'a35',patientId:'p1',date:dayOff(-20),time:'10:00',service:'Fat Transfer',provider:'Dr. Adrian Voss',status:'Completed',notes:''},
     {id:'a36',patientId:'p6',date:dayOff(-18),time:'11:30',service:'Botox',provider:'Nadia Reyes',status:'Completed',notes:''},
-    {id:'a37',patientId:'p7',date:dayOff(-7),time:'14:00',service:'Stem Cell Therapy',provider:'Dr. Todd Malan',status:'Completed',notes:''},
-    {id:'a38',patientId:'p8',date:dayOff(-3),time:'09:00',service:'IPL Photofacial',provider:'Cierra',status:'Completed',notes:''},
-    {id:'a39',patientId:'p3',date:dayOff(-25),time:'09:00',service:'Facial',provider:'Shay',status:'Completed',notes:''},
+    {id:'a37',patientId:'p7',date:dayOff(-7),time:'14:00',service:'Stem Cell Therapy',provider:'Dr. Adrian Voss',status:'Completed',notes:''},
+    {id:'a38',patientId:'p8',date:dayOff(-3),time:'09:00',service:'IPL Photofacial',provider:'Talia',status:'Completed',notes:''},
+    {id:'a39',patientId:'p3',date:dayOff(-25),time:'09:00',service:'Facial',provider:'Remy',status:'Completed',notes:''},
     {id:'a40',patientId:'p2',date:dayOff(-30),time:'14:00',service:'Lip Fillers',provider:'Nadia Reyes',status:'Completed',notes:''},
     {id:'a41',patientId:'p4',date:dayOff(-45),time:'13:00',service:'Botox',provider:'Nadia Reyes',status:'Completed',notes:''},
-    {id:'a42',patientId:'p6',date:dayOff(-60),time:'10:00',service:'Chemical Peel',provider:'Cierra',status:'Completed',notes:''},
+    {id:'a42',patientId:'p6',date:dayOff(-60),time:'10:00',service:'Chemical Peel',provider:'Talia',status:'Completed',notes:''},
     {id:'a43',patientId:'p5',date:dayOff(-90),time:'11:00',service:'Botox',provider:'Nadia Reyes',status:'Completed',notes:''},
   ];
   const txns=[
@@ -821,16 +821,16 @@ if(_needsSeed){
   ];
   // More Maria past appointments
   appts.push(
-    {id:'a50',patientId:'p1',date:dayOff(-60),time:'10:00',service:'LipoAway Procedure',provider:'Dr. Todd Malan',status:'Completed',notes:'Abdomen — excellent candidate'},
+    {id:'a50',patientId:'p1',date:dayOff(-60),time:'10:00',service:'LipoAway Procedure',provider:'Dr. Adrian Voss',status:'Completed',notes:'Abdomen — excellent candidate'},
     {id:'a51',patientId:'p1',date:dayOff(-45),time:'11:00',service:'Botox',provider:'Nadia Reyes',status:'Completed',notes:'Forehead + crows feet'},
     {id:'a52',patientId:'p1',date:dayOff(-30),time:'10:30',service:'Dermal Fillers',provider:'Nadia Reyes',status:'Completed',notes:'Lips + nasolabial folds'},
-    {id:'a53',patientId:'p1',date:dayOff(-15),time:'14:00',service:'Facial',provider:'Cierra',status:'Completed',notes:'Post-filler glow facial'},
-    {id:'a54',patientId:'p1',date:dayOff(-8),time:'13:00',service:'IV Therapy',provider:'Dr. Margaret Husami',status:'Completed',notes:'Immunity drip'}
+    {id:'a53',patientId:'p1',date:dayOff(-15),time:'14:00',service:'Facial',provider:'Talia',status:'Completed',notes:'Post-filler glow facial'},
+    {id:'a54',patientId:'p1',date:dayOff(-8),time:'13:00',service:'IV Therapy',provider:'Dr. Lena Hart',status:'Completed',notes:'Immunity drip'}
   );
   save(KP,pts);save(KA,appts);save(KT,txns);
   // Pre-seed waitlist
   save(KW,[
-    {id:'w1',patientId:'p4',service:'LipoAway Procedure',provider:'Dr. Todd Malan',notes:'Wants next available Friday',date:today()},
+    {id:'w1',patientId:'p4',service:'LipoAway Procedure',provider:'Dr. Adrian Voss',notes:'Wants next available Friday',date:today()},
     {id:'w2',patientId:'p8',service:'Botox',provider:'Nadia Reyes',notes:'Flexible on time, prefers mornings',date:dayOff(-2)},
   ]);
   localStorage.setItem('hoc_seed_v9','1');
@@ -884,7 +884,7 @@ function renderDash(){
   const hr=new Date().getHours();
   const greet=hr<12?'Good morning':hr<17?'Good afternoon':'Good evening';
   const greetEl=document.getElementById('dash-greeting');
-  if(greetEl)greetEl.textContent=greet+', Sara.';
+  if(greetEl)greetEl.textContent=greet+', Nadia.';
   const ta=appts.filter(a=>a.date===t);
   const pend=ta.filter(a=>a.status==='Pending').length;
   document.getElementById('d-appts').textContent=ta.length;
@@ -1171,20 +1171,20 @@ function initMessages(){
   if(load(KM).length)return;
   const seed=[
     {id:'m1',name:'Amanda K.',contact:'(623) 555-0391',ch:'SMS',messages:[
-      {text:'Hi Amanda! Your RF Microneedling is confirmed for tomorrow at 11:15am with Shay. Reply STOP to opt out.',from:'out',time:'Mar 16 · 4:02pm · Auto-reminder'},
+      {text:'Hi Amanda! Your RF Microneedling is confirmed for tomorrow at 11:15am with Remy. Reply STOP to opt out.',from:'out',time:'Mar 16 · 4:02pm · Auto-reminder'},
       {text:'Hey! Quick question — do I need to do anything to prep my skin before coming in?',from:'in',time:'9:41am'}
     ]},
     {id:'m2',name:'Nicole B.',contact:'(480) 555-0518',ch:'SMS',messages:[
       {text:'Can I reschedule to 2pm?',from:'in',time:'8:15am'}
     ]},
     {id:'m3',name:'Sarah P.',contact:'sarah@email.com',ch:'Email',messages:[
-      {text:'Thank you so much Sara! The results are amazing.',from:'in',time:'Yesterday'}
+      {text:'Thank you so much Nadia! The results are amazing.',from:'in',time:'Yesterday'}
     ]},
     {id:'m4',name:'Carmen L.',contact:'carmen@email.com',ch:'Email',messages:[
       {text:"What's the recovery time for LipoAway? I want to plan around my work schedule.",from:'in',time:'Yesterday'}
     ]},
     {id:'m5',name:'Maria G.',contact:'(602) 555-0143',ch:'SMS',messages:[
-      {text:'Your appointment is confirmed for tomorrow at 9:00am with Dr. Todd Malan.',from:'out',time:'Mon · Auto-sent'}
+      {text:'Your appointment is confirmed for tomorrow at 9:00am with Dr. Adrian Voss.',from:'out',time:'Mon · Auto-sent'}
     ]}
   ];
   save(KM,seed);
@@ -1377,7 +1377,7 @@ function toggleCalView(){
   if(provCalOn)renderProviderCal();
 }
 function renderProviderCal(){
-  const provs=['Nadia Reyes','Dr. Todd Malan','Dr. Margaret Husami','Shay','Cierra'];
+  const provs=['Nadia Reyes','Dr. Adrian Voss','Dr. Lena Hart','Remy','Talia'];
   const appts=load(KA).filter(a=>a.date===selDate);
   const hours=[];for(let h=8;h<=18;h++)hours.push(h);
   let html=`<div style="overflow-x:auto;"><table class="dt" style="min-width:700px;">
@@ -1732,7 +1732,7 @@ function confirmImport(){
   const names=[['Emily','S'],['Lauren','H'],['Megan','R'],['Taylor','C'],['Ashley','F'],['Brittany','D'],['Amber','W'],['Tiffany','J']];
   const sources=['Google','Instagram','Referral','Yelp','TikTok','Walk-in'];
   const services=['Botox','Dermal Fillers','RF Microneedling','LipoAway Consult','Facial','Medical Weight Loss','IPL Photofacial','Chemical Peel'];
-  const providers=['Nadia Reyes','Dr. Todd Malan','Shay','Cierra','Dr. Margaret Husami'];
+  const providers=['Nadia Reyes','Dr. Adrian Voss','Remy','Talia','Dr. Lena Hart'];
   const newPts=[];
   names.forEach(([first,last])=>{
     if(!pts.find(p=>p.first===first&&p.last===last)){

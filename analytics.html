@@ -215,10 +215,10 @@ function renderProviderLeaderboard() {
   });
   // demo data
   byProvider['Nadia Reyes']=(byProvider['Nadia Reyes']||0)+6800;
-  byProvider['Dr. Todd Malan']=(byProvider['Dr. Todd Malan']||0)+8200;
-  byProvider['Dr. Margaret Husami']=(byProvider['Dr. Margaret Husami']||0)+4500;
-  byProvider['Shay']=(byProvider['Shay']||0)+2100;
-  byProvider['Cierra']=(byProvider['Cierra']||0)+1800;
+  byProvider['Dr. Adrian Voss']=(byProvider['Dr. Adrian Voss']||0)+8200;
+  byProvider['Dr. Lena Hart']=(byProvider['Dr. Lena Hart']||0)+4500;
+  byProvider['Remy']=(byProvider['Remy']||0)+2100;
+  byProvider['Talia']=(byProvider['Talia']||0)+1800;
   const sorted=Object.entries(byProvider).sort((a,b)=>b[1]-a[1]);
   const max=sorted[0]?.[1]||1;
   document.getElementById('provider-leaderboard').innerHTML=sorted.map((p,i)=>`
@@ -293,10 +293,10 @@ function renderSpendByService() {
 function renderCommissions(){
   const COMM_RATES={
     'Nadia Reyes':{rate:0.35,salary:0,role:'Founder & NP'},
-    'Dr. Todd Malan':{rate:0.45,salary:0,role:'Cosmetic Surgeon'},
-    'Dr. Margaret Husami':{rate:0.35,salary:0,role:'NMD'},
-    'Shay':{rate:0.25,salary:2800,role:'Aesthetician'},
-    'Cierra':{rate:0.25,salary:2800,role:'Aesthetician'},
+    'Dr. Adrian Voss':{rate:0.45,salary:0,role:'Cosmetic Surgeon'},
+    'Dr. Lena Hart':{rate:0.35,salary:0,role:'NMD'},
+    'Remy':{rate:0.25,salary:2800,role:'Aesthetician'},
+    'Talia':{rate:0.25,salary:2800,role:'Aesthetician'},
   };
   const txns=HOC.load(HOC.K.txns).filter(t=>t.status==='Paid');
   const appts=HOC.load(HOC.K.appts);
@@ -315,10 +315,10 @@ function renderCommissions(){
     if(!byProv[p])byProv[p]={revenue:0,count:0};
   });
   byProv['Nadia Reyes'].revenue+=6800;byProv['Nadia Reyes'].count+=12;
-  byProv['Dr. Todd Malan'].revenue+=8200;byProv['Dr. Todd Malan'].count+=6;
-  byProv['Dr. Margaret Husami'].revenue+=4500;byProv['Dr. Margaret Husami'].count+=8;
-  byProv['Shay'].revenue+=2100;byProv['Shay'].count+=7;
-  byProv['Cierra'].revenue+=1800;byProv['Cierra'].count+=6;
+  byProv['Dr. Adrian Voss'].revenue+=8200;byProv['Dr. Adrian Voss'].count+=6;
+  byProv['Dr. Lena Hart'].revenue+=4500;byProv['Dr. Lena Hart'].count+=8;
+  byProv['Remy'].revenue+=2100;byProv['Remy'].count+=7;
+  byProv['Talia'].revenue+=1800;byProv['Talia'].count+=6;
 
   const rows=Object.entries(byProv).sort((a,b)=>b[1].revenue-a[1].revenue).map(([name,d])=>{
     const cr=COMM_RATES[name]||{rate:0.3,salary:0,role:'Provider'};

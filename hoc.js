@@ -13,10 +13,10 @@ const HOC = {
   // ── Providers ──────────────────────────────
   PROVIDERS: [
     { name: 'Nadia Reyes', title: 'DNP, FNP-C', role: 'Founder & NP', locations: ['scottsdale-main','scottsdale-flagship'] },
-    { name: 'Dr. Todd Malan', title: 'Cosmetic Surgeon', role: 'Surgeon', locations: ['scottsdale-flagship'] },
-    { name: 'Dr. Margaret Husami', title: 'NMD', role: 'Naturopathic MD', locations: ['scottsdale-flagship'] },
-    { name: 'Shay', title: 'Aesthetician', role: 'Provider', locations: ['scottsdale-main'] },
-    { name: 'Cierra', title: 'Aesthetician', role: 'Provider', locations: ['scottsdale-main'] },
+    { name: 'Dr. Adrian Voss', title: 'Cosmetic Surgeon', role: 'Surgeon', locations: ['scottsdale-flagship'] },
+    { name: 'Dr. Lena Hart', title: 'NMD', role: 'Naturopathic MD', locations: ['scottsdale-flagship'] },
+    { name: 'Remy', title: 'Aesthetician', role: 'Provider', locations: ['scottsdale-main'] },
+    { name: 'Talia', title: 'Aesthetician', role: 'Provider', locations: ['scottsdale-main'] },
   ],
 
   // ── Services ───────────────────────────────
@@ -75,27 +75,27 @@ const HOC = {
       {id:'p8',first:'Sophia',last:'W',phone:'(602) 555-1245',email:'sophia@email.com',dob:'1993-08-09',source:'Instagram',notes:'Interested in stem cells',location:loc2,created:Date.now()},
     ];
     const appts=[
-      {id:'a1',patientId:'p1',date:t,time:'09:00',service:'LipoAway Consult',provider:'Dr. Todd Malan',status:'Confirmed',notes:'',location:loc2},
+      {id:'a1',patientId:'p1',date:t,time:'09:00',service:'LipoAway Consult',provider:'Dr. Adrian Voss',status:'Confirmed',notes:'',location:loc2},
       {id:'a2',patientId:'p2',date:t,time:'10:30',service:'Dermal Fillers',provider:'Nadia Reyes',status:'Confirmed',notes:'',location:loc1},
-      {id:'a3',patientId:'p3',date:t,time:'11:15',service:'RF Microneedling',provider:'Shay',status:'Pending',notes:'',location:loc1},
-      {id:'a4',patientId:'p4',date:t,time:'13:00',service:'Medical Weight Loss',provider:'Dr. Margaret Husami',status:'Confirmed',notes:'',location:loc2},
+      {id:'a3',patientId:'p3',date:t,time:'11:15',service:'RF Microneedling',provider:'Remy',status:'Pending',notes:'',location:loc1},
+      {id:'a4',patientId:'p4',date:t,time:'13:00',service:'Medical Weight Loss',provider:'Dr. Lena Hart',status:'Confirmed',notes:'',location:loc2},
       {id:'a5',patientId:'p5',date:t,time:'14:30',service:'Botox',provider:'Nadia Reyes',status:'Confirmed',notes:'',location:loc1},
-      {id:'a6',patientId:'p6',date:t,time:'15:45',service:'Fat Transfer Consult',provider:'Dr. Todd Malan',status:'Pending',notes:'',location:loc2},
-      {id:'a7',patientId:'p7',date:t,time:'09:30',service:'Stem Cell Therapy',provider:'Dr. Todd Malan',status:'Confirmed',notes:'',location:loc2},
-      {id:'a8',patientId:'p8',date:t,time:'16:00',service:'Facial',provider:'Cierra',status:'Confirmed',notes:'',location:loc1},
+      {id:'a6',patientId:'p6',date:t,time:'15:45',service:'Fat Transfer Consult',provider:'Dr. Adrian Voss',status:'Pending',notes:'',location:loc2},
+      {id:'a7',patientId:'p7',date:t,time:'09:30',service:'Stem Cell Therapy',provider:'Dr. Adrian Voss',status:'Confirmed',notes:'',location:loc2},
+      {id:'a8',patientId:'p8',date:t,time:'16:00',service:'Facial',provider:'Talia',status:'Confirmed',notes:'',location:loc1},
     ];
     const past = [
-      {id:'a10',patientId:'p1',date:'2026-03-01',time:'10:00',service:'LipoAway Procedure',provider:'Dr. Todd Malan',status:'Completed',notes:'',location:loc2},
+      {id:'a10',patientId:'p1',date:'2026-03-01',time:'10:00',service:'LipoAway Procedure',provider:'Dr. Adrian Voss',status:'Completed',notes:'',location:loc2},
       {id:'a11',patientId:'p2',date:'2026-03-02',time:'11:00',service:'Botox',provider:'Nadia Reyes',status:'Completed',notes:'',location:loc1},
-      {id:'a12',patientId:'p3',date:'2026-03-03',time:'09:30',service:'RF Microneedling',provider:'Shay',status:'Completed',notes:'',location:loc1},
-      {id:'a13',patientId:'p4',date:'2026-03-05',time:'14:00',service:'Medical Weight Loss',provider:'Dr. Margaret Husami',status:'Completed',notes:'',location:loc2},
+      {id:'a12',patientId:'p3',date:'2026-03-03',time:'09:30',service:'RF Microneedling',provider:'Remy',status:'Completed',notes:'',location:loc1},
+      {id:'a13',patientId:'p4',date:'2026-03-05',time:'14:00',service:'Medical Weight Loss',provider:'Dr. Lena Hart',status:'Completed',notes:'',location:loc2},
       {id:'a14',patientId:'p5',date:'2026-03-06',time:'13:30',service:'Dermal Fillers',provider:'Nadia Reyes',status:'Completed',notes:'',location:loc1},
-      {id:'a15',patientId:'p1',date:'2026-03-08',time:'10:00',service:'Fat Transfer',provider:'Dr. Todd Malan',status:'Completed',notes:'',location:loc2},
+      {id:'a15',patientId:'p1',date:'2026-03-08',time:'10:00',service:'Fat Transfer',provider:'Dr. Adrian Voss',status:'Completed',notes:'',location:loc2},
       {id:'a16',patientId:'p6',date:'2026-03-10',time:'11:30',service:'Botox',provider:'Nadia Reyes',status:'Completed',notes:'',location:loc1},
-      {id:'a17',patientId:'p7',date:'2026-03-11',time:'14:00',service:'Stem Cell Therapy',provider:'Dr. Todd Malan',status:'Completed',notes:'',location:loc2},
-      {id:'a18',patientId:'p8',date:'2026-03-12',time:'09:00',service:'IPL Photofacial',provider:'Cierra',status:'Completed',notes:'',location:loc1},
-      {id:'a19',patientId:'p2',date:'2026-03-12',time:'14:00',service:'LipoAway Consult',provider:'Dr. Todd Malan',status:'Completed',notes:'',location:loc2},
-      {id:'a20',patientId:'p3',date:'2026-03-13',time:'09:00',service:'Facial',provider:'Shay',status:'Completed',notes:'',location:loc1},
+      {id:'a17',patientId:'p7',date:'2026-03-11',time:'14:00',service:'Stem Cell Therapy',provider:'Dr. Adrian Voss',status:'Completed',notes:'',location:loc2},
+      {id:'a18',patientId:'p8',date:'2026-03-12',time:'09:00',service:'IPL Photofacial',provider:'Talia',status:'Completed',notes:'',location:loc1},
+      {id:'a19',patientId:'p2',date:'2026-03-12',time:'14:00',service:'LipoAway Consult',provider:'Dr. Adrian Voss',status:'Completed',notes:'',location:loc2},
+      {id:'a20',patientId:'p3',date:'2026-03-13',time:'09:00',service:'Facial',provider:'Remy',status:'Completed',notes:'',location:loc1},
     ];
     const txns=[
       {id:'t1',patientId:'p1',service:'LipoAway Consult',amount:150,method:'Visa ···4821',status:'Paid',date:t,location:loc2},
@@ -116,7 +116,7 @@ const HOC = {
       {id:'t16',patientId:'p3',service:'Facial',amount:180,method:'Visa ···8821',status:'Paid',date:'2026-03-13',location:loc1},
     ];
     const charts=[
-      {id:'c1',patientId:'p1',appointmentId:'a10',date:'2026-03-01',provider:'Dr. Todd Malan',service:'LipoAway Procedure',type:'SOAP',subjective:'Patient reports stubborn abdominal fat unresponsive to diet/exercise. Goal: visible waist reduction.',objective:'3.5in pre-treatment abdominal circumference. Healthy for procedure. No contraindications.',assessment:'Ideal LipoAway candidate. Healthy BMI. Realistic expectations.',plan:'LipoAway abdomen. 500ml expected removal. Compression garment 2 weeks. F/U in 4 weeks.',injectables:[],created:Date.now()},
+      {id:'c1',patientId:'p1',appointmentId:'a10',date:'2026-03-01',provider:'Dr. Adrian Voss',service:'LipoAway Procedure',type:'SOAP',subjective:'Patient reports stubborn abdominal fat unresponsive to diet/exercise. Goal: visible waist reduction.',objective:'3.5in pre-treatment abdominal circumference. Healthy for procedure. No contraindications.',assessment:'Ideal LipoAway candidate. Healthy BMI. Realistic expectations.',plan:'LipoAway abdomen. 500ml expected removal. Compression garment 2 weeks. F/U in 4 weeks.',injectables:[],created:Date.now()},
       {id:'c2',patientId:'p2',appointmentId:'a11',date:'2026-03-02',provider:'Nadia Reyes',service:'Botox',type:'SOAP',subjective:'Moderate forehead lines and crow\'s feet. Wants natural look.',objective:'Moderate animation lines forehead. Moderate crow\'s feet bilateral.',assessment:'Good candidate. Skin elasticity intact.',plan:'Botox: 20u forehead, 12u glabella, 10u crow\'s feet bilateral. F/U 2 weeks.',injectables:[{product:'Botox',units:42,zones:'Forehead 20u, Glabella 12u, Crow\'s feet 10u bilateral',lot:'BTX2024-881',exp:'2026-12-01'}],created:Date.now()},
       {id:'c3',patientId:'p5',appointmentId:'a14',date:'2026-03-06',provider:'Nadia Reyes',service:'Dermal Fillers',type:'SOAP',subjective:'Lip volume loss, wants subtle enhancement. Nasolabial folds.',objective:'Mild lip deflation. Moderate NLF bilateral.',assessment:'Conservative filler candidate. Agree on natural enhancement.',plan:'1ml Juvederm Ultra XC lips. 1ml Restylane NLF bilateral. Ice 10min post.',injectables:[{product:'Juvederm Ultra XC',units:1,zones:'Lips',lot:'JUV2025-442',exp:'2027-06-01'},{product:'Restylane',units:2,zones:'Nasolabial folds bilateral',lot:'RST2025-119',exp:'2027-03-01'}],created:Date.now()},
     ];
