@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Analytics — Haus of Confidence</title>
+<title>Analytics — Maison Aesthetics</title>
 <link rel="stylesheet" href="hoc-style.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
@@ -214,7 +214,7 @@ function renderProviderLeaderboard() {
     if(t) byProvider[a.provider]=(byProvider[a.provider]||0)+Number(t.amount);
   });
   // demo data
-  byProvider['Sara Ameli']=(byProvider['Sara Ameli']||0)+6800;
+  byProvider['Nadia Reyes']=(byProvider['Nadia Reyes']||0)+6800;
   byProvider['Dr. Todd Malan']=(byProvider['Dr. Todd Malan']||0)+8200;
   byProvider['Dr. Margaret Husami']=(byProvider['Dr. Margaret Husami']||0)+4500;
   byProvider['Shay']=(byProvider['Shay']||0)+2100;
@@ -292,7 +292,7 @@ function renderSpendByService() {
 
 function renderCommissions(){
   const COMM_RATES={
-    'Sara Ameli':{rate:0.35,salary:0,role:'Founder & NP'},
+    'Nadia Reyes':{rate:0.35,salary:0,role:'Founder & NP'},
     'Dr. Todd Malan':{rate:0.45,salary:0,role:'Cosmetic Surgeon'},
     'Dr. Margaret Husami':{rate:0.35,salary:0,role:'NMD'},
     'Shay':{rate:0.25,salary:2800,role:'Aesthetician'},
@@ -314,7 +314,7 @@ function renderCommissions(){
   Object.keys(COMM_RATES).forEach(p=>{
     if(!byProv[p])byProv[p]={revenue:0,count:0};
   });
-  byProv['Sara Ameli'].revenue+=6800;byProv['Sara Ameli'].count+=12;
+  byProv['Nadia Reyes'].revenue+=6800;byProv['Nadia Reyes'].count+=12;
   byProv['Dr. Todd Malan'].revenue+=8200;byProv['Dr. Todd Malan'].count+=6;
   byProv['Dr. Margaret Husami'].revenue+=4500;byProv['Dr. Margaret Husami'].count+=8;
   byProv['Shay'].revenue+=2100;byProv['Shay'].count+=7;
@@ -365,12 +365,12 @@ function renderReminderLog(){
     const d48s=d48.toISOString().slice(0,10);
     if(d48s<=t){
       log.push({type:'48hr',name,phone,service:a.service,provider:a.provider,apptDate:a.date,apptTime:a.time,sentDate:d48s,
-        msg:'Hi '+p.first+'! This is Haus of Confidence. Reminder: you have a '+a.service+' appointment on '+HOC.fd(a.date)+' at '+HOC.ft(a.time)+' with '+a.provider+'. Reply C to confirm or R to reschedule.'});
+        msg:'Hi '+p.first+'! This is Maison Aesthetics. Reminder: you have a '+a.service+' appointment on '+HOC.fd(a.date)+' at '+HOC.ft(a.time)+' with '+a.provider+'. Reply C to confirm or R to reschedule.'});
     }
     // Day-of reminder
     if(a.date===t){
       log.push({type:'day-of',name,phone,service:a.service,provider:a.provider,apptDate:a.date,apptTime:a.time,sentDate:t,
-        msg:'Hi '+p.first+'! Your '+a.service+' is today at '+HOC.ft(a.time)+' with '+a.provider+' at Haus of Confidence. See you soon! 📍 4205 N Winfield Scott Plaza, Scottsdale'});
+        msg:'Hi '+p.first+'! Your '+a.service+' is today at '+HOC.ft(a.time)+' with '+a.provider+' at Maison Aesthetics. See you soon! 📍 Scottsdale, AZ'});
     }
   });
   // Also add post-visit review requests for recently completed
@@ -378,7 +378,7 @@ function renderReminderLog(){
   completed.forEach(a=>{
     const p=HOC.gp(a.patientId);if(!p.id)return;
     log.push({type:'review',name:HOC.pn(p),phone:p.phone||'',service:a.service,provider:a.provider,apptDate:a.date,apptTime:a.time,sentDate:a.date,
-      msg:'Hi '+p.first+'! Thank you for visiting Haus of Confidence for your '+a.service+'. We\'d love your feedback! Leave us a review: g.page/hausofconfidence ⭐'});
+      msg:'Hi '+p.first+'! Thank you for visiting Maison Aesthetics for your '+a.service+'. We\'d love your feedback! Leave us a review: g.page/hausofconfidence ⭐'});
   });
   log.sort((a,b)=>b.sentDate.localeCompare(a.sentDate));
   const el=document.getElementById('reminder-log');

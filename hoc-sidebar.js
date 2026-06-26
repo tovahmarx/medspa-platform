@@ -1,7 +1,7 @@
-// Shared sidebar renderer — Haus of Confidence
+// Shared sidebar renderer — Maison Aesthetics
 const HOC_LOCATIONS = [
-  { id: 'scottsdale-main', name: 'Old Town — Winfield Scott', address: '4205 N Winfield Scott Plaza, Suite 6', city: 'Scottsdale, AZ 85251', type: 'Medspa' },
-  { id: 'scottsdale-flagship', name: 'Old Town — Brown Ave', address: '4236 N. Brown Ave', city: 'Scottsdale, AZ', type: 'Surgical & Regenerative' },
+  { id: 'scottsdale-main', name: 'Scottsdale — Main', address: 'Scottsdale, AZ', city: 'Scottsdale, AZ 85251', type: 'Medspa' },
+  { id: 'scottsdale-flagship', name: 'Scottsdale — Flagship', address: 'Scottsdale, AZ', city: 'Scottsdale, AZ', type: 'Surgical & Regenerative' },
 ];
 
 function getActiveLocation() {
@@ -53,7 +53,7 @@ function renderSidebar(activePage) {
 
   let html = `<div class="sidebar">
     <div class="sb-brand">
-      <div class="sb-logo">Haus of Confidence</div>
+      <div class="sb-logo">Maison Aesthetics</div>
       <div class="sb-tag">A Premier Medspa</div>
     </div>
     <div class="sb-loc">
@@ -77,7 +77,7 @@ function renderSidebar(activePage) {
 
   html += `</div>
     <div class="sb-rep">✦ Replaces Clover + Boulevard + EHR + SMS</div>
-    <div class="sb-user"><div class="sb-uname">Sara Ameli</div><div class="sb-ucred">DNP, FNP-C · Founder</div></div>
+    <div class="sb-user"><div class="sb-uname">Nadia Reyes</div><div class="sb-ucred">DNP, FNP-C · Founder</div></div>
   </div>`;
   return html;
 }

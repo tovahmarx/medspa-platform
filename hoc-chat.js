@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════
-//  HOC Help Chat Widget — Haus of Confidence
+//  HOC Help Chat Widget — Maison Aesthetics
 //  Built-in knowledge base, no external API
 // ═══════════════════════════════════════════════
 (function(){
@@ -37,31 +37,31 @@ const KB = [
 
   // Providers
   { keys:['provider','staff','doctor','who works','team','practitioner'],
-    a:'Your providers are: Sara Ameli (DNP, FNP-C — Founder, works at both locations), Dr. Todd Malan (Cosmetic Surgeon — Flagship location), Dr. Margaret Husami (NMD — Flagship location), Shay (Aesthetician — Main location), and Cierra (Aesthetician — Main location).' },
-  { keys:['sara','ameli','founder','dnp','nurse practitioner'],
-    a:'Sara Ameli is the Founder of Haus of Confidence. She\'s a DNP, FNP-C (Board-Certified Nurse Practitioner) specializing in injectables and wellness. She works at both locations.' },
+    a:'Your providers are: Nadia Reyes (DNP, FNP-C — Founder, works at both locations), Dr. Todd Malan (Cosmetic Surgeon — Flagship location), Dr. Margaret Husami (NMD — Flagship location), Shay (Aesthetician — Main location), and Cierra (Aesthetician — Main location).' },
+  { keys:['nadia','reyes','founder','dnp','nurse practitioner'],
+    a:'Nadia Reyes is the Founder of Maison Aesthetics. She\'s a DNP, FNP-C (Board-Certified Nurse Practitioner) specializing in injectables and wellness. She works at both locations.' },
   { keys:['todd','malan','surgeon','cosmetic surgeon','lipoaway doctor'],
-    a:'Dr. Todd Malan is a Cosmetic Surgeon who pioneered cosmetic stem cell therapies. He specializes in LipoAway, fat transfer, BodyTite, and stem cell treatments. He works at the Flagship (Brown Ave) location.' },
+    a:'Dr. Todd Malan is a Cosmetic Surgeon who pioneered cosmetic stem cell therapies. He specializes in LipoAway, fat transfer, BodyTite, and stem cell treatments. He works at the Flagship location.' },
   { keys:['margaret','husami','naturopathic','nmd','integrative'],
     a:'Dr. Margaret Husami is a Board-Certified Naturopathic Medical Doctor (NMD) with 10+ years in aesthetic and integrative medicine. She specializes in regenerative treatments, hormone replacement, and medical weight loss. She works at the Flagship location.' },
   { keys:['shay','cierra','aesthetician','esthetician'],
-    a:'Shay and Cierra are Aestheticians at the Main (Winfield Scott) location. They handle services like RF Microneedling, IPL Photofacial, facials, chemical peels, and laser treatments.' },
+    a:'Shay and Cierra are Aestheticians at the Main location. They handle services like RF Microneedling, IPL Photofacial, facials, chemical peels, and laser treatments.' },
 
   // Locations
-  { keys:['location','address','where','scottsdale','old town','office','clinic','switch location'],
-    a:'Haus of Confidence has 2 locations, both in Old Town Scottsdale:\n\n1. Main (Winfield Scott): 4205 N Winfield Scott Plaza, Suite 6, Scottsdale, AZ 85251 — traditional medspa services\n2. Flagship (Brown Ave): 4236 N. Brown Ave, Scottsdale, AZ — surgical, regenerative, and stem cell center\n\nSwitch between locations using the dropdown at the top of the sidebar.' },
-  { keys:['winfield','main location','original location'],
-    a:'The Main location is at 4205 N Winfield Scott Plaza, Suite 6, Scottsdale, AZ 85251. This is the original medspa offering injectables, facials, laser treatments, and aesthetic services. Providers: Sara Ameli, Shay, Cierra.' },
-  { keys:['brown ave','flagship','surgical','regenerative','stem cell'],
-    a:'The Flagship location is at 4236 N. Brown Ave, Old Town Scottsdale. This is the new 2,000 sq ft center focused on surgical procedures, regenerative wellness, and stem cell treatments. Providers: Sara Ameli, Dr. Todd Malan, Dr. Margaret Husami.' },
+  { keys:['location','address','where','scottsdale','main','office','clinic','switch location'],
+    a:'Maison Aesthetics has 2 locations, both in Scottsdale:\n\n1. Main: Scottsdale, AZ — traditional medspa services\n2. Flagship: Scottsdale, AZ — surgical, regenerative, and stem cell center\n\nSwitch between locations using the dropdown at the top of the sidebar.' },
+  { keys:['main location','original location'],
+    a:'The Main location is at Scottsdale, AZ. This is the original medspa offering injectables, facials, laser treatments, and aesthetic services. Providers: Nadia Reyes, Shay, Cierra.' },
+  { keys:['flagship','surgical','regenerative','stem cell'],
+    a:'The Flagship location is at Scottsdale, AZ. This is the new 2,000 sq ft center focused on surgical procedures, regenerative wellness, and stem cell treatments. Providers: Nadia Reyes, Dr. Todd Malan, Dr. Margaret Husami.' },
 
   // Services
   { keys:['lipoaway','lipo','liposuction','awake lipo','fat removal'],
     a:'LipoAway is the signature awake liposuction procedure — removes 2-5 inches of stubborn fat in a single treatment with NO general anesthesia. Book a LipoAway Consult ($150) first, then the procedure ($4,800+). Provider: Dr. Todd Malan at the Flagship location.' },
   { keys:['botox','wrinkle','forehead','crow','frown','relaxer'],
-    a:'Botox (wrinkle relaxers) starts at $350. Used for forehead lines, crow\'s feet, frown lines, and more. Providers: Sara Ameli, Shay. Book via sidebar → Appointments → + New Appointment → select "Botox."' },
+    a:'Botox (wrinkle relaxers) starts at $350. Used for forehead lines, crow\'s feet, frown lines, and more. Providers: Nadia Reyes, Shay. Book via sidebar → Appointments → + New Appointment → select "Botox."' },
   { keys:['filler','dermal','lip filler','cheek','jawline','juvederm','restylane','volume'],
-    a:'Dermal Fillers start at $720. Options include lip fillers, cheek augmentation, jawline contouring, and nasolabial fold treatment. Products: Juvederm, Restylane. Providers: Sara Ameli. Sculptra & Radiesse (collagen stimulators) are also available from $800.' },
+    a:'Dermal Fillers start at $720. Options include lip fillers, cheek augmentation, jawline contouring, and nasolabial fold treatment. Products: Juvederm, Restylane. Providers: Nadia Reyes. Sculptra & Radiesse (collagen stimulators) are also available from $800.' },
   { keys:['microneedling','rf','collagen','skin tighten'],
     a:'RF Microneedling is $1,200 per session. It\'s a collagen induction therapy for skin tightening and texture improvement. Provider: Shay at the Main location.' },
   { keys:['weight loss','semaglutide','ozempic','wegovy','glp'],
@@ -73,15 +73,15 @@ const KB = [
   { keys:['iv therapy','drip','hydration','vitamin','immunity'],
     a:'IV Therapy starts at $199. Options include hydration, immunity boosters, energy drips, and vitamin infusions. Available at both locations.' },
   { keys:['thread','pdo','lift','non-surgical lift'],
-    a:'PDO Thread Lift starts at $1,500. A non-surgical lift and tightening treatment. Provider: Sara Ameli.' },
+    a:'PDO Thread Lift starts at $1,500. A non-surgical lift and tightening treatment. Provider: Nadia Reyes.' },
   { keys:['laser','hair removal','ipl','photofacial','skin resurfacing'],
     a:'Laser services include: Laser Hair Removal (from $200), IPL Photofacial (from $350), and Laser Skin Resurfacing. Providers: Shay, Cierra at the Main location.' },
   { keys:['facial','unicorn','prx','skin treatment','peel','chemical peel'],
     a:'Facials start at $180. The Unicorn Facial uses PRX-T33 technology. Chemical Peels start at $150. Provider: Cierra at the Main location.' },
   { keys:['kybella','liquid lipo','double chin','submental'],
-    a:'Kybella / Liquid Lipo is an injectable fat dissolving treatment for the chin area, starting at $600. Provider: Sara Ameli.' },
+    a:'Kybella / Liquid Lipo is an injectable fat dissolving treatment for the chin area, starting at $600. Provider: Nadia Reyes.' },
   { keys:['hair restoration','hair loss','hair regrowth','prp hair','growth factor'],
-    a:'Hair Restoration uses Natural Growth Factor Injections starting at $1,200. Provider: Sara Ameli.' },
+    a:'Hair Restoration uses Natural Growth Factor Injections starting at $1,200. Provider: Nadia Reyes.' },
   { keys:['bodytite','body contouring','minimally invasive'],
     a:'BodyTite is a minimally invasive body contouring procedure starting at $3,500. Provider: Dr. Todd Malan at the Flagship location.' },
   { keys:['feminlift','emsella','feminine','pelvic','women'],
@@ -97,11 +97,11 @@ const KB = [
   { keys:['financing','affirm','payment plan','cherry','carecredit'],
     a:'Patient financing is available through Cherry, CareCredit, and Affirm. Go to sidebar → Memberships → Financing tab. Click "Connect" on any provider to link your merchant account. Use "Simulate Patient Application" to demo the approval flow. Patients can apply in 60 seconds with a soft credit check.' },
   { keys:['phone','contact','email','call','reach'],
-    a:'Haus of Confidence contact info:\nPhone: (480) 493-5921\nEmail: info@hausofconfidence.com\nInstagram: @hausmedspa\nWebsite: hausofconfidence.com' },
+    a:'Maison Aesthetics contact info:\nPhone: (480) 555-0148\nEmail: info@hausofconfidence.com\nInstagram: @hausmedspa\nWebsite: hausofconfidence.com' },
 
   // Round 2 features
   { keys:['provider calendar','provider view','side by side','multi provider','calendar view','daily schedule'],
-    a:'In the Appointments view, click "Provider View" to see a side-by-side daily calendar with columns for each provider (Sara Ameli, Dr. Todd Malan, Dr. Margaret Husami, Shay, Cierra). Click any appointment block to edit it. Toggle back to list view with the same button.' },
+    a:'In the Appointments view, click "Provider View" to see a side-by-side daily calendar with columns for each provider (Nadia Reyes, Dr. Todd Malan, Dr. Margaret Husami, Shay, Cierra). Click any appointment block to edit it. Toggle back to list view with the same button.' },
   { keys:['treatment plan','multi visit','series','recurring treatment','maintenance plan'],
     a:'Create treatment plans from the Dashboard — click "+ Treatment Plan." Set a patient, service, number of sessions, and interval (weeks between sessions). Active plans appear on the dashboard with progress bars. Click "View" to check off completed sessions.' },
   { keys:['rebook','rebooking','overdue','follow up','due for','touch up','reminder'],
@@ -224,7 +224,7 @@ function init() {
     <div class="hoc-chat-hdr">
       <div>
         <div class="hoc-chat-hdr-title">Platform Help</div>
-        <div class="hoc-chat-hdr-sub">Haus of Confidence</div>
+        <div class="hoc-chat-hdr-sub">Maison Aesthetics</div>
       </div>
       <button class="hoc-chat-close" onclick="document.getElementById('hoc-chat-panel').classList.remove('open')">&times;</button>
     </div>
