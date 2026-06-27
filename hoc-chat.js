@@ -97,7 +97,7 @@ const KB = [
   { keys:['financing','affirm','payment plan','cherry','carecredit'],
     a:'Patient financing is available through Cherry, CareCredit, and Affirm. Go to sidebar → Memberships → Financing tab. Click "Connect" on any provider to link your merchant account. Use "Simulate Patient Application" to demo the approval flow. Patients can apply in 60 seconds with a soft credit check.' },
   { keys:['phone','contact','email','call','reach'],
-    a:'Maison Aesthetics contact info:\nPhone: (480) 555-0148\nEmail: info@hausofconfidence.com\nInstagram: @hausmedspa\nWebsite: hausofconfidence.com' },
+    a:'Maison Aesthetics contact info:\nPhone: (480) 555-0148\nEmail: info@maisonaesthetics.com\nInstagram: @hausmedspa\nWebsite: maisonaesthetics.com' },
 
   // Round 2 features
   { keys:['provider calendar','provider view','side by side','multi provider','calendar view','daily schedule'],

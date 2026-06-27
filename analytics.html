@@ -378,7 +378,7 @@ function renderReminderLog(){
   completed.forEach(a=>{
     const p=HOC.gp(a.patientId);if(!p.id)return;
     log.push({type:'review',name:HOC.pn(p),phone:p.phone||'',service:a.service,provider:a.provider,apptDate:a.date,apptTime:a.time,sentDate:a.date,
-      msg:'Hi '+p.first+'! Thank you for visiting Maison Aesthetics for your '+a.service+'. We\'d love your feedback! Leave us a review: g.page/hausofconfidence ⭐'});
+      msg:'Hi '+p.first+'! Thank you for visiting Maison Aesthetics for your '+a.service+'. We\'d love your feedback! Leave us a review: g.page/maisonaesthetics ⭐'});
   });
   log.sort((a,b)=>b.sentDate.localeCompare(a.sentDate));
   const el=document.getElementById('reminder-log');

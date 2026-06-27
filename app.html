@@ -1267,7 +1267,7 @@ function renderAutoMessages(){
   appts.filter(a=>a.status==='Completed').sort((a,b)=>b.date.localeCompare(a.date)).slice(0,4).forEach(a=>{
     const p=gp(a.patientId);if(!p.id)return;
     log.push({icon:'⭐',label:'Review Request',name:pn(p),phone:p.phone||'',time:a.date,status:'Delivered',
-      msg:'Hi '+p.first+'! Thank you for your '+a.service+' at Maison Aesthetics. We\'d love your feedback! Leave us a review: g.page/hausofconfidence ⭐'});
+      msg:'Hi '+p.first+'! Thank you for your '+a.service+' at Maison Aesthetics. We\'d love your feedback! Leave us a review: g.page/maisonaesthetics ⭐'});
   });
   // Rebooking reminders
   const rebookIntervals={'Botox':90,'Dermal Fillers':180,'RF Microneedling':42,'Facial':30};

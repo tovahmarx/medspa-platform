@@ -36,9 +36,6 @@ function renderSidebar(activePage) {
       { href: 'inventory.html', icon: 'nsq', label: 'Inventory' },
       { href: 'app.html#messages', icon: 'nsq round', label: 'Messages', badge: '5' },
     ]},
-    { section: 'Settings', items: [
-      { href: 'settings.html', icon: 'nsq', label: 'Settings' },
-    ]},
     { section: 'Patient Tools', items: [
       { href: 'booking.html', icon: 'nsq', label: 'Online Booking ↗', target: '_blank' },
       { href: 'patient-portal.html', icon: 'nsq', label: 'Patient Portal ↗', target: '_blank' },
